@@ -9,9 +9,7 @@ export const environment = {
    endpoint: 'http://localhost:54600',
 
   // pruebas
-//  endpoint: 'https://gestion-test.novaquimica.com.co',
+//  endpoint: 'https://cash-manager-back-production.up.railway.app',
 
-  //produccion
-  // endpoint: 'https://gestion.novaquimica.com.co',
 
 }

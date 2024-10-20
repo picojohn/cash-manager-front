@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/menu-boostrap",
+            "outputPath": "cashManagerClientBuilded",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -27,9 +27,7 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": [
-              
-            ]
+            "scripts": []
           },
           "configurations": {
             "production": {
