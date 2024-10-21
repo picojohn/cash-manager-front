@@ -47,12 +47,11 @@ export interface ILoginInfo {
   newPassword?: string;
 }
 
-// export interface IDatosUsuario {
-//   nombre: string;
-//   userName: string;
-//   idClinica: number;
-//   identificacion: number;
-//   id: number
-// }
+export interface IDatosUsuario {
+  name: string;
+  lastName: string;
+  userName: string;
+  id: number
+}
 
 

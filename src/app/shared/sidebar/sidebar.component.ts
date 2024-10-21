@@ -1,11 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { IDatosUsuario } from 'src/app/authentication/interface/authentication';
 
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css']
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit {
+
+  public datosUsuario: IDatosUsuario
+  ngOnInit(): void {
+    this.datosUsuario = JSON.parse(localStorage.getItem('datosUsuario'))
+  }
+
    isMenuOpen = true;
    isDropdownOpen = false;
 

@@ -69,7 +69,8 @@ export class LoginComponent implements OnInit {
           let permission = []
           const decodedJSON = jwt_decode(item['token']);
                 const datosUsuario = {
-                  nombre: decodedJSON['userLogin']['name'],
+                  name: decodedJSON['userLogin']['name'],
+                  lastName: decodedJSON['userLogin']['lastName'],
                   mobile: decodedJSON['userLogin']['mobile'],
                   email: decodedJSON['userLogin']['email'],
                   id: decodedJSON['userLogin']['id'],
@@ -85,7 +86,7 @@ export class LoginComponent implements OnInit {
           //       });
           //       let permisos = JSON.stringify(permission)
           //       localStorage.setItem('permission', permisos);
-          //       this.router.navigate(['gestiones'])
+                this.router.navigate(['gestiones'])
         } else {
           this.toast.error('Usuario o contraseña errada', 'Información');
         }

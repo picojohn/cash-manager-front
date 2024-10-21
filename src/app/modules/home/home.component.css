@@ -1,0 +1,57 @@
+@media only screen and (max-width: 480px) {
+  img {
+      width: auto;
+  }
+}
+
+i:hover{
+  color:#1272b3 !important;
+}
+
+i{
+
+  font-size: 15px;
+}
+
+h2{
+  color: gray;
+}
+
+p{
+  color: gray;
+}
+
+
+.btn-outline-primary{
+  --bs-btn-hover-bg: #33ccff;
+  border-color: #33ccff;
+}
+
+.button_estado{
+  border: 0;
+  background-color: chartreuse;
+  border-radius: 10px;
+}
+
+.icono i{
+  font-size: 4rem;
+  color:#0039a5;
+}
+
+
+.profile1 img {
+  width: 90px;
+  height: auto;
+  justify-content: center;
+}
+
+hr{
+  z-index: -1;
+  position: relative;
+}
+
+.logocorreo {
+  justify-content: center !important;
+  text-align: center;
+  display: flex;
+}

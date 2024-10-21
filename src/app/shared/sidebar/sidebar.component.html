@@ -59,7 +59,7 @@
           <div class="profile1 d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
             <img src="/assets/img/perfil.png" onError="this.src='/assets/img/perfil.png'" alt="Perfil" />
             <div class="row ms-2 text-center" id="dropdown_user">
-              <strong>John Pico</strong>
+              <strong>{{datosUsuario.name}} {{datosUsuario.lastName}}</strong>
               <span>Menu Principal</span>
             </div>
             <i class="fa-solid fa-caret-down ms-auto"></i>
@@ -76,13 +76,13 @@
         </div>
       </div>
     </header>
-
+<!--
     <main class="container p-3">
       <h3><i class="fa-solid fa-chart-pie col-1 py-2" style="font-size: 25px; color:#0a3754; width: 25px;"></i>
         Bienvenido al Panel de Administración</h3>
       <p>Aquí puedes gestionar tu aplicación de manera efectiva.</p>
-      <router-outlet></router-outlet>
-    </main>
+    </main> -->
+    <router-outlet></router-outlet>
   </div>
 </div>
 
