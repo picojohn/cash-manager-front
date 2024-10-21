@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 //import { SweetAlertService } from "./services/sweetAlert.service";
-//import { ErrorService } from './services/error.service';
+import { ErrorService } from './services/error.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 //import { PermissionService } from './services/permission.service';
@@ -31,7 +31,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 
   ],
   providers: [
-    //  ErrorService,
+     ErrorService,
     //  SweetAlertService,
     // PermissionService,
 

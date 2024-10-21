@@ -1,16 +1,16 @@
 //import { Menu } from "src/app/shared/interface/menu.interface";
 
-export interface IAuthentication {
-  id: number;
-  userName: string;
-  nombre: string;
-  correo: string;
-  direccion: string;
-  menu: Array<any> ;
-  role: Irole;
-  telephone: number;
-  token: string;
-}
+// export interface IAuthentication {
+//   id: number;
+//   userName: string;
+//   nombre: string;
+//   correo: string;
+//   direccion: string;
+//   menu: Array<any> ;
+//   role: Irole;
+//   telephone: number;
+//   token: string;
+// }
 
 export interface IMenu {
   id: number;
@@ -41,18 +41,18 @@ export interface Irole {
 export interface ILoginInfo {
   userName?: string;
   password?: string;
-  correo? : string;
+  email? : string;
   id?: number;
   personId?: number;
   newPassword?: string;
 }
 
-export interface IDatosUsuario {
-  nombre: string;
-  userName: string;
-  idClinica: number;
-  identificacion: number;
-  id: number
-}
+// export interface IDatosUsuario {
+//   nombre: string;
+//   userName: string;
+//   idClinica: number;
+//   identificacion: number;
+//   id: number
+// }
 
 

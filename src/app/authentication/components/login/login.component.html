@@ -11,28 +11,40 @@
               <div class="row col-md-12 justify-content-center mb-5">
                 <img src="/assets/img/logo.png" alt="logo">
               </div>
-              <form>
+              <form [formGroup]="loginForm">
                 <p class="text-center">¡Favor ingresar la información requerida!</p>
 
                 <div data-mdb-input-init class="form-outline mb-4">
-                  <label class="form-label" for="form2Example11"><strong>Correo</strong></label>
-                  <input type="email" id="form2Example11" class="form-control"
-                    placeholder="Phone number or email address" />
+                  <label class="form-label"><strong>Correo</strong></label>
+                  <input formControlName="email" type="email" class="form-control" placeholder="email address" />
+                  <div *ngIf="loginForm.controls.email.touched && loginForm.controls.email.errors?.required"
+                    class="text text-danger">
+                    El correo es requerido
+                  </div>
+                  <div *ngIf="loginForm.controls.email.touched && loginForm.controls.email.invalid"
+                    class="text text-danger">
+                    El correo es invalido
+                  </div>
                 </div>
 
                 <div data-mdb-input-init class="form-outline mb-4">
-                  <label class="form-label" for="form2Example22"><strong>Contraseña</strong></label>
-                  <input type="password" id="form2Example22" class="form-control" />
+                  <label class="form-label"><strong>Contraseña</strong></label>
+                  <input formControlName="password" type="password" class="form-control" placeholder="Password" />
+                  <div *ngIf="loginForm.controls.password.touched && loginForm.controls.password.errors?.required"
+                    class="text text-danger">
+                    La contraseña es requerida
+                  </div>
                 </div>
 
                 <div class="row justify-content-center mb-2">
-                  <button class="btn btn-primary btn-block mb-3 col-md-8" type="button">Entrar</button>
+                  <button (click)="login()" class="btn btn-primary btn-block mb-3 col-md-8"
+                    type="button">{{textIniSesssion}}</button>
                 </div>
 
-                <div class="d-flex align-items-center justify-content-center pb-4">
-                  <a class="text-muted" href="#!">Has olvidado tu contraseña?</a>
-                </div>
               </form>
+              <div class="d-flex align-items-center justify-content-center pb-4">
+                <a class="text-muted" href="#!">Has olvidado tu contraseña?</a>
+              </div>
             </div>
           </div>
 

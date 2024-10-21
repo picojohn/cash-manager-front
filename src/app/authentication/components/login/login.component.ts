@@ -1,4 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { firstValueFrom } from 'rxjs';
+import { AuthenticationService } from '../../service/authentication.service';
+import { Router } from '@angular/router';
+import { ErrorService } from '../../../shared/services/error.service';
+import jwt_decode from 'jwt-decode';
 
 @Component({
   selector: 'app-login',
@@ -7,8 +14,92 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginComponent implements OnInit {
 
-ngOnInit(): void {
-    
-}
+
+  /** Login form */
+  public loginForm: FormGroup;
+  /** Bandera de se indoca cuando se esta iniciando sesion */
+  loadingSession = false;
+  /**Mensajes de formulario */
+  textIniSesssion = 'Iniciar sesión';
+
+
+  constructor(
+    public toast: ToastrService,
+    public authenticationService: AuthenticationService,
+    private router: Router,
+    private errorService: ErrorService
+  ) { }
+
+  /** Ciclo de vida ngOnInit */
+  async ngOnInit() {
+    localStorage.clear()
+    this.buildForm();
+
+  }
+
+  /**
+   * Metodo que contruye los formularios
+   * @returns void
+   */
+  private buildForm(): void {
+    this.loginForm = new FormGroup(({
+      password: new FormControl(null, [Validators.required]),
+      email: new FormControl(null, [Validators.required,
+      Validators.pattern(
+        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      ),]),
+    }));
+  }
+
+  /**
+  * Metodo que hace login al servicio backend
+  * @returns void
+  */
+  login(): void {
+    this.loginForm.markAllAsTouched()
+    if (this.loginForm.invalid) {
+      this.toast.info('Todos los campos son obligatorios', 'Información');
+    }
+    else {
+      this.loadingSession = true;
+      this.textIniSesssion = 'Iniciando sesión...';
+      firstValueFrom(this.authenticationService.login(this.loginForm.value)).then(item => {
+
+        if (item) {
+          let permission = []
+          const decodedJSON = jwt_decode(item['token']);
+                const datosUsuario = {
+                  nombre: decodedJSON['userLogin']['name'],
+                  mobile: decodedJSON['userLogin']['mobile'],
+                  email: decodedJSON['userLogin']['email'],
+                  id: decodedJSON['userLogin']['id'],
+                }
+                localStorage.setItem('datosUsuario', JSON.stringify(datosUsuario));
+          //       localStorage.setItem('role', JSON.stringify(decodedJSON['userLogin']['role']));
+          localStorage.setItem('token', item.token);
+          //       localStorage.setItem('menu', JSON.stringify(item.menu));
+          //       item.menu.forEach(item => {
+          //         item.children.forEach(menuChild => {
+          //           permission.push(JSON.parse(atob(menuChild['actions'])));
+          //         });
+          //       });
+          //       let permisos = JSON.stringify(permission)
+          //       localStorage.setItem('permission', permisos);
+          //       this.router.navigate(['gestiones'])
+        } else {
+          this.toast.error('Usuario o contraseña errada', 'Información');
+        }
+
+      }, err => {
+        const errorObject = this.errorService.showNotification(err);
+        this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
+        this.loadingSession = false;
+        this.textIniSesssion = 'Iniciar sesión -';
+      })
+    }
+
+
+
+  }
 
 }

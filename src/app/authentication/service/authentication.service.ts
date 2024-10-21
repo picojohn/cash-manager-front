@@ -29,18 +29,18 @@ export class AuthenticationService {
    return this.http.post(`${this.url}/login/login`, payload)
    }
 
-   generateCode(payload: ILoginInfo): Observable<any> {
-   return this.http.post(`${this.url}/login/generate-code`, payload)
-   }
+  //  generateCode(payload: ILoginInfo): Observable<any> {
+  //  return this.http.post(`${this.url}/login/generate-code`, payload)
+  //  }
 
-   comprobateCode(payload: ILoginInfo): Observable<any> {
-   return this.http.post(`${this.url}/login/comprobate-code`, payload)
-   }
+  //  comprobateCode(payload: ILoginInfo): Observable<any> {
+  //  return this.http.post(`${this.url}/login/comprobate-code`, payload)
+  //  }
 
 
-   updatePassUserName(payload: ILoginInfo): Observable<any> {
-   return this.http.post(`${this.url}/login/change-email-pass`, payload)
-   }
+  //  updatePassUserName(payload: ILoginInfo): Observable<any> {
+  //  return this.http.post(`${this.url}/login/change-email-pass`, payload)
+  //  }
 
 
 }
