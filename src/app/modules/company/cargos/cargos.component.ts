@@ -41,31 +41,31 @@ export class cargosComponent implements OnInit {
    * carga inicial de datos
    */
   loadData() {
-    firstValueFrom(this.cargosService.getCargos()).then(
-      (cargosBack) => {
-        this.cargos = cargosBack;
-      },
-      (err) => {
-        const errorObject = this.errorService.showNotification(err);
-        this.toast[errorObject.typeToast](
-          errorObject.message,
-          errorObject.typeMessage,
-          { timeOut: errorObject.timeOut }
-        );
-      }
-    );
+    // firstValueFrom(this.cargosService.getCargos()).then(
+    //   (cargosBack) => {
+    //     this.cargos = cargosBack;
+    //   },
+    //   (err) => {
+    //     const errorObject = this.errorService.showNotification(err);
+    //     this.toast[errorObject.typeToast](
+    //       errorObject.message,
+    //       errorObject.typeMessage,
+    //       { timeOut: errorObject.timeOut }
+    //     );
+    //   }
+    // );
   }
 
   edit(cargo: ICargo) {
-    this.bsModalRef = this.modalService.show(EditarCargosComponent, {
-      backdrop: 'static',
-      class: 'modal-lg p-5',
-    });
-    this.bsModalRef.content.title = 'Editar Cargo';
-    this.bsModalRef.content.cargo = cargo;
-    this.bsModalRef.onHidden?.subscribe((_) => {
-      this.loadData();
-    });
+    // this.bsModalRef = this.modalService.show(EditarCargosComponent, {
+    //   backdrop: 'static',
+    //   class: 'modal-lg p-5',
+    // });
+    // this.bsModalRef.content.title = 'Editar Cargo';
+    // this.bsModalRef.content.cargo = cargo;
+    // this.bsModalRef.onHidden?.subscribe((_) => {
+    //   this.loadData();
+    // });
   }
 
   new() {
@@ -84,22 +84,22 @@ export class cargosComponent implements OnInit {
    * @param id
    */
   async states(id): Promise<void> {
-    if (await this.sweetAlertService.alertStatesMessage()) {
-      await firstValueFrom(this.cargosService.cambiarEstadosByid(id)).then(
-        (_) => {
-          this.toast.success('Estado cambiado correctamente', 'Cargo');
-          this.loadData();
-        },
-        (err) => {
-          const errorObject = this.errorService.showNotification(err);
-          this.toast[errorObject.typeToast](
-            errorObject.message,
-            errorObject.typeMessage,
-            { timeOut: errorObject.timeOut }
-          );
-        }
-      );
-    }
+    // if (await this.sweetAlertService.alertStatesMessage()) {
+    //   await firstValueFrom(this.cargosService.cambiarEstadosByid(id)).then(
+    //     (_) => {
+    //       this.toast.success('Estado cambiado correctamente', 'Cargo');
+    //       this.loadData();
+    //     },
+    //     (err) => {
+    //       const errorObject = this.errorService.showNotification(err);
+    //       this.toast[errorObject.typeToast](
+    //         errorObject.message,
+    //         errorObject.typeMessage,
+    //         { timeOut: errorObject.timeOut }
+    //       );
+    //     }
+    //   );
+    // }
   }
 
   numeroPaginas($event: any) {
