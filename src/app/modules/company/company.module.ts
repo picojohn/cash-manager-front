@@ -8,8 +8,6 @@ import { CompanyComponent } from './company.component';
 import { cargosComponent } from './cargos/cargos.component';
 import { CargosService } from './cargos/services/cargos.service';
 import { EditarCargosComponent } from './cargos/editar-cargos/editar-cargos.component';
-import { NgSelectModule } from '@ng-select/ng-select';
-
 
 
 @NgModule({
@@ -26,7 +24,6 @@ import { NgSelectModule } from '@ng-select/ng-select';
     FormsModule,
     NgxPaginationModule,
     ReactiveFormsModule,
-    NgSelectModule,
   ],
   providers: [
     CargosService,
