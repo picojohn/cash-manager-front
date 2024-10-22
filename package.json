@@ -19,6 +19,7 @@
     "@angular/platform-browser": "^18.2.8",
     "@angular/platform-browser-dynamic": "^18.2.8",
     "@angular/router": "^18.2.8",
+    "@ng-select/ng-select": "^13.9.1",
     "jwt-decode": "^3.1.2",
     "menu-boostrap": "file:",
     "ngx-bootstrap": "^18.1.2",
