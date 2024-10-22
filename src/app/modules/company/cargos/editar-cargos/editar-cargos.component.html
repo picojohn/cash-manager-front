@@ -1,0 +1,38 @@
+<div class="container container mt-5 mb-3 p-3">
+  <div class="row justify-content-center">
+    <div class="row justify-content-center text-center">
+      <h2 class="p-3 col-md-6"><i class="fa-solid fa-id-badge" style="font-size: 25px; color:#0a3754;"></i>
+        {{title}}</h2>
+    </div>
+  </div>
+  <div *ngIf="cargarFormularioBooleam">
+    <form  [formGroup]="formCargos" >
+      <div class="row justify-content-center p-3">
+        <div class="card_form col-md-6">
+          <div class="form-group">
+            <label for="cargo">
+              <p>Cargo</p>
+            </label>
+            <input type="text" class="form-control" formControlName="nombres" aria-describedby="emailHelp"
+              placeholder="Ingrese el Cargo">
+              <div
+              *ngIf="formCargos.controls.nombres.touched && formCargos.controls.nombres.errors?.required"
+              class="text text-danger">
+              El nombre del cargo es requerido
+            </div>
+          </div>
+        </div>
+        <div class="card_select p-3 col-md-10">
+        </div>
+        <div class="row justify-content-between p-3 col-md-10">
+          <button  class="btn btn-outline-primary btn-ms btn-block col-md-5">
+            <i class="fa-solid fa-floppy-disk" style="color: #0a3754"></i><strong> Guardar</strong>
+          </button>
+          <button (click)="bsModalRef.hide()" class="btn btn-outline-secondary btn-ms btn-block col-md-5">
+            <i class="fa-solid fa-ban" style="color: red"></i><strong> Cerrar</strong>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

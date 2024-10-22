@@ -1,0 +1,74 @@
+<div class="card_titulo">
+  <div class="icono col-2"><i class="fa-solid fa-id-badge"></i>
+  </div>
+  <div class="titulo col-10">
+    <h2>Cargos</h2>
+    <p> Crea y gestiona los Cargos pertenecientes a la Compañia.</p>
+  </div>
+</div>
+<div class="container container mt-5 mb-3 p-5">
+  <div class="row justify-content-center">
+    <div class="row justify-content-between p-3">
+      <h2 class="p-3 col-md-6"><i class="fa-solid fa-id-badge" style="font-size: 25px; color:#0a3754;"></i>
+        Gestión de Cargos</h2>
+      <div class="card_search col-md-4">
+        <input type="search" [(ngModel)]="buscador" class="form-control" style="margin-top: 1rem;" placeholder="Buscar">
+      </div>
+      <button (click)="new()" style="margin-bottom: 3rem;margin-top: 1rem;"
+        class="btn btn-outline-primary btn-ms btn-block col-md-2"><i class="fa-solid fa-id-badge"
+          style="color: gray;"></i> Crear</button>
+    </div>
+    <div class="mb-4">
+      <div class="select col-md" style="width: 5rem;">
+        <select class="form-select" (change)="numeroPaginas($event)">
+          <option *ngFor="let option of nPaginas" [value]="option" [selected]="option === totalPaginas">
+            {{ option }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="scroll col-md-12">
+      <table class="table table-responsive" id="cont_table">
+        <thead class="cont_head">
+          <tr>
+            <th>NOMBRE</th>
+            <th>ESTADO</th>
+            <th>ACCIONES</th>
+          </tr>
+        </thead>
+        <tbody class="cont_body">
+          <tr *ngFor="let cargo of filtroCargos() | paginate: {itemsPerPage: totalPaginas, currentPage: page, id: 'cargos'}">
+            <td>
+              <p style="color: #0a3754; font-weight: 600;">{{cargo.nombres}}</p>
+            </td>
+            <td> <button class="button_estado" (click)="states(cargo.id)"
+                [ngStyle]="{background: cargo.estado == 1 ? 'chartreuse' : 'red' }"><i class="fa-solid fa-check"
+                  style="color: white;"></i></button>
+            </td>
+            <td>
+              <i (click)="edit(cargo)" class="fa-solid fa-pen-to-square"
+                style="color: #1272b3; margin-right: 0.5rem;"></i>
+              <!-- <i class="fas fa-trash-alt" style="color: gray;"></i> -->
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="row justify-content-between text-center p-3">
+    <div class="col-md-3 p-3" *ngIf="filtroCargos().length"><span
+        style="color: gray; font-weight: 300;justify-content: center !important;"><strong>Mostrando </strong>
+        <strong style="color: #0a3754;">{{
+          (page - 1) * totalPaginas + 1 }} <strong style="color: gray;">-</strong> {{
+          (page * totalPaginas < filtroCargos().length) ? (page * totalPaginas) : filtroCargos().length }} <strong
+            style="color: gray;font-weight: 300;">de</strong>
+        {{ filtroCargos().length }}</strong></span>
+    </div>
+    <pagination-controls class="col-md-5" style="padding-top: 13px; color: #0a3754;font-weight: 400;" id="cargos"
+      (pageChange)="page =$event" previousLabel="Anterior" nextLabel="Siguiente"
+      screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
+      screenReaderCurrentLabel="You're on page 5 de 10">
+    </pagination-controls>
+  </div>
+</div>

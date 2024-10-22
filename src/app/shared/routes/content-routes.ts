@@ -8,21 +8,12 @@ export const content: Routes = [
     component: HomeComponent,
     loadChildren: () => import('../../modules/home/home.module').then(m => m.HomeModule)
   },
-  // {
-  //   path: 'users',
-  //   loadChildren: () => import('../../modules/users/users.module').then(m => m.UsersModule)
-  //  // canActivate: [AdminGuard]
-  // },
-  // {
-  //   path: 'commercial',
-  //   loadChildren: () => import('../../modules/commercial/commercial.module').then(m => m.CommercialModule)
-  //  // canActivate: [AdminGuard]
-  // },
-  // {
-  //   path: 'technical',
-  //   loadChildren: () => import('../../modules/technical/technical.module').then(m => m.TechnicalModule)
-  //  // canActivate: [AdminGuard]
-  // },
+  {
+    path: 'empresa',
+    loadChildren: () => import('../../modules/company/company.module').then(m => m.CompanyModule),
+  //  canActivate: [AdminGuard]
+  },
+ 
 
   {
     path: '',
