@@ -7,7 +7,9 @@
   </div>
   <div *ngIf="cargarFormularioBooleam">
     <form  [formGroup]="formCargos" >
+
       <div class="row justify-content-center p-3">
+
         <div class="card_form col-md-6">
           <div class="form-group">
             <label for="cargo">
@@ -22,6 +24,22 @@
             </div>
           </div>
         </div>
+        
+        <div class="card_form col-md-6">
+          <div class="form-group">
+            <label for="cargo">
+              <p>Cargo</p>
+            </label>
+            <input type="text" class="form-control" formControlName="nombres" aria-describedby="emailHelp"
+              placeholder="Ingrese el Cargo">
+              <div
+              *ngIf="formCargos.controls.nombres.touched && formCargos.controls.nombres.errors?.required"
+              class="text text-danger">
+              El nombre del cargo es requerido
+            </div>
+          </div>
+        </div>
+
         <div class="card_select p-3 col-md-10">
         </div>
         <div class="row justify-content-between p-3 col-md-10">
@@ -33,6 +51,7 @@
           </button>
         </div>
       </div>
+
     </form>
   </div>
 </div>
