@@ -1,0 +1,100 @@
+@media only screen and (max-width: 480px) {
+    img {
+        width: 100%;
+    }
+}
+
+i:hover{
+    color: white !important;
+}
+
+i{
+   
+    font-size: 15px;
+}
+
+h2{
+    color: gray;
+}
+
+p{
+    color: gray;
+}
+
+.card_titulo{
+    padding-left: 7rem;
+    padding-top: 2rem;
+}
+
+.btn-outline-primary{
+    --bs-btn-hover-bg: #1272b3;
+    border-color: #1272b3;
+}
+
+
+
+.button_estado{
+    border: 0;
+    background-color: chartreuse;
+    border-radius: 10px;
+}
+
+.icono i{
+    font-size: 4rem;
+    color:#0a3754;
+}
+
+/* aca empieza la tabla*/
+
+div.scroll {
+    overflow-x: auto;
+    height: auto;
+    display: flex;
+}
+
+.cont_head th {
+    justify-content: center;
+    font-size: 11px;
+    height: 5px;
+    align-items: center;
+}
+
+.cont_head tr th{
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+}
+
+tbody td:hover {
+    background: rgb(158, 219, 241)
+}
+
+th {
+    color: #33687f;
+    font-size: 14px;
+    border-collapse: collapse;
+    background-color: #1273b341;
+}
+
+.cont_head {
+    background: rgba(140, 212, 243, 0.4)
+}
+
+th {
+    padding: 20px 15px;
+    font-weight: 700;
+    text-align: center;
+}
+
+td {
+    padding: 25px;
+    text-align: center;
+}
+
+tbody tr {
+    cursor: pointer;
+}
+
+td i{
+    color:#0a3754;
+}

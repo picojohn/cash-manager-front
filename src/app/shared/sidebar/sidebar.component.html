@@ -56,21 +56,21 @@
               </ul>
             </div>
           </div>
-          <div class="profile1 d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
+          <div class="profile1 d-flex align-items-center" >
             <img src="/assets/img/perfil.png" onError="this.src='/assets/img/perfil.png'" alt="Perfil" />
-            <div class="row ms-2 text-center" id="dropdown_user">
+            <div class="row text-center" id="dropdown_user">
               <strong>{{datosUsuario.name}} {{datosUsuario.lastName}}</strong>
               <span>Menu Principal</span>
             </div>
-            <i class="fa-solid fa-caret-down ms-auto"></i>
             <div class="micro-menu" id="micro">
-              <ul class="dropdown-menu shadow" id="ul">
+              <ul class="dropdown-menu shadow col-md-12" id="ul">
                 <li><a class="dropdown-item" href="#"><i class="fa-solid fa-user col-md-2" id="icon_micro"></i>
                     Mi Perfil</a></li>
                 <li><a class="dropdown-item" href="#"><i class="fa-solid fa-right-from-bracket col-md-2"
                       id="icon_micro"></i>
                     Cerrar Sesión</a></li>
               </ul>
+              <i class="fa-solid fa-caret-down ms-auto col-md-1" data-bs-toggle="dropdown" aria-expanded="false"></i>
             </div>
           </div>
         </div>
