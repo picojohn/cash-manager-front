@@ -1,27 +1,27 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CompanyRoutingModule } from './company.routing.module';
+import { ConfigurationRoutingModule } from './configuration.routing.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { CompanyComponent } from './company.component';
-import { cargosComponent } from './cargos/cargos.component';
-import { CargosService } from './cargos/services/cargos.service';
-import { EditarCargosComponent } from './cargos/editar-cargos/editar-cargos.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { ConfigurationComponent } from './configuration.component';
+import { CurrencyComponent } from './currency/currency.component';
+import { EditCurrencyComponent } from './currency/edit-currency/edit-currency.component';
+import { CurrencyService } from './currency/services/currency.service';
 
 
 
 @NgModule({
   declarations: [
-    CompanyComponent,
-    cargosComponent,
-    EditarCargosComponent,
+    ConfigurationComponent,
+    CurrencyComponent,
+    EditCurrencyComponent,
 
   ],
   imports: [
     CommonModule,
-    CompanyRoutingModule,
+    ConfigurationRoutingModule,
     SharedModule,
     FormsModule,
     NgxPaginationModule,
@@ -29,9 +29,9 @@ import { NgSelectModule } from '@ng-select/ng-select';
     NgSelectModule,
   ],
   providers: [
-    CargosService,
+    CurrencyService,
 
   ]
 
 })
-export class CompanyModule { }
+export class ConfigurationModule { }
