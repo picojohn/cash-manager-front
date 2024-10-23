@@ -26,7 +26,6 @@ import { CurrencyService } from './currency/services/currency.service';
     FormsModule,
     NgxPaginationModule,
     ReactiveFormsModule,
-    NgSelectModule,
   ],
   providers: [
     CurrencyService,
