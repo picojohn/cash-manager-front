@@ -6,44 +6,37 @@
     </div>
   </div>
   <div *ngIf="cargarFormularioBooleam">
-    <form  [formGroup]="formCargos" >
+    <form [formGroup]="formCurrency">
 
       <div class="row justify-content-center p-3">
 
         <div class="card_form col-md-6">
           <div class="form-group">
-            <label for="cargo">
-              <p>Cargo</p>
-            </label>
-            <input type="text" class="form-control" formControlName="nombres" aria-describedby="emailHelp"
-              placeholder="Ingrese el Cargo">
-              <div
-              *ngIf="formCargos.controls.nombres.touched && formCargos.controls.nombres.errors?.required"
+            <label> Nombre </label>
+            <input type="text" class="form-control" formControlName="name" placeholder="Ingrese el nombre la moneda">
+            <div *ngIf="formCurrency.controls.name.touched && formCurrency.controls.name.errors?.required"
               class="text text-danger">
-              El nombre del cargo es requerido
-            </div>
-          </div>
-        </div>
-        
-        <div class="card_form col-md-6">
-          <div class="form-group">
-            <label for="cargo">
-              <p>Cargo</p>
-            </label>
-            <input type="text" class="form-control" formControlName="nombres" aria-describedby="emailHelp"
-              placeholder="Ingrese el Cargo">
-              <div
-              *ngIf="formCargos.controls.nombres.touched && formCargos.controls.nombres.errors?.required"
-              class="text text-danger">
-              El nombre del cargo es requerido
+              El nombre de la moneda es requerido
             </div>
           </div>
         </div>
 
+        <div class="card_form col-md-6">
+          <div class="form-group">
+            <label> Codigo </label>
+            <input type="text" class="form-control" formControlName="code" placeholder="Ingrese el codigo la moneda">
+            <div *ngIf="formCurrency.controls.code.touched && formCurrency.controls.code.errors?.required"
+              class="text text-danger">
+              El codigo de la moneda es requerido
+            </div>
+          </div>
+        </div>
+
+
         <div class="card_select p-3 col-md-10">
         </div>
         <div class="row justify-content-between p-3 col-md-10">
-          <button  class="btn btn-outline-primary btn-ms btn-block col-md-5">
+          <button (click)="saveData()" class="btn btn-outline-primary btn-ms btn-block col-md-5">
             <i class="fa-solid fa-floppy-disk" style="color: #0a3754"></i><strong> Guardar</strong>
           </button>
           <button (click)="bsModalRef.hide()" class="btn btn-outline-secondary btn-ms btn-block col-md-5">

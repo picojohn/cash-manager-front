@@ -9,11 +9,11 @@ export const content: Routes = [
     loadChildren: () => import('../../modules/home/home.module').then(m => m.HomeModule)
   },
   {
-    path: 'empresa',
-    loadChildren: () => import('../../modules/company/company.module').then(m => m.CompanyModule),
+    path: 'configuration',
+    loadChildren: () => import('../../modules/configuration/configuration.module').then(m => m.ConfigurationModule),
   //  canActivate: [AdminGuard]
   },
- 
+
 
   {
     path: '',
@@ -26,3 +26,4 @@ export const content: Routes = [
     pathMatch: 'full'
   }
 ];
+
