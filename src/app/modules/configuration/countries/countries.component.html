@@ -1,0 +1,74 @@
+<div class="card_titulo">
+  <div class="icono col-2">
+  </div>
+  <div class="titulo col-10">
+    <h2>Pais</h2>
+    <p> Crea y gestiona los paises en el sistema.</p>
+  </div>
+</div>
+ <div class="container container mt-5 mb-3 p-5">
+  <div class="row justify-content-center">
+    <div class="row justify-content-between p-3">
+      <h2 class="p-3 col-md-6"> Gestión de Monedas</h2>
+      <div class="card_search col-md-4">
+        <input type="search" [(ngModel)]="buscador" class="form-control" style="margin-top: 1rem;" placeholder="Buscar">
+      </div>
+      <button (click)="new()" style="margin-bottom: 3rem;margin-top: 1rem;"
+        class="btn btn-outline-primary btn-ms btn-block col-md-2"><i class="fa-solid fa-id-badge"
+          style="color: gray;"></i> Crear</button>
+    </div>
+    <div class="mb-4">
+      <div class="select col-md" style="width: 5rem;">
+        <select class="form-select" (change)="numeroPaginas($event)">
+          <option *ngFor="let option of nPaginas" [value]="option" [selected]="option === totalPaginas">
+            {{ option }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="scroll col-md-12">
+      <table class="table table-responsive" id="cont_table">
+        <thead class="cont_head">
+          <tr>
+            <th>NOMBRE</th>
+            <th>CODIGO PAIS</th>
+            <th>IDIOMA</th>
+            <th>MONEDA</th>
+            <th>ACCIONES</th>
+          </tr>
+        </thead>
+        <tbody class="cont_body">
+          <tr
+            *ngFor="let country of filterCountries() | paginate: {itemsPerPage: totalPaginas, currentPage: page, id: 'country'}">
+            <td>
+              <p style="color: #0a3754; font-weight: 600;">{{country.name}}</p>
+            </td>
+            <td> {{country.countryCode}} </td>
+            <td> {{country.language}} </td>
+            <td> {{country.nameCurrencies}} </td>
+            <td>
+              <i (click)="edit(country)" class="fa-solid fa-pen-to-square"
+                style="color: #1272b3; margin-right: 0.5rem;"></i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="row justify-content-between text-center p-3">
+    <div class="col-md-3 p-3" *ngIf="filterCountries().length"><span
+        style="color: gray; font-weight: 300;justify-content: center !important;"><strong>Mostrando </strong>
+        <strong style="color: #0a3754;">{{
+          (page - 1) * totalPaginas + 1 }} <strong style="color: gray;">-</strong> {{
+          (page * totalPaginas < filterCountries().length) ? (page * totalPaginas) : filterCountries().length }} <strong
+            style="color: gray;font-weight: 300;">de</strong>
+        {{ filterCountries().length }}</strong></span>
+    </div>
+    <pagination-controls class="col-md-5" style="padding-top: 13px; color: #0a3754;font-weight: 400;" id="country"
+      (pageChange)="page =$event" previousLabel="Anterior" nextLabel="Siguiente"
+      screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
+      screenReaderCurrentLabel="You're on page 5 de 10">
+    </pagination-controls>
+  </div>
+</div>
