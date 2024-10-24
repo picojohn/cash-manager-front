@@ -1,25 +1,27 @@
 <div class="card_titulo">
-  <div class="icono col-2">
+  <div class="icon col-2">
+    <i class="fa-solid fa-coins"></i>
   </div>
   <div class="titulo col-10">
     <h2>Pais</h2>
     <p> Crea y gestiona los paises en el sistema.</p>
   </div>
 </div>
- <div class="container container mt-5 mb-3 p-5">
+ <div class="container container p-5">
   <div class="row justify-content-center">
     <div class="row justify-content-between p-3">
-      <h2 class="p-3 col-md-6"> Gestión de Monedas</h2>
-      <div class="card_search col-md-4">
-        <input type="search" [(ngModel)]="buscador" class="form-control" style="margin-top: 1rem;" placeholder="Buscar">
+      <h3 class="col-md-6"><i class="fa-solid fa-flag-usa" id="icon_subtitle"></i> Gestión de País</h3>
+      <div class="card_search col-md-4 position-relative">
+        <input id="search" type="search" [(ngModel)]="buscador" class="form-control" placeholder="Buscar">
+        <i class="fas fa-search position-absolute" id="icon_search"></i>
       </div>
-      <button (click)="new()" style="margin-bottom: 3rem;margin-top: 1rem;"
-        class="btn btn-outline-primary btn-ms btn-block col-md-2"><i class="fa-solid fa-id-badge"
-          style="color: gray;"></i> Crear</button>
+      <button (click)="new()" class="btn btn-outline-primary btn-ms btn-block col-md-2">
+        <i class="fa-solid fa-circle-plus"></i> Crear
+      </button>
     </div>
-    <div class="mb-4">
-      <div class="select col-md" style="width: 5rem;">
-        <select class="form-select" (change)="numeroPaginas($event)">
+    <div class="row justify-content-left">
+      <div class="select col-md-1">
+        <select class="form-select co-md-1" (change)="numeroPaginas($event)">
           <option *ngFor="let option of nPaginas" [value]="option" [selected]="option === totalPaginas">
             {{ option }}
           </option>
@@ -27,7 +29,7 @@
       </div>
     </div>
     <div class="scroll col-md-12">
-      <table class="table table-responsive" id="cont_table">
+      <table class="table table-responsive">
         <thead class="cont_head">
           <tr>
             <th>NOMBRE</th>
@@ -41,14 +43,13 @@
           <tr
             *ngFor="let country of filterCountries() | paginate: {itemsPerPage: totalPaginas, currentPage: page, id: 'country'}">
             <td>
-              <p style="color: #0a3754; font-weight: 600;">{{country.name}}</p>
+              <p id="td_1">{{country.name}}</p>
             </td>
             <td> {{country.countryCode}} </td>
             <td> {{country.language}} </td>
             <td> {{country.nameCurrencies}} </td>
             <td>
-              <i (click)="edit(country)" class="fa-solid fa-pen-to-square"
-                style="color: #1272b3; margin-right: 0.5rem;"></i>
+              <i (click)="edit(country)" class="fa-solid fa-pen-to-square" id="table_icon_edit"></i>
             </td>
           </tr>
         </tbody>

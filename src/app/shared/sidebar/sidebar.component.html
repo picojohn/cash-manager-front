@@ -1,6 +1,6 @@
-<div class="d-flex">
-  <nav class="sidebar flex-column p-3 bg-light shadow text-white col-md-2"
-    [ngClass]="{'sidebar-open': isMenuOpen, 'collapsed': !isMenuOpen}" id="sidebar">
+<div class="card">
+  <nav class="sidebar flex-column p-3 bg-light shadow text-white"
+    [ngClass]="{'sidebar-open': isMenuOpen, 'collapsed': !isMenuOpen}">
     <div class="justify-content-center align-items-center text-center p-2">
       <div class="row justify-content-center col-md-2">
         <button class="btn btn-outline-primary btn-ms btn-block col-md-1" id="boton_menu" (click)="toggleMenu()"
@@ -17,7 +17,7 @@
       <p class="titulo text-center"><strong><i class="fa-solid fa-layer-group"></i> Navegación</strong></p>
     </div>
 
-    <div class="row p-2">
+    <div class="row justify-content-center">
       <span (click)="toggleDropdown()" class="btn btn-outline-primary">
         <i class="fa-solid fa-chart-simple"></i> Dashboard
         <i class="fas col-2" [ngClass]="isDropdownOpen ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
@@ -35,7 +35,7 @@
   </nav>
 
   <div class="flex-grow-1" [ngClass]="{'expanded': isMenuOpen, 'collapsed': !isMenuOpen}">
-    <header class="row bg-light shadow text-secondary p-3 align-items-center">
+    <header class="row bg-light shadow text-secondary px-3 align-items-center">
       <div class="card_botton col-2">
         <button class="btn btn-outline-primary btn-ms btn-block col-md-1" id="boton_menu" (click)="toggleMenu()">
           <i class="fas" [ngClass]="isMenuOpen ? 'fa-solid fa-bars' : 'fa-regular fa-chart-bar'"></i>
