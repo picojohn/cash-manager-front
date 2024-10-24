@@ -1,0 +1,73 @@
+<div class="container container mt-5 mb-3 p-3">
+  <div class="row justify-content-center">
+    <div class="row justify-content-center text-center">
+      <h2 class="p-3 col-md-6"><i class="fa-solid fa-id-badge" style="font-size: 25px; color:#0a3754;"></i>
+        {{title}}</h2>
+    </div>
+  </div>
+  <div *ngIf="cargarFormularioBooleam">
+    <form [formGroup]="formCountry">
+
+      <div class="row justify-content-center p-3">
+
+      <div class="card_form col-md-6">
+          <div class="form-group">
+            <label> Nombre </label>
+            <input type="text" class="form-control" formControlName="name" placeholder="Ingrese el nombre del pais">
+            <div *ngIf="formCountry.controls.name.touched && formCountry.controls.name.errors?.required"
+              class="text text-danger">
+              El nombre es requerido
+            </div>
+          </div>
+        </div>
+
+        <div class="card_form col-md-6">
+          <div class="form-group">
+            <label> Idioma </label>
+            <input type="text" class="form-control" formControlName="language" placeholder="Ingrese el Idioma">
+            <div *ngIf="formCountry.controls.language.touched && formCountry.controls.language.errors?.required"
+              class="text text-danger">
+              El idioma es requerido
+            </div>
+          </div>
+        </div>
+
+        <div class="card_form col-md-6">
+          <div class="form-group">
+            <label> Codigo Pais </label>
+            <input type="number" class="form-control" formControlName="countryCode" placeholder="Ingrese el codigo">
+            <div *ngIf="formCountry.controls.countryCode.touched && formCountry.controls.countryCode.errors?.required"
+              class="text text-danger">
+              El codigo es requerido
+            </div>
+          </div>
+        </div>
+
+        <div class="card_form col-md-6">
+          <div class="form-group">
+            <label> Moneda </label>
+            <ng-select [items]="currencies" bindLabel="name" bindValue="id" formControlName="idCurrencies" [multiple]="true">
+            </ng-select>
+            <div *ngIf="formCountry.controls.idCurrencies.touched && formCountry.controls.idCurrencies.errors?.required"
+              class="text text-danger">
+              La moneda es requerido
+            </div>
+          </div>
+        </div>
+
+
+        <div class="card_select p-3 col-md-10">
+        </div>
+        <div class="row justify-content-between p-3 col-md-10">
+          <button (click)="saveData()" class="btn btn-outline-primary btn-ms btn-block col-md-5">
+            <i class="fa-solid fa-floppy-disk" style="color: #0a3754"></i><strong> Guardar</strong>
+          </button>
+          <button (click)="bsModalRef.hide()" class="btn btn-outline-secondary btn-ms btn-block col-md-5">
+            <i class="fa-solid fa-ban" style="color: red"></i><strong> Cerrar</strong>
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>
