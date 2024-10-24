@@ -19,15 +19,15 @@
 
     <div class="row justify-content-center">
       <span (click)="toggleDropdown()" class="btn btn-outline-primary">
-        <i class="fa-solid fa-chart-simple"></i> Dashboard
+        <i class="fa-solid fa-sliders"></i> Configuración
         <i class="fas col-2" [ngClass]="isDropdownOpen ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
       </span>
       <div *ngIf="isDropdownOpen" class="mt-2 d-flex flex-column justify-content-center">
         <div class="row shadow justify-content-center" id="micro">
-          <span><a class="dropdown-item" routerLink="configuration/currency"><i class="fa-solid fa-chart-pie" id="icon_micro"></i>
+          <span><a class="dropdown-item" routerLink="configuration/currency"><i class="fa-solid fa-coins" id="icon_micro"></i>
               Moneda</a></span>
-          <span><a class="dropdown-item" routerLink="configuration/countries"><i class="fa-solid fa-square-poll-vertical" id="icon_micro"></i>
-              Paises</a></span>
+          <span><a class="dropdown-item" routerLink="configuration/countries"><i class="fa-solid fa-flag-usa" id="icon_micro"></i>
+              Países</a></span>
         </div>
       </div>
     </div>
