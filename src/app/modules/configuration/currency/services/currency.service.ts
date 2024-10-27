@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, catchError, map, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ICurrency } from '../interface/currency.interface';
+import { ICountry } from '../../countries/interface/countries.interface';
 
 
 
@@ -33,6 +34,10 @@ export class CurrencyService {
     return this.http.patch<ICurrency>(`${this.url}/currencys`, currency)
   }
 
+////
 
+getCountries(): Observable<Array<ICountry>> {
+  return this.http.get<Array<ICountry>>(`${this.url}/countries`)
+}
 
 }

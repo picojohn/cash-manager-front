@@ -24,10 +24,15 @@
       </span>
       <div *ngIf="isDropdownOpen" class="mt-2 d-flex flex-column justify-content-center">
         <div class="row shadow justify-content-center" id="micro">
-          <span><a class="dropdown-item" routerLink="configuration/currency"><i class="fa-solid fa-coins" id="icon_micro"></i>
+          <span><a class="dropdown-item" routerLink="configuration/currency"><i class="fa-solid fa-coins"
+                id="icon_micro"></i>
               Moneda</a></span>
-          <span><a class="dropdown-item" routerLink="configuration/countries"><i class="fa-solid fa-flag-usa" id="icon_micro"></i>
-              Países</a></span>
+          <span><a class="dropdown-item" routerLink="configuration/countries"><i
+                class="fa-solid fa-square-poll-vertical" id="icon_micro"></i>
+              Paises</a></span>
+          <span><a class="dropdown-item" routerLink="configuration/modulesSub"><i
+                class="fa-solid fa-square-poll-vertical" id="icon_micro"></i>
+              Módulos</a></span>
         </div>
       </div>
     </div>
@@ -56,7 +61,7 @@
               </ul>
             </div>
           </div>
-          <div class="profile1 d-flex align-items-center" >
+          <div class="profile1 d-flex align-items-center">
             <img src="/assets/img/perfil.png" onError="this.src='/assets/img/perfil.png'" alt="Perfil" />
             <div class="row text-center" id="dropdown_user">
               <strong>{{datosUsuario.name}} {{datosUsuario.lastName}}</strong>
@@ -76,7 +81,7 @@
         </div>
       </div>
     </header>
-<!--
+    <!--
     <main class="container p-3">
       <h3><i class="fa-solid fa-chart-pie col-1 py-2" style="font-size: 25px; color:#0a3754; width: 25px;"></i>
         Bienvenido al Panel de Administración</h3>
@@ -85,4 +90,3 @@
     <router-outlet></router-outlet>
   </div>
 </div>
-

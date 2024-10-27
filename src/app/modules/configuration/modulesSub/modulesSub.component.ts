@@ -1,0 +1,219 @@
+import { Component, OnInit } from '@angular/core';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { ToastrService } from 'ngx-toastr';
+import { ErrorService } from 'src/app/shared/services/error.service';
+import { SweetAlertService } from 'src/app/shared/services/sweetAlert.service';
+import { firstValueFrom } from 'rxjs';
+import { IModule, ISubModule } from './interface/modulesSub.interface';
+import { ModulesSubService } from './services/modulesSub.service';
+
+@Component({
+  selector: 'app-modulesSub',
+  templateUrl: './modulesSub.component.html',
+  styleUrls: ['./modulesSub.component.css'],
+})
+export class ModulesSubComponent implements OnInit {
+
+  public selectedTab: number = 1;
+  private bsModalRef: BsModalRef;
+
+  //  pestaña de modulos
+  public modules: Array<IModule> = [];
+  public nPaginasModule = [5, 10, 20, 50, 100];
+  public pageModule: number = 1;
+  public totalPaginasModule = 5;
+  public _buscadorModule: string = '';
+
+  //  pestaña de subModulos
+  public subModules: Array<ISubModule> = [];
+  public nPaginasSubModule = [5, 10, 20, 50, 100];
+  public pageSubModule: number = 1;
+  public totalPaginasSubModule = 5;
+  public _buscadorSubModule: string = '';
+
+
+
+  constructor(
+    private modalService: BsModalService,
+    public toast: ToastrService,
+    private errorService: ErrorService,
+    private modulesSubService: ModulesSubService
+    // private sweetAlertService: SweetAlertService
+  ) { }
+
+  ngOnInit(): void {
+    this.loadData();
+  }
+
+  selectTab(tabNumber: number) {
+    this.selectedTab = tabNumber;
+  }
+
+  /**
+   * carga inicial de datos
+   */
+  loadData() {
+    firstValueFrom(this.modulesSubService.getModulesAll()).then(modulesBack => {
+      this.modules = modulesBack;
+      console.log(modulesBack);
+    }, err => {
+      const errorObject = this.errorService.showNotification(err);
+      this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
+    });
+    firstValueFrom(this.modulesSubService.getSubModulesAll()).then(subModulesBack => {
+      this.subModules = subModulesBack;
+      console.log(subModulesBack);
+    }, err => {
+      const errorObject = this.errorService.showNotification(err);
+      this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
+    });
+  }
+
+
+  // para la pestaña de modulos
+  newModule() {
+    // this.bsModalRef = this.modalService.show(EditCountryComponent, { backdrop: 'static', class: 'modal-lg p-5', });
+    // this.bsModalRef.content.title = 'Crear Pais';
+    // this.bsModalRef.onHidden?.subscribe((_) => {
+    //   this.loadData();
+    // });
+  }
+
+  editModule(module: IModule) {
+    // this.bsModalRef = this.modalService.show(EditCountryComponent, { backdrop: 'static', class: 'modal-lg p-5', });
+    // this.bsModalRef.content.title = 'Editar Pais';
+    // this.bsModalRef.content.country = country;
+    // this.bsModalRef.onHidden?.subscribe((_) => {
+    //   this.loadData();
+    // });
+  }
+
+
+  /**
+   * metodo del controlador de colaborador para cambiar el estdo de un colaborador
+   * @param id
+   */
+  async statesModule(id): Promise<void> {
+    // if (await this.sweetAlertService.alertStatesMessage()) {
+    //   await firstValueFrom(this.cargosService.cambiarEstadosByid(id)).then(
+    //     (_) => {
+    //       this.toast.success('Estado cambiado correctamente', 'Cargo');
+    //       this.loadData();
+    //     },
+    //     (err) => {
+    //       const errorObject = this.errorService.showNotification(err);
+    //       this.toast[errorObject.typeToast](
+    //         errorObject.message,
+    //         errorObject.typeMessage,
+    //         { timeOut: errorObject.timeOut }
+    //       );
+    //     }
+    //   );
+    // }
+  }
+
+  numeroPaginasSubModule($event: any) {
+    const { value } = $event.target;
+    this.totalPaginasSubModule = value;
+    this.pageSubModule = 1;
+  }
+
+  set buscadorSubModule(value: string) {
+    this._buscadorSubModule = value;
+    this.pageSubModule = 1;
+  }
+
+  get buscadorSubModule(): string {
+    return this._buscadorSubModule;
+  }
+
+  filterSubModules() {
+    if (!this.buscadorSubModule) {
+      return this.subModules;
+    }
+    return this.subModules.filter((currency) =>
+      currency.name.toLowerCase().includes(this.buscadorSubModule.toLowerCase())
+    );
+  }
+
+
+
+
+
+  // para la pestaña de sub-modulos
+  newSubModule() {
+    // this.bsModalRef = this.modalService.show(EditCountryComponent, { backdrop: 'static', class: 'modal-lg p-5', });
+    // this.bsModalRef.content.title = 'Crear Pais';
+    // this.bsModalRef.onHidden?.subscribe((_) => {
+    //   this.loadData();
+    // });
+  }
+
+  editSubModule(module: IModule) {
+    // this.bsModalRef = this.modalService.show(EditCountryComponent, { backdrop: 'static', class: 'modal-lg p-5', });
+    // this.bsModalRef.content.title = 'Editar Pais';
+    // this.bsModalRef.content.country = country;
+    // this.bsModalRef.onHidden?.subscribe((_) => {
+    //   this.loadData();
+    // });
+  }
+
+
+  /**
+   * metodo del controlador de colaborador para cambiar el estdo de un colaborador
+   * @param id
+   */
+  async statesSubModule(id): Promise<void> {
+    // if (await this.sweetAlertService.alertStatesMessage()) {
+    //   await firstValueFrom(this.cargosService.cambiarEstadosByid(id)).then(
+    //     (_) => {
+    //       this.toast.success('Estado cambiado correctamente', 'Cargo');
+    //       this.loadData();
+    //     },
+    //     (err) => {
+    //       const errorObject = this.errorService.showNotification(err);
+    //       this.toast[errorObject.typeToast](
+    //         errorObject.message,
+    //         errorObject.typeMessage,
+    //         { timeOut: errorObject.timeOut }
+    //       );
+    //     }
+    //   );
+    // }
+  }
+
+  getModulesId(idModule){
+    const modules = this.modules.find(i => i.id == idModule)?.name
+    return modules? modules : ''
+  }
+
+  numeroPaginasModule($event: any) {
+    const { value } = $event.target;
+    this.totalPaginasModule = value;
+    this.pageModule = 1;
+  }
+
+  set buscadorModule(value: string) {
+    this._buscadorModule = value;
+    this.pageModule = 1;
+  }
+
+  get buscadorModule(): string {
+    return this._buscadorModule;
+  }
+
+  filterModules() {
+    if (!this.buscadorModule) {
+      return this.modules;
+    }
+    return this.modules.filter((currency) =>
+      currency.name.toLowerCase().includes(this.buscadorModule.toLowerCase())
+    );
+  }
+
+
+
+
+
+
+}

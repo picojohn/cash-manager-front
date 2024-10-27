@@ -12,6 +12,8 @@ import { CurrencyService } from './currency/services/currency.service';
 import { CountriesComponent } from './countries/countries.component';
 import { CountriesService } from './countries/services/countries.service';
 import { EditCountryComponent } from './countries/edit-country/edit-country.component';
+import { ModulesSubComponent } from './modulesSub/modulesSub.component';
+import { ModulesSubService } from './modulesSub/services/modulesSub.service';
 
 
 
@@ -22,6 +24,7 @@ import { EditCountryComponent } from './countries/edit-country/edit-country.comp
     EditCurrencyComponent,
     CountriesComponent,
     EditCountryComponent,
+    ModulesSubComponent,
 
   ],
   imports: [
@@ -36,6 +39,7 @@ import { EditCountryComponent } from './countries/edit-country/edit-country.comp
   providers: [
     CurrencyService,
     CountriesService,
+    ModulesSubService
 
   ]
 
