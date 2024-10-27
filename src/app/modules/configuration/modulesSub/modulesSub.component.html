@@ -1,0 +1,167 @@
+<div class="card_titulo px-5 mt-5">
+  <div class="icon col-md-2">
+    <i class="fa-solid fa-square-poll-horizontal"></i>
+  </div>
+  <div class="titulo col-10">
+    <h2>Módulos y Submódulos</h2>
+    <p> Crea y gestiona los Módulos y Submódulos en el sistema.</p>
+  </div>
+</div>
+
+
+<div class="tab-container">
+  <div class="tabs">
+    <button (click)="selectTab(1)" [class.active]="selectedTab === 1">Modulos</button>
+    <button (click)="selectTab(2)" [class.active]="selectedTab === 2">Submodulos</button>
+  </div>
+  <div class="tab-divider"></div>
+
+  <div class="tab-content">
+    <div *ngIf="selectedTab === 1">
+      <div class="container container p-5">
+        <div class="row justify-content-center">
+          <div class="row justify-content-between p-3">
+            <h3 class="col-md-6">    <i class="fa-solid fa-square-poll-horizontal" id="icon_subtitle"></i> Gestión de Módulos</h3>
+            <div class="card_search col-md-4 position-relative">
+              <input id="search" type="search" [(ngModel)]="buscadorModule" class="form-control" placeholder="Buscar">
+              <i class="fas fa-search position-absolute" id="icon_search"></i>
+            </div>
+            <button (click)="newModule()" class="btn btn-outline-primary btn-ms btn-block col-md-2">
+              <i class="fa-solid fa-circle-plus"></i> Crear
+            </button>
+          </div>
+          <div class="row justify-content-left">
+            <div class="select col-md-1">
+              <select class="form-select co-md-1" (change)="numeroPaginasModule($event)">
+                <option *ngFor="let option of nPaginasModule" [value]="option" [selected]="option === totalPaginasModule">
+                  {{ option }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="scroll col-md-12">
+            <table class="table table-responsive">
+              <thead class="cont_head">
+                <tr>
+                  <th>NOMBRE</th>
+                  <th>URL</th>
+                  <th>ICONO</th>
+                  <th>ACCIONES</th>
+                </tr>
+              </thead>
+              <tbody class="cont_body">
+                <tr
+                  *ngFor="let module of filterModules() | paginate: {itemsPerPage: totalPaginasModule, currentPage: pageModule, id: 'itemsModules'}">
+                  <td>
+                    <p id="td_1">{{module.name}}</p>
+                  </td>
+                  <td> {{module.path}} </td>
+                  <td> <i [class]="'fas ' + module.icon"></i> </td>
+                  <td>
+                    <i (click)="editModule(module)" class="fa-solid fa-pen-to-square" id="table_icon_edit"></i>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+
+        <div class="row justify-content-between text-center p-3">
+          <div class="col-md-3 p-3" *ngIf="filterModules().length"><span
+              style="color: gray; font-weight: 300;justify-content: center !important;"><strong>Mostrando </strong>
+              <strong style="color: #0a3754;">{{
+                (pageModule - 1) * totalPaginasModule + 1 }} <strong style="color: gray;">-</strong> {{
+                (pageModule * totalPaginasModule < filterModules().length) ? (pageModule * totalPaginasModule) : filterModules().length }} <strong
+                  style="color: gray;font-weight: 300;">de</strong>
+              {{ filterModules().length }}</strong></span>
+          </div>
+          <pagination-controls class="col-md-5" style="padding-top: 13px; color: #0a3754;font-weight: 400;" id="itemsModules"
+            (pageChange)="pageModule =$event" previousLabel="Anterior" nextLabel="Siguiente"
+            screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
+            screenReaderCurrentLabel="You're on page 5 de 10">
+          </pagination-controls>
+        </div>
+      </div>
+
+    </div>
+    <div *ngIf="selectedTab === 2">
+
+      <div class="container container p-5">
+        <div class="row justify-content-center">
+          <div class="row justify-content-between p-3">
+            <h3 class="col-md-6"><i class="fa-solid fa-square-poll-horizontal" id="icon_subtitle"></i> Gestión de SubModulos</h3>
+            <div class="card_search col-md-4 position-relative">
+              <input id="search" type="search" [(ngModel)]="buscadorSubModule" class="form-control" placeholder="Buscar">
+              <i class="fas fa-search position-absolute" id="icon_search"></i>
+            </div>
+            <button (click)="newSubModule()" class="btn btn-outline-primary btn-ms btn-block col-md-2">
+              <i class="fa-solid fa-circle-plus"></i> Crear
+            </button>
+          </div>
+          <div class="row justify-content-left">
+            <div class="select col-md-1">
+              <select class="form-select co-md-1" (change)="numeroPaginasSubModule($event)">
+                <option *ngFor="let option of nPaginasSubModule" [value]="option" [selected]="option === totalPaginasSubModule">
+                  {{ option }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="scroll col-md-12">
+            <table class="table table-responsive">
+              <thead class="cont_head">
+                <tr>
+                  <th>NOMBRE</th>
+                  <th>URL</th>
+                  <th>MODULO</th>
+                  <th>ICONO</th>
+                  <th>ESTADO</th>
+                  <th>ACCIONES</th>
+                </tr>
+              </thead>
+              <tbody class="cont_body">
+                <tr
+                  *ngFor="let subModule of filterSubModules() | paginate: {itemsPerPage: totalPaginasSubModule, currentPage: pageSubModule, id: 'itemSubmodule'}">
+                  <td>
+                    <p id="td_1">{{subModule.name}}</p>
+                  </td>
+                  <td> {{subModule.path}} </td>
+                  <td> {{getModulesId(subModule.idModule)}} </td>
+                  <td> <i [class]="'fas ' + subModule.icon"></i> </td>
+                  <td> <button class="button_estado" (click)="statesSubModule(subModule.id)"
+                    [ngStyle]="{background: subModule.state == 1 ? 'chartreuse' : 'red' }"><i class="fa-solid fa-check"
+                      style="color: white;"></i></button>
+                </td>
+                  <td>
+                    <i (click)="editSubModule(subModule)" class="fa-solid fa-pen-to-square" id="table_icon_edit"></i>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="row justify-content-between text-center p-3">
+          <div class="col-md-3 p-3" *ngIf="filterSubModules().length"><span
+              style="color: gray; font-weight: 300;justify-content: center !important;"><strong>Mostrando </strong>
+              <strong style="color: #0a3754;">{{
+                (pageSubModule - 1) * totalPaginasSubModule + 1 }} <strong style="color: gray;">-</strong> {{
+                (pageSubModule * totalPaginasSubModule < filterSubModules().length) ? (pageSubModule * totalPaginasSubModule) : filterSubModules().length }} <strong
+                  style="color: gray;font-weight: 300;">de</strong>
+              {{ filterSubModules().length }}</strong></span>
+          </div>
+          <pagination-controls class="col-md-5" style="padding-top: 13px; color: #0a3754;font-weight: 400;" id="itemSubmodule"
+            (pageChange)="pageSubModule =$event" previousLabel="Anterior" nextLabel="Siguiente"
+            screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
+            screenReaderCurrentLabel="You're on page 5 de 10">
+          </pagination-controls>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
