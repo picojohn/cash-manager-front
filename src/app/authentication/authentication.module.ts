@@ -8,6 +8,7 @@ import { AuthenticationComponent } from './authentication.component';
 // import { NgxPaginationModule } from 'ngx-pagination';
 import { SharedModule } from '../shared/shared.module';
 import { LoginComponent } from './components/login/login.component';
+import { RecoverPasswordComponent } from './components/recover-password/recover-password.component';
 
 @NgModule({
   imports: [
@@ -24,7 +25,7 @@ import { LoginComponent } from './components/login/login.component';
   declarations: [
     LoginComponent,
     AuthenticationComponent,
-    // RecoverPasswordComponent,
+    RecoverPasswordComponent,
   ],
   providers: [AuthenticationService]
 })
