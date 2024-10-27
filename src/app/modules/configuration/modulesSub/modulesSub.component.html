@@ -9,16 +9,15 @@
 </div>
 
 
-<div class="tab-container">
-  <div class="tabs">
-    <button (click)="selectTab(1)" [class.active]="selectedTab === 1">Modulos</button>
-    <button (click)="selectTab(2)" [class.active]="selectedTab === 2">Submodulos</button>
+<div class="container">
+  <div class="tabs col-md-12 py-5">
+      <button (click)="selectTab(1)" [class.active]="selectedTab === 1">Modulos</button>
+      <button (click)="selectTab(2)" [class.active]="selectedTab === 2">Submodulos</button>
   </div>
-  <div class="tab-divider"></div>
 
-  <div class="tab-content">
+  <div class="container px-5">
     <div *ngIf="selectedTab === 1">
-      <div class="container container p-5">
+
         <div class="row justify-content-center">
           <div class="row justify-content-between p-3">
             <h3 class="col-md-6">    <i class="fa-solid fa-square-poll-horizontal" id="icon_subtitle"></i> Gestión de Módulos</h3>
@@ -82,8 +81,6 @@
             screenReaderCurrentLabel="You're on page 5 de 10">
           </pagination-controls>
         </div>
-      </div>
-
     </div>
     <div *ngIf="selectedTab === 2">
 

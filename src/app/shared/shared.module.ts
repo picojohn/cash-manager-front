@@ -6,25 +6,21 @@ import { RouterModule } from '@angular/router';
 //import { PermissionService } from './services/permission.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SidebarComponent } from './sidebar/sidebar.component';
+import { ChangePasswordComponent } from './sidebar/change-password/change-password.component';
 
 
 
 @NgModule({
   declarations: [
-   SidebarComponent
-
+   SidebarComponent,
+   ChangePasswordComponent,
   ],
   imports: [
     CommonModule,
     RouterModule,
-    //FormsModule,
-    // ReactiveFormsModule,
-    // ToastrModule.forRoot({
-    //   timeOut: 3000,
-    //   preventDuplicates: true,
-    //   closeButton: false,
-    //   progressBar: true
-    // })
+    FormsModule,
+    ReactiveFormsModule,
+
 
   ],
   exports: [
