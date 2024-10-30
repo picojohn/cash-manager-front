@@ -2,8 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, map, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { ICurrency } from '../interface/currency.interface';
-import { ICountry } from '../../countries/interface/countries.interface';
+import { ICountry, ICurrency } from '../interface/currency.interface';
 
 
 
@@ -38,6 +37,21 @@ export class CurrencyService {
 
 getCountries(): Observable<Array<ICountry>> {
   return this.http.get<Array<ICountry>>(`${this.url}/countries`)
+}
+
+
+newCountry(country: ICountry): Observable<ICountry> {
+  return this.http.post<ICountry>(`${this.url}/countries`, country)
+}
+
+
+editCountry(country: ICountry): Observable<ICountry> {
+  return this.http.patch<ICountry>(`${this.url}/countries`, country)
+}
+
+
+getCurrencies(): Observable<Array<ICurrency>> {
+  return this.http.get<Array<ICurrency>>(`${this.url}/currencys`)
 }
 
 }

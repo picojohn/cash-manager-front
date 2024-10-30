@@ -19,23 +19,14 @@ export class ModulesSubService {
     return this.http.get<Array<IModule>>(`${this.url}/modules`)
   }
 
-  // getCurrencies(): Observable<Array<ICurrency>> {
-  //   return this.http.get<Array<ICurrency>>(`${this.url}/currencys`)
-  // }
-
-  // // public cambiarEstadosByid(id: number): Observable<Array<any>> {
-  // //   return this.http.get<Array<any>>(`${this.url}/cargos/estados/${id}`)
-  // // }
+  newModule(module: IModule): Observable<IModule> {
+    return this.http.post<IModule>(`${this.url}/modules`, module)
+  }
 
 
-  // newCountry(country: ICountry): Observable<ICountry> {
-  //   return this.http.post<ICountry>(`${this.url}/countries`, country)
-  // }
-
-
-  // editCountry(country: ICountry): Observable<ICountry> {
-  //   return this.http.patch<ICountry>(`${this.url}/countries`, country)
-  // }
+  editModule(module: IModule): Observable<IModule> {
+    return this.http.patch<IModule>(`${this.url}/modules`, module)
+  }
 
 
 // submodulos

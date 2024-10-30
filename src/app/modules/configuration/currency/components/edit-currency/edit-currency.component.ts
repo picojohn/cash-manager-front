@@ -4,8 +4,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ErrorService } from 'src/app/shared/services/error.service';
 import { firstValueFrom } from 'rxjs';
-import { ICurrency } from '../interface/currency.interface';
-import { CurrencyService } from '../services/currency.service';
+import { ICurrency } from '../../interface/currency.interface';
+import { CurrencyService } from '../../services/currency.service';
 
 
 @Component({

@@ -6,6 +6,8 @@ import { SweetAlertService } from 'src/app/shared/services/sweetAlert.service';
 import { firstValueFrom } from 'rxjs';
 import { IModule, ISubModule } from './interface/modulesSub.interface';
 import { ModulesSubService } from './services/modulesSub.service';
+import { EditModuleComponent } from './components/edit-module/edit-module.component';
+import { EditSubModuleComponent } from './components/edit-subModule/edit-subModule.component';
 
 @Component({
   selector: 'app-modulesSub',
@@ -14,7 +16,7 @@ import { ModulesSubService } from './services/modulesSub.service';
 })
 export class ModulesSubComponent implements OnInit {
 
-  public selectedTab: number = 1;
+  public selectedTab: number = 2;
   private bsModalRef: BsModalRef;
 
   //  pestaña de modulos
@@ -72,45 +74,22 @@ export class ModulesSubComponent implements OnInit {
 
   // para la pestaña de modulos
   newModule() {
-    // this.bsModalRef = this.modalService.show(EditCountryComponent, { backdrop: 'static', class: 'modal-lg p-5', });
-    // this.bsModalRef.content.title = 'Crear Pais';
-    // this.bsModalRef.onHidden?.subscribe((_) => {
-    //   this.loadData();
-    // });
+    this.bsModalRef = this.modalService.show(EditModuleComponent, { backdrop: 'static', class: 'modal-lg p-5', });
+    this.bsModalRef.content.title = 'Crear Modulo';
+    this.bsModalRef.onHidden?.subscribe((_) => {
+      this.loadData();
+    });
   }
 
   editModule(module: IModule) {
-    // this.bsModalRef = this.modalService.show(EditCountryComponent, { backdrop: 'static', class: 'modal-lg p-5', });
-    // this.bsModalRef.content.title = 'Editar Pais';
-    // this.bsModalRef.content.country = country;
-    // this.bsModalRef.onHidden?.subscribe((_) => {
-    //   this.loadData();
-    // });
+    this.bsModalRef = this.modalService.show(EditModuleComponent, { backdrop: 'static', class: 'modal-lg p-5', });
+    this.bsModalRef.content.title = 'Editar Modulo';
+    this.bsModalRef.content.module = module;
+    this.bsModalRef.onHidden?.subscribe((_) => {
+      this.loadData();
+    });
   }
 
-
-  /**
-   * metodo del controlador de colaborador para cambiar el estdo de un colaborador
-   * @param id
-   */
-  async statesModule(id): Promise<void> {
-    // if (await this.sweetAlertService.alertStatesMessage()) {
-    //   await firstValueFrom(this.cargosService.cambiarEstadosByid(id)).then(
-    //     (_) => {
-    //       this.toast.success('Estado cambiado correctamente', 'Cargo');
-    //       this.loadData();
-    //     },
-    //     (err) => {
-    //       const errorObject = this.errorService.showNotification(err);
-    //       this.toast[errorObject.typeToast](
-    //         errorObject.message,
-    //         errorObject.typeMessage,
-    //         { timeOut: errorObject.timeOut }
-    //       );
-    //     }
-    //   );
-    // }
-  }
 
   numeroPaginasSubModule($event: any) {
     const { value } = $event.target;
@@ -142,20 +121,20 @@ export class ModulesSubComponent implements OnInit {
 
   // para la pestaña de sub-modulos
   newSubModule() {
-    // this.bsModalRef = this.modalService.show(EditCountryComponent, { backdrop: 'static', class: 'modal-lg p-5', });
-    // this.bsModalRef.content.title = 'Crear Pais';
-    // this.bsModalRef.onHidden?.subscribe((_) => {
-    //   this.loadData();
-    // });
+    this.bsModalRef = this.modalService.show(EditSubModuleComponent, { backdrop: 'static', class: 'modal-lg p-5', });
+    this.bsModalRef.content.title = 'Crear SubModulo';
+    this.bsModalRef.onHidden?.subscribe((_) => {
+      this.loadData();
+    });
   }
 
-  editSubModule(module: IModule) {
-    // this.bsModalRef = this.modalService.show(EditCountryComponent, { backdrop: 'static', class: 'modal-lg p-5', });
-    // this.bsModalRef.content.title = 'Editar Pais';
-    // this.bsModalRef.content.country = country;
-    // this.bsModalRef.onHidden?.subscribe((_) => {
-    //   this.loadData();
-    // });
+  editSubModule(subModule: IModule) {
+    this.bsModalRef = this.modalService.show(EditSubModuleComponent, { backdrop: 'static', class: 'modal-lg p-5', });
+    this.bsModalRef.content.title = 'Editar SubModulo';
+    this.bsModalRef.content.subModule = subModule;
+    this.bsModalRef.onHidden?.subscribe((_) => {
+      this.loadData();
+    });
   }
 
 
