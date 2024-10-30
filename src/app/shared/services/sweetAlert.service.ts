@@ -35,20 +35,19 @@ export class SweetAlertService {
 
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
-        confirmButton: 'btn btn-primary',
-        cancelButton: 'btn btn-danger'
+        confirmButton: 'btn btn-outline-primary',
+        cancelButton: 'btn btn-outline-secondary'
       },
       buttonsStyling: false,
     })
 
     return await swalWithBootstrapButtons.fire({
-
-      title: '¿Estás seguro?',
+      title: '¿Estas Seguro?',
       text: "¡No podrás revertir esto!",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: '¡Sí, bórralo!',
-      cancelButtonText: 'Cancelar',
+      confirmButtonText: '<i class="fa-regular fa-trash-can"  style="color: red" ></i> <strong>¡Sí, bórralo!</strong>',
+      cancelButtonText: '<i class="fa-solid fa-ban" style="color: red"></i> <strong>Cancelar</strong>'
 
     }).then((validation: any) => {
       return validation.value ? true : false;

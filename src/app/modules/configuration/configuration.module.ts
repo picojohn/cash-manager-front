@@ -7,13 +7,13 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ConfigurationComponent } from './configuration.component';
 import { CurrencyComponent } from './currency/currency.component';
-import { EditCurrencyComponent } from './currency/edit-currency/edit-currency.component';
+import { EditCurrencyComponent } from './currency/components/edit-currency/edit-currency.component';
 import { CurrencyService } from './currency/services/currency.service';
-import { CountriesComponent } from './countries/countries.component';
-import { CountriesService } from './countries/services/countries.service';
-import { EditCountryComponent } from './countries/edit-country/edit-country.component';
+import { EditCountryComponent } from './currency/components/edit-country/edit-country.component';
 import { ModulesSubComponent } from './modulesSub/modulesSub.component';
 import { ModulesSubService } from './modulesSub/services/modulesSub.service';
+import { EditModuleComponent } from './modulesSub/components/edit-module/edit-module.component';
+import { EditSubModuleComponent } from './modulesSub/components/edit-subModule/edit-subModule.component';
 
 
 
@@ -22,9 +22,11 @@ import { ModulesSubService } from './modulesSub/services/modulesSub.service';
     ConfigurationComponent,
     CurrencyComponent,
     EditCurrencyComponent,
-    CountriesComponent,
     EditCountryComponent,
     ModulesSubComponent,
+    EditModuleComponent,
+    EditSubModuleComponent,
+
 
   ],
   imports: [
@@ -38,7 +40,6 @@ import { ModulesSubService } from './modulesSub/services/modulesSub.service';
   ],
   providers: [
     CurrencyService,
-    CountriesService,
     ModulesSubService
 
   ]

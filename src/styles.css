@@ -17,7 +17,9 @@
   --bs-btn-disabled-bg: transparent;
   --bs-btn-disabled-border-color: #5564eb69 !important;
   margin-bottom: 1rem;
+  margin-right:10px;
 }
+
 
 .btn-outline-secondary {
   --bs-btn-color: #0a3754 !important;
@@ -308,3 +310,4 @@ option:hover {
 }
 
 /* Fin Select */
+

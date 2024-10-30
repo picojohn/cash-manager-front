@@ -4,10 +4,10 @@ import { ToastrService } from 'ngx-toastr';
 import { ErrorService } from 'src/app/shared/services/error.service';
 import { SweetAlertService } from 'src/app/shared/services/sweetAlert.service';
 import { firstValueFrom } from 'rxjs';
-import { ICurrency } from './interface/currency.interface';
+import { ICountry, ICurrency } from './interface/currency.interface';
 import { CurrencyService } from './services/currency.service';
-import { EditCurrencyComponent } from './edit-currency/edit-currency.component';
-import { ICountry } from '../countries/interface/countries.interface';
+import { EditCurrencyComponent } from './components/edit-currency/edit-currency.component';
+import { EditCountryComponent } from './components/edit-country/edit-country.component';
 
 @Component({
   selector: 'app-currency',
@@ -15,42 +15,41 @@ import { ICountry } from '../countries/interface/countries.interface';
   styleUrls: ['./currency.component.css'],
 })
 export class CurrencyComponent implements OnInit {
-  private bsModalRef: BsModalRef;
-  public currencys: Array<ICurrency> = [];
 
-  // paginador
+  private bsModalRef: BsModalRef;
+  public selectedTab: number = 1;
+
+  // currencies
+  public currencys: Array<ICurrency> = [];
   public nPaginasCurrency = [5, 10, 20, 50, 100];
   public pageCurrency: number = 1;
-  public totalPaginasCurrency = 5; // Establece el valor inicial en 5
-
-  // buscador
+  public totalPaginasCurrency = 5;
   public _buscadorCurrency: string = '';
 
-/////countries
+  //countries
 
-public countries: Array<ICountry> = [];
-
-public nPaginasCountries = [5, 10, 20, 50, 100];
-public pageCountries: number = 1;
-public totalPaginasCountries = 5; // Establece el valor inicial en 5
-
-// buscador
-public _buscadorCountries: string = '';
-
-
-
-
+  public countries: Array<ICountry> = [];
+  public nPaginasCountries = [5, 10, 20, 50, 100];
+  public pageCountries: number = 1;
+  public totalPaginasCountries = 5;
+  public _buscadorCountries: string = '';
 
   constructor(
     private modalService: BsModalService,
     public toast: ToastrService,
     private errorService: ErrorService,
     private currencyService: CurrencyService,
+    private sweetAlertService: SweetAlertService,
   ) { }
 
   ngOnInit(): void {
     this.loadData();
   }
+
+  selectTab(tabNumber: number) {
+    this.selectedTab = tabNumber;
+  }
+
 
   /**
    * carga inicial de datos
@@ -58,7 +57,6 @@ public _buscadorCountries: string = '';
   loadData() {
     firstValueFrom(this.currencyService.getCurrencys()).then(currencysBack => {
       this.currencys = currencysBack;
-      console.log(currencysBack);
     }, err => {
       const errorObject = this.errorService.showNotification(err);
       this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
@@ -82,7 +80,6 @@ public _buscadorCountries: string = '';
         }
         return acc;
       }, {}));
-      console.log(result);
       this.countries = result;
     }, err => {
       const errorObject = this.errorService.showNotification(err);
@@ -107,28 +104,17 @@ public _buscadorCountries: string = '';
     });
   }
 
+ async deleteCurrency(id: number){
+    if (await this.sweetAlertService.alertDeleteMessage()) {
+      firstValueFrom(this.currencyService.deleteCurrency(id)).then(i => {
+        this.toast.success('Moneda eliminada correctamente', 'Monedas')
+        this.loadData()
+      }, err => {
+        const errorObject = this.errorService.showNotification(err);
+        this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
+      })
 
-  /**
-   * metodo del controlador de colaborador para cambiar el estdo de un colaborador
-   * @param id
-   */
-  async statesCurrency(id): Promise<void> {
-    // if (await this.sweetAlertService.alertStatesMessage()) {
-    //   await firstValueFrom(this.cargosService.cambiarEstadosByid(id)).then(
-    //     (_) => {
-    //       this.toast.success('Estado cambiado correctamente', 'Cargo');
-    //       this.loadData();
-    //     },
-    //     (err) => {
-    //       const errorObject = this.errorService.showNotification(err);
-    //       this.toast[errorObject.typeToast](
-    //         errorObject.message,
-    //         errorObject.typeMessage,
-    //         { timeOut: errorObject.timeOut }
-    //       );
-    //     }
-    //   );
-    // }
+    }
   }
 
   numeroPaginasCurrency($event: any) {
@@ -158,8 +144,37 @@ public _buscadorCountries: string = '';
   }
 
 
-
   ///// counturies
+
+  newCountry() {
+    this.bsModalRef = this.modalService.show(EditCountryComponent, { backdrop: 'static', class: 'modal-lg p-5', });
+    this.bsModalRef.content.title = 'Crear Pais';
+    this.bsModalRef.onHidden?.subscribe((_) => {
+      this.loadData();
+    });
+  }
+
+  editCountry(country: ICountry) {
+    this.bsModalRef = this.modalService.show(EditCountryComponent, { backdrop: 'static', class: 'modal-lg p-5', });
+    this.bsModalRef.content.title = 'Editar Pais';
+    this.bsModalRef.content.country = country;
+    this.bsModalRef.onHidden?.subscribe((_) => {
+      this.loadData();
+    });
+  }
+
+ async deleteCountry(id: number){
+    if (await this.sweetAlertService.alertDeleteMessage()) {
+      firstValueFrom(this.currencyService.deleteCountry(id)).then(i => {
+        this.toast.success('País eliminada correctamente', 'País')
+        this.loadData()
+      }, err => {
+        const errorObject = this.errorService.showNotification(err);
+        this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
+      })
+
+    }
+  }
 
 
   numeroPaginasCountries($event: any) {
@@ -167,8 +182,6 @@ public _buscadorCountries: string = '';
     this.totalPaginasCountries = value;
     this.pageCountries = 1;
   }
-
-  // Buscador filtro como tambien que siempre retorne a pagina 1
 
   set buscadorCountries(value: string) {
     this._buscadorCountries = value;
@@ -188,12 +201,5 @@ public _buscadorCountries: string = '';
     );
   }
 
-
-  // componentes para las pestañas en tablas si se quisira
-  // selectedTab: number = 1;
-
-  // selectTab(tabNumber: number) {
-  //   this.selectedTab = tabNumber;
-  // }
 
 }
