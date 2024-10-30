@@ -18,7 +18,6 @@
   <div class="container px-5">
     <div *ngIf="selectedTab === 1">
 
-
       <div class="row justify-content-center">
         <div class="row justify-content-between p-3">
           <h3 class="col-md-6"><i class="fa-solid fa-coins" id="icon_subtitle"></i> Gestión de Monedas</h3>
@@ -30,20 +29,12 @@
             <i class="fa-solid fa-circle-plus"></i> Crear
           </button>
         </div>
-        <div class="row justify-content-left">
-          <div class="select col-md-1">
-            <select class="form-select co-md-1" (change)="numeroPaginasCurrency($event)">
-              <option *ngFor="let option of nPaginasCurrency" [value]="option"
-                [selected]="option === totalPaginasCurrency">
-                {{ option }}
-              </option>
-            </select>
-          </div>
-        </div>
+
         <div class="scroll col-md-12">
           <table class="table table-responsive">
             <thead class="cont_head">
               <tr>
+                <th>ID</th>
                 <th>NOMBRE</th>
                 <th>CODIGO</th>
                 <th>ACCIONES</th>
@@ -52,13 +43,15 @@
             <tbody class="cont_body" id="cont_body">
               <tr
                 *ngFor="let currency of filterCurrencys() | paginate: {itemsPerPage: totalPaginasCurrency, currentPage: pageCurrency, id: 'pageCurrency'}">
+                <td>{{currency.id}}</td>
                 <td>
                   <p id="td_1">{{currency.name}}</p>
                 </td>
                 <td> {{currency.code}} </td>
                 <td>
                   <i (click)="editCurrency(currency)" class="fa-solid fa-pen-to-square" id="table_icon_edit"></i>
-                  <!-- <i class="fas fa-trash-alt" style="color: gray;"></i> -->
+                  <i (click)="deleteCurrency(currency.id)" class="fa-regular fa-trash-can" style="color: red;"></i>
+
                 </td>
               </tr>
             </tbody>
@@ -67,6 +60,16 @@
       </div>
 
       <div class="row justify-content-between text-center p-3">
+
+        <div class="select col-md-1">
+          <select class="form-select co-md-1" (change)="numeroPaginasCurrency($event)">
+            <option *ngFor="let option of nPaginasCurrency" [value]="option"
+              [selected]="option === totalPaginasCurrency">
+              {{ option }}
+            </option>
+          </select>
+        </div>
+
         <div class="col-md-3 p-3" *ngIf="filterCurrencys().length"><span
             style="color: gray; font-weight: 300;justify-content: center !important;"><strong>Mostrando </strong>
             <strong style="color: #0a3754;">{{
@@ -75,11 +78,13 @@
                 filterCurrencys().length }} <strong style="color: gray;font-weight: 300;">de</strong>
             {{ filterCurrencys().length }}</strong></span>
         </div>
+
         <pagination-controls class="col-md-5" style="padding-top: 13px; color: #0a3754;font-weight: 400;"
           id="pageCurrency" (pageChange)="pageCurrency =$event" previousLabel="Anterior" nextLabel="Siguiente"
           screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
           screenReaderCurrentLabel="You're on page 5 de 10">
         </pagination-controls>
+
       </div>
 
 
@@ -93,7 +98,7 @@
       <div class="row justify-content-center">
         <div class="row justify-content-between p-3">
           <h3 class="col-md-6"><i class="fa-solid fa-flag-usa" id="icon_subtitle"></i> Gestión de País</h3>
-          <div class="card_search col-md-4 position-relative">
+          <div class="card_search col-md-3 position-relative">
             <input id="search" type="search" [(ngModel)]="buscadorCountries" class="form-control" placeholder="Buscar">
             <i class="fas fa-search position-absolute" id="icon_search"></i>
           </div>
@@ -101,20 +106,12 @@
             <i class="fa-solid fa-circle-plus"></i> Crear
           </button>
         </div>
-        <div class="row justify-content-left">
-          <div class="select col-md-1">
-            <select class="form-select co-md-1" (change)="numeroPaginasCountries($event)">
-              <option *ngFor="let option of nPaginasCountries" [value]="option"
-                [selected]="option === totalPaginasCountries">
-                {{ option }}
-              </option>
-            </select>
-          </div>
-        </div>
+
         <div class="scroll col-md-12">
           <table class="table table-responsive">
             <thead class="cont_head">
               <tr>
+                <th>ID</th>
                 <th>NOMBRE</th>
                 <th>CODIGO PAIS</th>
                 <th>IDIOMA</th>
@@ -124,7 +121,8 @@
             </thead>
             <tbody class="cont_body">
               <tr
-                *ngFor="let country of filterCountries() | paginate: {itemsPerPage: totalPaginasCountries, currentPage: pageCountries, id: 'country'}">
+                *ngFor="let country of filterCountries() | paginate: {itemsPerPage: totalPaginasCountries, currentPage: pageCountries, id: 'itemCountry'}">
+                <td>{{country.id}}</td>
                 <td>
                   <p id="td_1">{{country.name}}</p>
                 </td>
@@ -133,6 +131,7 @@
                 <td> {{country.nameCurrencies}} </td>
                 <td>
                   <i (click)="editCountry(country)" class="fa-solid fa-pen-to-square" id="table_icon_edit"></i>
+                  <i (click)="deleteCountry(country.id)" class="fa-regular fa-trash-can" style="color: red;"></i>
                 </td>
               </tr>
             </tbody>
@@ -141,6 +140,16 @@
       </div>
 
       <div class="row justify-content-between text-center p-3">
+
+        <div class="select col-md-1">
+          <select class="form-select co-md-1" (change)="numeroPaginasCountries($event)">
+            <option *ngFor="let option of nPaginasCountries" [value]="option"
+              [selected]="option === totalPaginasCountries">
+              {{ option }}
+            </option>
+          </select>
+        </div>
+
         <div class="col-md-3 p-3" *ngIf="filterCountries().length"><span
             style="color: gray; font-weight: 300;justify-content: center !important;"><strong>Mostrando </strong>
             <strong style="color: #0a3754;">{{
@@ -150,8 +159,9 @@
                 de</strong>
             {{ filterCountries().length }}</strong></span>
         </div>
-        <pagination-controls class="col-md-5" style="padding-top: 13px; color: #0a3754;font-weight: 400;" id="country"
-          (pageChange)="pageCountries =$event" previousLabel="Anterior" nextLabel="Siguiente"
+
+        <pagination-controls class="col-md-5" style="padding-top: 13px; color: #0a3754;font-weight: 400;"
+          id="itemCountry" (pageChange)="pageCountries =$event" previousLabel="Anterior" nextLabel="Siguiente"
           screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
           screenReaderCurrentLabel="You're on page 5 de 10">
         </pagination-controls>

@@ -60,7 +60,6 @@
 //         }
 //         return acc;
 //       }, {}));
-//       console.log(result);
 //       this.countries = result;
 //     }, err => {
 //       const errorObject = this.errorService.showNotification(err);

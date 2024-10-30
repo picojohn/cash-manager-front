@@ -57,14 +57,12 @@ export class ModulesSubComponent implements OnInit {
   loadData() {
     firstValueFrom(this.modulesSubService.getModulesAll()).then(modulesBack => {
       this.modules = modulesBack;
-      console.log(modulesBack);
     }, err => {
       const errorObject = this.errorService.showNotification(err);
       this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
     });
     firstValueFrom(this.modulesSubService.getSubModulesAll()).then(subModulesBack => {
       this.subModules = subModulesBack;
-      console.log(subModulesBack);
     }, err => {
       const errorObject = this.errorService.showNotification(err);
       this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });

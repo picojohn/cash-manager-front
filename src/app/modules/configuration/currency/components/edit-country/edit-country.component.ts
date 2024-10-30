@@ -43,7 +43,7 @@ export class EditCountryComponent {
  * carga inicial de datos
  */
   loadData() {
-firstValueFrom(this.currencyService.getCurrencies()).then(item => {
+firstValueFrom(this.currencyService.getCurrencys()).then(item => {
   this.currencies = item
 })
   }

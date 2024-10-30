@@ -39,6 +39,7 @@ export class CurrencyComponent implements OnInit {
     public toast: ToastrService,
     private errorService: ErrorService,
     private currencyService: CurrencyService,
+    private sweetAlertService: SweetAlertService,
   ) { }
 
   ngOnInit(): void {
@@ -56,7 +57,6 @@ export class CurrencyComponent implements OnInit {
   loadData() {
     firstValueFrom(this.currencyService.getCurrencys()).then(currencysBack => {
       this.currencys = currencysBack;
-      console.log(currencysBack);
     }, err => {
       const errorObject = this.errorService.showNotification(err);
       this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
@@ -80,7 +80,6 @@ export class CurrencyComponent implements OnInit {
         }
         return acc;
       }, {}));
-      console.log(result);
       this.countries = result;
     }, err => {
       const errorObject = this.errorService.showNotification(err);
@@ -103,6 +102,19 @@ export class CurrencyComponent implements OnInit {
     this.bsModalRef.onHidden?.subscribe((_) => {
       this.loadData();
     });
+  }
+
+ async deleteCurrency(id: number){
+    if (await this.sweetAlertService.alertDeleteMessage()) {
+      firstValueFrom(this.currencyService.deleteCurrency(id)).then(i => {
+        this.toast.success('Moneda eliminada correctamente', 'Monedas')
+        this.loadData()
+      }, err => {
+        const errorObject = this.errorService.showNotification(err);
+        this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
+      })
+
+    }
   }
 
   numeroPaginasCurrency($event: any) {
@@ -149,6 +161,19 @@ export class CurrencyComponent implements OnInit {
     this.bsModalRef.onHidden?.subscribe((_) => {
       this.loadData();
     });
+  }
+
+ async deleteCountry(id: number){
+    if (await this.sweetAlertService.alertDeleteMessage()) {
+      firstValueFrom(this.currencyService.deleteCountry(id)).then(i => {
+        this.toast.success('País eliminada correctamente', 'País')
+        this.loadData()
+      }, err => {
+        const errorObject = this.errorService.showNotification(err);
+        this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
+      })
+
+    }
   }
 
 
