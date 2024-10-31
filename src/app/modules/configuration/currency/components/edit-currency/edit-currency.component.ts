@@ -6,6 +6,7 @@ import { ErrorService } from 'src/app/shared/services/error.service';
 import { firstValueFrom } from 'rxjs';
 import { ICurrency } from '../../interface/currency.interface';
 import { CurrencyService } from '../../services/currency.service';
+import { ETitleMessages } from 'src/app/shared/enums/error.service.eum';
 
 
 @Component({
@@ -55,10 +56,10 @@ export class EditCurrencyComponent {
 
   saveData() {
       this.formCurrency.markAllAsTouched();
-      if (this.formCurrency.invalid) return this.toast.info('Debes llenar todos los datos requiridos del formulario', 'Moneda')
+      if (this.formCurrency.invalid) return this.toast.info('Debes llenar todos los datos requiridos del formulario', ETitleMessages.CURRENCY)
         const rawValue: ICurrency = this.formCurrency.value;
         firstValueFrom( this.currency? this.currencyService.editCurrency(rawValue) : this.currencyService.newCurrency(rawValue)).then(item => {
-          this.toast.success(` Moneda ${this.currency? 'modificada' : 'creada'} correctamente`, 'Moneda')
+          this.toast.success(` Moneda ${this.currency? 'modificada' : 'creada'} correctamente`, ETitleMessages.CURRENCY)
           this.bsModalRef.hide()
         }, err => {
           const errorObject = this.errorService.showNotification(err);

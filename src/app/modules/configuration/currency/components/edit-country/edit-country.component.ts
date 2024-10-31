@@ -6,6 +6,7 @@ import { ErrorService } from 'src/app/shared/services/error.service';
 import { firstValueFrom } from 'rxjs';
 import { ICountry, ICurrency } from '../../interface/currency.interface';
 import { CurrencyService } from '../../services/currency.service';
+import { ETitleMessages } from 'src/app/shared/enums/error.service.eum';
 
 
 
@@ -43,9 +44,12 @@ export class EditCountryComponent {
  * carga inicial de datos
  */
   loadData() {
-firstValueFrom(this.currencyService.getCurrencys()).then(item => {
-  this.currencies = item
-})
+    firstValueFrom(this.currencyService.getCurrencys()).then(item => {
+      this.currencies = item
+    }, err => {
+      const errorObject = this.errorService.showNotification(err);
+      this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
+    })
   }
 
   cargarFormularios() {
@@ -60,16 +64,16 @@ firstValueFrom(this.currencyService.getCurrencys()).then(item => {
   }
 
   saveData() {
-      this.formCountry.markAllAsTouched();
-      if (this.formCountry.invalid) return this.toast.info('Debes llenar todos los datos requiridos del formulario', 'Pais')
-        const rawValue: ICountry = this.formCountry.value;
-        firstValueFrom( this.country? this.currencyService.editCountry(rawValue) : this.currencyService.newCountry(rawValue)).then(item => {
-          this.toast.success(` Pais ${this.country? 'modificado' : 'creado'} correctamente`, 'Pais')
-          this.bsModalRef.hide()
-        }, err => {
-          const errorObject = this.errorService.showNotification(err);
-          this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
-        })
+    this.formCountry.markAllAsTouched();
+    if (this.formCountry.invalid) return this.toast.info('Debes llenar todos los datos requiridos del formulario', ETitleMessages.COUNTRY)
+    const rawValue: ICountry = this.formCountry.value;
+    firstValueFrom(this.country ? this.currencyService.editCountry(rawValue) : this.currencyService.newCountry(rawValue)).then(item => {
+      this.toast.success(` Pais ${this.country ? 'modificado' : 'creado'} correctamente`, ETitleMessages.COUNTRY)
+      this.bsModalRef.hide()
+    }, err => {
+      const errorObject = this.errorService.showNotification(err);
+      this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
+    })
 
   }
 

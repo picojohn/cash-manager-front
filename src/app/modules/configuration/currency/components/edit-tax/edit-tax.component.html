@@ -1,0 +1,73 @@
+<div class="container p-3">
+  <div class="row justify-content-center">
+    <div class="row justify-content-center text-center">
+      <h2 class="p-3 col-md-6"><i class="fa-solid fa-id-badge" id="icon_subtitle"></i>
+        {{title}}</h2>
+    </div>
+  </div>
+  <div *ngIf="cargarFormularioBooleam">
+    <form [formGroup]="formTax">
+
+      <div class="row justify-content-center px-5">
+
+        <div class="card_form col-md-6 mb-3">
+          <div class="form-group">
+            <label> Nombre </label>
+            <input type="text" class="form-control" formControlName="name" placeholder="Ingrese el nombre del impuesto">
+            <div *ngIf="formTax.controls.name.touched && formTax.controls.name.errors?.required"
+              class="text text-danger">
+              El nombre es requerido
+            </div>
+          </div>
+        </div>
+
+        <div class="card_form col-md-6 mb-3">
+          <div class="form-group">
+            <label> Descripcion </label>
+            <input type="text" class="form-control" formControlName="description" placeholder="Ingrese la descripcion">
+            <div *ngIf="formTax.controls.description.touched && formTax.controls.description.errors?.required"
+              class="text text-danger">
+              La descripcion es requerida
+            </div>
+          </div>
+        </div>
+
+        <div class="card_form col-md-6">
+          <div class="form-group">
+            <label> Tasas de Impuestos </label>
+            <input type="number" class="form-control" formControlName="defaultRate" placeholder="Ingrese la tasa de impuesto">
+            <div *ngIf="formTax.controls.defaultRate.touched && formTax.controls.defaultRate.errors?.required"
+              class="text text-danger">
+              La Tasas de Impuestos es requerida
+            </div>
+          </div>
+        </div>
+
+        <div class="card_form col-md-6">
+          <div class="form-group">
+            <label> País </label>
+            <ng-select [items]="countries" bindLabel="name" bindValue="id" formControlName="idCountry">
+            </ng-select>
+            <div *ngIf="formTax.controls.idCountry.touched && formTax.controls.idCountry.errors?.required"
+              class="text text-danger">
+              El País es requerido
+            </div>
+          </div>
+        </div>
+
+
+        <div class="card_select p-3 col-md-10">
+        </div>
+        <div class="row justify-content-between p-3 col-md-10">
+          <button (click)="saveData()" class="btn btn-outline-primary btn-ms btn-block col-md-5">
+            <i class="fa-solid fa-floppy-disk" style="color: #0a3754"></i><strong> Guardar</strong>
+          </button>
+          <button (click)="bsModalRef.hide()" class="btn btn-outline-secondary btn-ms btn-block col-md-5">
+            <i class="fa-solid fa-ban" id="icon_cancel"></i><strong> Cerrar</strong>
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>
