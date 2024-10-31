@@ -22,11 +22,11 @@
         <div class="row justify-content-between p-3">
           <h3 class="col-md-6"> <i class="fa-solid fa-square-poll-horizontal" id="icon_subtitle"></i> Gestión de Módulos
           </h3>
-          <div class="card_search col-md-4 position-relative">
+          <div class="card_search col-md-3 position-relative">
             <input id="search" type="search" [(ngModel)]="buscadorModule" class="form-control" placeholder="Buscar">
             <i class="fas fa-search position-absolute" id="icon_search"></i>
           </div>
-          <button (click)="newModule()" class="btn btn-outline-primary btn-ms btn-block col-md-2">
+          <button (click)="newModule()" class="btn btn-outline-primary btn-ms btn-block col-md-2" id="create_boton">
             <i class="fa-solid fa-circle-plus"></i> Crear
           </button>
         </div>
@@ -90,11 +90,11 @@
         <div class="row justify-content-between p-3">
           <h3 class="col-md-6"><i class="fa-solid fa-square-poll-horizontal" id="icon_subtitle"></i> Gestión de
             SubModulos</h3>
-          <div class="card_search col-md-4 position-relative">
+          <div class="card_search col-md-3 position-relative">
             <input id="search" type="search" [(ngModel)]="buscadorSubModule" class="form-control" placeholder="Buscar">
             <i class="fas fa-search position-absolute" id="icon_search"></i>
           </div>
-          <button (click)="newSubModule()" class="btn btn-outline-primary btn-ms btn-block col-md-2">
+          <button (click)="newSubModule()" class="btn btn-outline-primary btn-ms btn-block col-md-2" id="create_boton">
             <i class="fa-solid fa-circle-plus"></i> Crear
           </button>
         </div>

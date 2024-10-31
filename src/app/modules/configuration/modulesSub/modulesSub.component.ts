@@ -39,8 +39,8 @@ export class ModulesSubComponent implements OnInit {
     private modalService: BsModalService,
     public toast: ToastrService,
     private errorService: ErrorService,
-    private modulesSubService: ModulesSubService
-    // private sweetAlertService: SweetAlertService
+    private modulesSubService: ModulesSubService,
+    private sweetAlertService: SweetAlertService
   ) { }
 
   ngOnInit(): void {
@@ -141,22 +141,22 @@ export class ModulesSubComponent implements OnInit {
    * @param id
    */
   async statesSubModule(id): Promise<void> {
-    // if (await this.sweetAlertService.alertStatesMessage()) {
-    //   await firstValueFrom(this.cargosService.cambiarEstadosByid(id)).then(
-    //     (_) => {
-    //       this.toast.success('Estado cambiado correctamente', 'Cargo');
-    //       this.loadData();
-    //     },
-    //     (err) => {
-    //       const errorObject = this.errorService.showNotification(err);
-    //       this.toast[errorObject.typeToast](
-    //         errorObject.message,
-    //         errorObject.typeMessage,
-    //         { timeOut: errorObject.timeOut }
-    //       );
-    //     }
-    //   );
-    // }
+    if (await this.sweetAlertService.alertStatesMessage()) {
+      // await firstValueFrom(this.modulesSubService.cambiarEstadosByid(id)).then(
+      //   (_) => {
+      //     this.toast.success('Estado cambiado correctamente', 'Cargo');
+      //     this.loadData();
+      //   },
+      //   (err) => {
+      //     const errorObject = this.errorService.showNotification(err);
+      //     this.toast[errorObject.typeToast](
+      //       errorObject.message,
+      //       errorObject.typeMessage,
+      //       { timeOut: errorObject.timeOut }
+      //     );
+      //   }
+      // );
+    }
   }
 
   getModulesId(idModule){

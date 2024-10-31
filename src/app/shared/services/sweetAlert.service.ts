@@ -57,8 +57,8 @@ export class SweetAlertService {
 
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
-        confirmButton: 'btn btn-primary',
-        cancelButton: 'btn btn-danger'
+        confirmButton: 'btn btn-outline-primary',
+        cancelButton: 'btn btn-outline-secondary'
       },
       buttonsStyling: false,
     })
