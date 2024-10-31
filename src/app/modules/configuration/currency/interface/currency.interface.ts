@@ -10,9 +10,18 @@ export interface ICountry {
   language: string;
   countryCode: number;
   idCurrency: number;
-  idCurrencies: [];
   nameCurrency: string;
-  nameCurrencies: [];
   code: string;
   state: number;
 }
+
+export interface ITax {
+  id: number;
+  name: string;
+  description: string;
+  defaultRate: number;
+  idCountry: number;
+  nameCountry?: string;
+  state: number;
+}
+

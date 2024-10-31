@@ -4,7 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ErrorService } from 'src/app/shared/services/error.service';
 import { SweetAlertService } from 'src/app/shared/services/sweetAlert.service';
 import { firstValueFrom } from 'rxjs';
-import { ICountry, ICurrency } from './interface/currency.interface';
+import { ICountry, ICurrency, ITax } from './interface/currency.interface';
 import { CurrencyService } from './services/currency.service';
 import { EditCurrencyComponent } from './components/edit-currency/edit-currency.component';
 import { EditCountryComponent } from './components/edit-country/edit-country.component';
@@ -17,7 +17,7 @@ import { EditCountryComponent } from './components/edit-country/edit-country.com
 export class CurrencyComponent implements OnInit {
 
   private bsModalRef: BsModalRef;
-  public selectedTab: number = 1;
+  public selectedTab: number = 3;
 
   // currencies
   public currencys: Array<ICurrency> = [];
@@ -27,12 +27,19 @@ export class CurrencyComponent implements OnInit {
   public _buscadorCurrency: string = '';
 
   //countries
-
   public countries: Array<ICountry> = [];
   public nPaginasCountries = [5, 10, 20, 50, 100];
   public pageCountries: number = 1;
   public totalPaginasCountries = 5;
   public _buscadorCountries: string = '';
+
+  //Tqxes
+  public taxes: Array<ITax> = [];
+  public nPaginasTaxes = [5, 10, 20, 50, 100];
+  public pageTaxes: number = 1;
+  public totalPaginasTaxes = 5;
+  public _buscadorTaxes: string = '';
+
 
   constructor(
     private modalService: BsModalService,
@@ -61,30 +68,21 @@ export class CurrencyComponent implements OnInit {
       const errorObject = this.errorService.showNotification(err);
       this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
     });
+
     firstValueFrom(this.currencyService.getCountries()).then(countriesBack => {
-      const result: Array<ICountry> = Object.values(countriesBack.reduce((acc, curr) => {
-        if (!acc[curr.id]) {
-          acc[curr.id] = {
-            id: curr.id,
-            name: curr.name,
-            state: curr.state,
-            language: curr.language,
-            countryCode: curr.countryCode,
-            idCurrencies: [],
-            nameCurrencies: []
-          };
-        }
-        if (!acc[curr.id].idCurrencies.includes(curr.idCurrency)) {
-          acc[curr.id].idCurrencies.push(curr.idCurrency);
-          acc[curr.id].nameCurrencies.push(' ' + curr.nameCurrency + ' - ' + curr.code);
-        }
-        return acc;
-      }, {}));
-      this.countries = result;
+      this.countries = countriesBack;
     }, err => {
       const errorObject = this.errorService.showNotification(err);
       this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
     });
+
+    firstValueFrom(this.currencyService.getTaxes()).then(taxesBack => {
+      this.taxes = taxesBack;
+    }, err => {
+      const errorObject = this.errorService.showNotification(err);
+      this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
+    });
+
   }
 
   newCurrency() {
@@ -104,7 +102,7 @@ export class CurrencyComponent implements OnInit {
     });
   }
 
- async deleteCurrency(id: number){
+  async deleteCurrency(id: number) {
     if (await this.sweetAlertService.alertDeleteMessage()) {
       firstValueFrom(this.currencyService.deleteCurrency(id)).then(i => {
         this.toast.success('Moneda eliminada correctamente', 'Monedas')
@@ -163,7 +161,7 @@ export class CurrencyComponent implements OnInit {
     });
   }
 
- async deleteCountry(id: number){
+  async deleteCountry(id: number) {
     if (await this.sweetAlertService.alertDeleteMessage()) {
       firstValueFrom(this.currencyService.deleteCountry(id)).then(i => {
         this.toast.success('País eliminada correctamente', 'País')
@@ -198,6 +196,64 @@ export class CurrencyComponent implements OnInit {
     }
     return this.countries.filter((currency) =>
       currency.name.toLowerCase().includes(this.buscadorCountries.toLowerCase())
+    );
+  }
+
+
+  // taxes
+
+  newTax() {
+    // this.bsModalRef = this.modalService.show(EditCountryComponent, { backdrop: 'static', class: 'modal-lg p-5', });
+    // this.bsModalRef.content.title = 'Crear Pais';
+    // this.bsModalRef.onHidden?.subscribe((_) => {
+    //   this.loadData();
+    // });
+  }
+
+  editTax(tax: ITax) {
+    // this.bsModalRef = this.modalService.show(EditCountryComponent, { backdrop: 'static', class: 'modal-lg p-5', });
+    // this.bsModalRef.content.title = 'Editar Pais';
+    // this.bsModalRef.content.country = country;
+    // this.bsModalRef.onHidden?.subscribe((_) => {
+    //   this.loadData();
+    // });
+  }
+
+  async deleteTax(id: number) {
+    if (await this.sweetAlertService.alertDeleteMessage()) {
+      // firstValueFrom(this.currencyService.deleteCountry(id)).then(i => {
+      //   this.toast.success('País eliminada correctamente', 'País')
+      //   this.loadData()
+      // }, err => {
+      //   const errorObject = this.errorService.showNotification(err);
+      //   this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
+      // })
+
+    }
+  }
+
+
+  numeroPaginasTaxes($event: any) {
+    const { value } = $event.target;
+    this.totalPaginasTaxes = value;
+    this.pageTaxes = 1;
+  }
+
+  set buscadorTaxes(value: string) {
+    this._buscadorTaxes = value;
+    this.pageTaxes = 1;
+  }
+
+  get buscadorTaxes(): string {
+    return this._buscadorTaxes;
+  }
+
+  filterTaxes() {
+    if (!this.buscadorTaxes) {
+      return this.taxes;
+    }
+    return this.taxes.filter((tax) =>
+      tax.name.toLowerCase().includes(this.buscadorTaxes.toLowerCase())
     );
   }
 

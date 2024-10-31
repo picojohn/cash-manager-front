@@ -46,9 +46,9 @@
         <div class="card_form col-md-6">
           <div class="form-group">
             <label> Moneda </label>
-            <ng-select [items]="currencies" bindLabel="name" bindValue="id" formControlName="idCurrencies" [multiple]="true">
+            <ng-select [items]="currencies" bindLabel="name" bindValue="id" formControlName="idCurrency" >
             </ng-select>
-            <div *ngIf="formCountry.controls.idCurrencies.touched && formCountry.controls.idCurrencies.errors?.required"
+            <div *ngIf="formCountry.controls.idCurrency.touched && formCountry.controls.idCurrency.errors?.required"
               class="text text-danger">
               La moneda es requerido
             </div>

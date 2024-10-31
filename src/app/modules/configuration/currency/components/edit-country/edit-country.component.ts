@@ -54,7 +54,7 @@ firstValueFrom(this.currencyService.getCurrencys()).then(item => {
       name: new FormControl(this.country ? this.country.name : null, [Validators.required]),
       language: new FormControl(this.country ? this.country.language : null, [Validators.required]),
       countryCode: new FormControl(this.country ? this.country.countryCode : null, [Validators.required]),
-      idCurrencies: new FormControl(this.country ? this.country.idCurrencies : null, [Validators.required]),
+      idCurrency: new FormControl(this.country ? this.country.idCurrency : null, [Validators.required]),
       state: new FormControl(this.country ? this.country.state : 1, [Validators.required]),
     })
   }
