@@ -16,13 +16,37 @@
   --bs-btn-disabled-color: #5564eb69 !important;
   --bs-btn-disabled-bg: transparent;
   --bs-btn-disabled-border-color: #5564eb69 !important;
-  margin-bottom: 1rem;
-  margin-right:10px;
 }
+
+#create_boton {
+margin-bottom: 1rem !important;
+}
+
+/* Alerta cambiar estado */
+
+.swal2-icon.swal2-warning.swal2-icon-show {
+  color: black !important;
+  border-color: yellow !important;
+  box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.2);
+}
+
+.swal2-confirm {
+  margin-right: 5px;
+}
+
+.swal2-cancel {
+  margin-left: 5px;
+}
+
+.swal2-title {
+  color: #0a3754;
+}
+
+/* Fin alerta cambiar estado */
 
 
 .btn-outline-secondary {
-  --bs-btn-color: #0a3754 !important;
+  --bs-btn-color: gray !important;
   --bs-btn-hover-bg: rgb(198, 195, 195) !important;
   border-color: rgb(198, 195, 195) !important;
   --bs-btn-active-bg: rgb(198, 195, 195) !important;
@@ -38,7 +62,6 @@
   --bs-btn-disabled-color: rgb(198, 195, 195) !important;
   --bs-btn-disabled-bg: transparent;
   --bs-btn-disabled-border-color: rgb(198, 195, 195) !important;
-  margin-bottom: 1rem;
 }
 
 .btn-primary {
@@ -59,7 +82,6 @@
   --bs-btn-disabled-color: #5564eb69 !important;
   --bs-btn-disabled-bg: transparent;
   --bs-btn-disabled-border-color: #5564eb69 !important;
-  margin-bottom: 1rem;
 }
 
 #card_img {

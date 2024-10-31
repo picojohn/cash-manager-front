@@ -26,7 +26,7 @@
             <input id="search" type="search" [(ngModel)]="buscadorCurrency" class="form-control" placeholder="Buscar">
             <i class="fas fa-search position-absolute" id="icon_search"></i>
           </div>
-          <button (click)="newCurrency()" class="btn btn-outline-primary btn-ms btn-block col-md-2">
+          <button (click)="newCurrency()" class="btn btn-outline-primary btn-ms btn-block col-md-2" id="create_boton">
             <i class="fa-solid fa-circle-plus"></i> Crear
           </button>
         </div>
@@ -103,7 +103,7 @@
             <input id="search" type="search" [(ngModel)]="buscadorCountries" class="form-control" placeholder="Buscar">
             <i class="fas fa-search position-absolute" id="icon_search"></i>
           </div>
-          <button (click)="newCountry()" class="btn btn-outline-primary btn-ms btn-block col-md-2">
+          <button (click)="newCountry()" class="btn btn-outline-primary btn-ms btn-block col-md-2" id="create_boton">
             <i class="fa-solid fa-circle-plus"></i> Crear
           </button>
         </div>
@@ -183,7 +183,7 @@
             <input id="search" type="search" [(ngModel)]="buscadorTaxes" class="form-control" placeholder="Buscar">
             <i class="fas fa-search position-absolute" id="icon_search"></i>
           </div>
-          <button (click)="newTax()" class="btn btn-outline-primary btn-ms btn-block col-md-2">
+          <button (click)="newTax()" class="btn btn-outline-primary btn-ms btn-block col-md-2" id="create_boton">
             <i class="fa-solid fa-circle-plus"></i> Crear
           </button>
         </div>
@@ -224,8 +224,7 @@
 
         <div class="select col-md-1">
           <select class="form-select co-md-1" (change)="numeroPaginasTaxes($event)">
-            <option *ngFor="let option of nPaginasTaxes" [value]="option"
-              [selected]="option === totalPaginasTaxes">
+            <option *ngFor="let option of nPaginasTaxes" [value]="option" [selected]="option === totalPaginasTaxes">
               {{ option }}
             </option>
           </select>
@@ -235,14 +234,14 @@
             style="color: gray; font-weight: 300;justify-content: center !important;"><strong>Mostrando </strong>
             <strong style="color: #0a3754;">{{
               (pageTaxes - 1) * totalPaginasTaxes+ 1 }} <strong style="color: gray;">-</strong> {{
-              (pageTaxes * totalPaginasTaxes < filterTaxes().length) ? (pageTaxes *
-                totalPaginasTaxes) : filterTaxes().length }} <strong style="color: gray;font-weight: 300;">
+              (pageTaxes * totalPaginasTaxes < filterTaxes().length) ? (pageTaxes * totalPaginasTaxes) :
+                filterTaxes().length }} <strong style="color: gray;font-weight: 300;">
                 de</strong>
             {{ filterTaxes().length }}</strong></span>
         </div>
 
-        <pagination-controls class="col-md-5" style="padding-top: 13px; color: #0a3754;font-weight: 400;"
-          id="itemTaxes" (pageChange)="pageTaxes =$event" previousLabel="Anterior" nextLabel="Siguiente"
+        <pagination-controls class="col-md-5" style="padding-top: 13px; color: #0a3754;font-weight: 400;" id="itemTaxes"
+          (pageChange)="pageTaxes =$event" previousLabel="Anterior" nextLabel="Siguiente"
           screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
           screenReaderCurrentLabel="You're on page 5 de 10">
         </pagination-controls>
@@ -251,6 +250,4 @@
 
     </div>
   </div>
-
-
 </div>
