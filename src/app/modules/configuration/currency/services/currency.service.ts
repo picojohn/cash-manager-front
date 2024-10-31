@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, map, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { ICountry, ICurrency } from '../interface/currency.interface';
+import { ICountry, ICurrency, ITax } from '../interface/currency.interface';
 
 
 
@@ -23,13 +23,6 @@ export class CurrencyService {
     return this.http.get<Array<ICurrency>>(`${this.url}/currencys`)
   }
 
-  // getCurrencies(): Observable<Array<ICurrency>> {
-  //   return this.http.get<Array<ICurrency>>(`${this.url}/currencys`)
-  // }
-
-  // public cambiarEstadosByid(id: number): Observable<Array<any>> {
-  //   return this.http.get<Array<any>>(`${this.url}/cargos/estados/${id}`)
-  // }
 
   /**
    * metodo del servicio para crear una moneda
@@ -58,7 +51,7 @@ export class CurrencyService {
     return this.http.delete<void>(`${this.url}/currencys/${id}`,)
   }
 
-  ////
+  //// paises
 
   /**
    * metodo del servicio para traer los paises
@@ -93,6 +86,44 @@ export class CurrencyService {
    */
   deleteCountry(id: number): Observable<void> {
     return this.http.delete<void>(`${this.url}/countries/${id}`,)
+  }
+
+  ///// taxes
+
+
+  /**
+   * metodo del servicio para traer los taxes
+   * @returns Array<ITax>
+   */
+  getTaxes(): Observable<Array<ITax>> {
+    return this.http.get<Array<ITax>>(`${this.url}/taxes`)
+  }
+
+  /**
+   * metodo del servicio para crear un Tax
+   * @param tax
+   * @returns Array<ITax>
+   */
+  newTax(tax: ITax): Observable<ITax> {
+    return this.http.post<ITax>(`${this.url}/taxes`, tax)
+  }
+
+  /**
+   * metodo del servicio para editar un tax
+   * @param tax
+   * @returns
+   */
+  editTax(tax: ITax): Observable<ITax> {
+    return this.http.patch<ITax>(`${this.url}/taxes`, tax)
+  }
+
+  /**
+   * metodo del servicio para eliminar un Tax por id
+   * @param id
+   * @returns
+   */
+  deleteTax(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.url}/taxes/${id}`,)
   }
 
 }

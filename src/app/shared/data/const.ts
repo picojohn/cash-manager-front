@@ -1,11 +1,3 @@
-
-export const estadoClienteConst = [
-  { id: 1, name: 'Activo' },
-  { id: 0, name: 'Inactivo' }
-
-]
-
-
 export const constFreeIcons = [
   'fa-chart-simple', 'fa-home', 'fa-user', 'fa-cog', 'fa-star', 'fa-heart', 'fa-check', 'fa-envelope',
   'fa-search', 'fa-trash', 'fa-edit', 'fa-camera', 'fa-cloud', 'fa-comment', 'fa-download',
@@ -27,6 +19,27 @@ export const constFreeIcons = [
   'fa-ticket-alt', 'fa-times-circle', 'fa-toggle-off', 'fa-toggle-on', 'fa-toolbox', 'fa-train',
   'fa-trash-alt', 'fa-trophy', 'fa-truck', 'fa-undo', 'fa-undo-alt', 'fa-university', 'fa-unlock',
   'fa-user-circle', 'fa-user-md', 'fa-user-tie', 'fa-video', 'fa-video-slash', 'fa-volume-down',
-  'fa-volume-off', 'fa-volume-up', 'fa-wallet', 'fa-wifi', 'fa-wind', 'fa-wine-glass-alt'
+  'fa-volume-off', 'fa-volume-up', 'fa-wallet', 'fa-wifi', 'fa-wind', 'fa-wine-glass-alt', 'fa-solid fa-percent',
+  'fa-solid fa-square-pen'
 ];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
