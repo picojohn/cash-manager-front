@@ -30,19 +30,12 @@
             <i class="fa-solid fa-circle-plus"></i> Crear
           </button>
         </div>
-        <div class="row justify-content-left">
-          <div class="select col-md-1">
-            <select class="form-select co-md-1" (change)="numeroPaginasModule($event)">
-              <option *ngFor="let option of nPaginasModule" [value]="option" [selected]="option === totalPaginasModule">
-                {{ option }}
-              </option>
-            </select>
-          </div>
-        </div>
+
         <div class="scroll col-md-12">
           <table class="table table-responsive">
             <thead class="cont_head">
               <tr>
+                <th>ID</th>
                 <th>NOMBRE</th>
                 <th>URL</th>
                 <th>ICONO</th>
@@ -52,6 +45,7 @@
             <tbody class="cont_body">
               <tr
                 *ngFor="let module of filterModules() | paginate: {itemsPerPage: totalPaginasModule, currentPage: pageModule, id: 'itemsModules'}">
+               <td>{{module.id}}</td>
                 <td>
                   <p id="td_1">{{module.name}}</p>
                 </td>
@@ -68,6 +62,15 @@
 
 
       <div class="row justify-content-between text-center p-3">
+
+        <div class="select col-md-1">
+          <select class="form-select co-md-1" (change)="numeroPaginasModule($event)">
+            <option *ngFor="let option of nPaginasModule" [value]="option" [selected]="option === totalPaginasModule">
+              {{ option }}
+            </option>
+          </select>
+        </div>
+
         <div class="col-md-3 p-3" *ngIf="filterModules().length"><span
             style="color: gray; font-weight: 300;justify-content: center !important;"><strong>Mostrando </strong>
             <strong style="color: #0a3754;">{{
@@ -98,20 +101,12 @@
             <i class="fa-solid fa-circle-plus"></i> Crear
           </button>
         </div>
-        <div class="row justify-content-left">
-          <div class="select col-md-1">
-            <select class="form-select co-md-1" (change)="numeroPaginasSubModule($event)">
-              <option *ngFor="let option of nPaginasSubModule" [value]="option"
-                [selected]="option === totalPaginasSubModule">
-                {{ option }}
-              </option>
-            </select>
-          </div>
-        </div>
+
         <div class="scroll col-md-12">
           <table class="table table-responsive">
             <thead class="cont_head">
               <tr>
+                <th>ID</th>
                 <th>NOMBRE</th>
                 <th>URL</th>
                 <th>MODULO</th>
@@ -123,6 +118,7 @@
             <tbody class="cont_body">
               <tr
                 *ngFor="let subModule of filterSubModules() | paginate: {itemsPerPage: totalPaginasSubModule, currentPage: pageSubModule, id: 'itemSubmodule'}">
+              <td>{{subModule.id}}</td>
                 <td>
                   <p id="td_1">{{subModule.name}}</p>
                 </td>
@@ -143,6 +139,16 @@
       </div>
 
       <div class="row justify-content-between text-center p-3">
+
+          <div class="select col-md-1">
+            <select class="form-select co-md-1" (change)="numeroPaginasSubModule($event)">
+              <option *ngFor="let option of nPaginasSubModule" [value]="option"
+                [selected]="option === totalPaginasSubModule">
+                {{ option }}
+              </option>
+            </select>
+          </div>
+
         <div class="col-md-3 p-3" *ngIf="filterSubModules().length"><span
             style="color: gray; font-weight: 300;justify-content: center !important;"><strong>Mostrando </strong>
             <strong style="color: #0a3754;">{{

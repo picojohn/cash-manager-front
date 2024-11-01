@@ -35,7 +35,7 @@ export class EditCountryComponent {
   ngOnInit(): void {
     this.loadData()
     setTimeout(() => {
-      this.cargarFormularios()
+      this.buildForms()
       this.cargarFormularioBooleam = true
     }, 100);
   }
@@ -52,7 +52,11 @@ export class EditCountryComponent {
     })
   }
 
-  cargarFormularios() {
+  /**
+   * Medoto que construye los formularios
+   * @returns void
+   */
+  buildForms(): void {
     this.formCountry = new FormGroup({
       id: new FormControl(this.country ? this.country.id : null),
       name: new FormControl(this.country ? this.country.name : null, [Validators.required]),
@@ -63,6 +67,10 @@ export class EditCountryComponent {
     })
   }
 
+  /**
+   * metodo para guardar los datos en el backend
+   * @returns ICountry
+   */
   saveData() {
     this.formCountry.markAllAsTouched();
     if (this.formCountry.invalid) return this.toast.info('Debes llenar todos los datos requiridos del formulario', ETitleMessages.COUNTRY)

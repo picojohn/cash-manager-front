@@ -31,21 +31,18 @@ export class EditCurrencyComponent {
   }
 
   ngOnInit(): void {
-    this.loadData()
     setTimeout(() => {
-      this.cargarFormularios()
+      this.buildForms()
       this.cargarFormularioBooleam = true
     }, 100);
   }
 
+
   /**
- * carga inicial de datos
- */
-  loadData() {
-
-  }
-
-  cargarFormularios() {
+   * Medoto que construye los formularios
+   * @returns void
+   */
+  buildForms(): void {
     this.formCurrency = new FormGroup({
       id: new FormControl(this.currency ? this.currency.id : null),
       name: new FormControl(this.currency ? this.currency.name : null, [Validators.required]),
@@ -54,17 +51,21 @@ export class EditCurrencyComponent {
     })
   }
 
+  /**
+   * metodo para guardar los datos en el backend
+   * @returns ICurrency
+   */
   saveData() {
-      this.formCurrency.markAllAsTouched();
-      if (this.formCurrency.invalid) return this.toast.info('Debes llenar todos los datos requiridos del formulario', ETitleMessages.CURRENCY)
-        const rawValue: ICurrency = this.formCurrency.value;
-        firstValueFrom( this.currency? this.currencyService.editCurrency(rawValue) : this.currencyService.newCurrency(rawValue)).then(item => {
-          this.toast.success(` Moneda ${this.currency? 'modificada' : 'creada'} correctamente`, ETitleMessages.CURRENCY)
-          this.bsModalRef.hide()
-        }, err => {
-          const errorObject = this.errorService.showNotification(err);
-          this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
-        })
+    this.formCurrency.markAllAsTouched();
+    if (this.formCurrency.invalid) return this.toast.info('Debes llenar todos los datos requiridos del formulario', ETitleMessages.CURRENCY)
+    const rawValue: ICurrency = this.formCurrency.value;
+    firstValueFrom(this.currency ? this.currencyService.editCurrency(rawValue) : this.currencyService.newCurrency(rawValue)).then(item => {
+      this.toast.success(` Moneda ${this.currency ? 'modificada' : 'creada'} correctamente`, ETitleMessages.CURRENCY)
+      this.bsModalRef.hide()
+    }, err => {
+      const errorObject = this.errorService.showNotification(err);
+      this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
+    })
 
   }
 

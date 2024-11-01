@@ -35,7 +35,7 @@ export class EditTaxComponent {
   ngOnInit(): void {
     this.loadData()
     setTimeout(() => {
-      this.cargarFormularios()
+      this.buildForms()
       this.cargarFormularioBooleam = true
     }, 100);
   }
@@ -46,14 +46,18 @@ export class EditTaxComponent {
   loadData() {
     firstValueFrom(this.currencyService.getCountries()).then(item => {
       this.countries = item
-     }, err => {
+    }, err => {
       const errorObject = this.errorService.showNotification(err);
       this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
     })
 
   }
 
-  cargarFormularios() {
+  /**
+   * Medoto que construye los formularios
+   * @returns void
+   */
+  buildForms(): void {
     this.formTax = new FormGroup({
       id: new FormControl(this.tax ? this.tax.id : null),
       name: new FormControl(this.tax ? this.tax.name : null, [Validators.required]),
@@ -64,6 +68,10 @@ export class EditTaxComponent {
     })
   }
 
+  /**
+   * metodo para guardar los datos ne le backend
+   * @returns ITax
+   */
   saveData() {
     this.formTax.markAllAsTouched();
     if (this.formTax.invalid) return this.toast.info('Debes llenar todos los datos requiridos del formulario', ETitleMessages.TAX)

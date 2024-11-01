@@ -5,5 +5,7 @@ export enum ETitleMessages {
   CURRENCY = 'Monedas',
   COUNTRY = 'Países',
   TAX = 'Impuestos',
+  MODULE = 'Modulos',
+  SUBMODULE = 'SubModulos',
 
 }

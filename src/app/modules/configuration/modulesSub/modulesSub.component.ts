@@ -8,6 +8,7 @@ import { IModule, ISubModule } from './interface/modulesSub.interface';
 import { ModulesSubService } from './services/modulesSub.service';
 import { EditModuleComponent } from './components/edit-module/edit-module.component';
 import { EditSubModuleComponent } from './components/edit-subModule/edit-subModule.component';
+import { ETitleMessages } from 'src/app/shared/enums/error.service.eum';
 
 @Component({
   selector: 'app-modulesSub',
@@ -142,20 +143,20 @@ export class ModulesSubComponent implements OnInit {
    */
   async statesSubModule(id): Promise<void> {
     if (await this.sweetAlertService.alertStatesMessage()) {
-      // await firstValueFrom(this.modulesSubService.cambiarEstadosByid(id)).then(
-      //   (_) => {
-      //     this.toast.success('Estado cambiado correctamente', 'Cargo');
-      //     this.loadData();
-      //   },
-      //   (err) => {
-      //     const errorObject = this.errorService.showNotification(err);
-      //     this.toast[errorObject.typeToast](
-      //       errorObject.message,
-      //       errorObject.typeMessage,
-      //       { timeOut: errorObject.timeOut }
-      //     );
-      //   }
-      // );
+      await firstValueFrom(this.modulesSubService.cambiarEstadosByid(id)).then(
+        (_) => {
+          this.toast.success('Estado cambiado correctamente', ETitleMessages.SUBMODULE);
+          this.loadData();
+        },
+        (err) => {
+          const errorObject = this.errorService.showNotification(err);
+          this.toast[errorObject.typeToast](
+            errorObject.message,
+            errorObject.typeMessage,
+            { timeOut: errorObject.timeOut }
+          );
+        }
+      );
     }
   }
 

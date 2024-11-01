@@ -7,6 +7,7 @@ import { firstValueFrom } from 'rxjs';
 import { IModule, ISubModule } from '../../interface/modulesSub.interface';
 import { ModulesSubService } from '../../services/modulesSub.service';
 import { constFreeIcons } from 'src/app/shared/data/const';
+import { ETitleMessages } from 'src/app/shared/enums/error.service.eum';
 
 
 @Component({
@@ -35,7 +36,7 @@ export class EditSubModuleComponent {
   ngOnInit(): void {
     this.loadData()
     setTimeout(() => {
-      this.cargarFormularios()
+      this.buildForms()
       this.cargarFormularioBooleam = true
     }, 100);
   }
@@ -46,14 +47,17 @@ export class EditSubModuleComponent {
   loadData() {
     firstValueFrom(this.modulesSubService.getModulesAll()).then(item => {
       this.modules = item
-      // this.currencies = item
     }, err => {
       const errorObject = this.errorService.showNotification(err);
       this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
     })
   }
 
-  cargarFormularios() {
+  /**
+   * Medoto que construye los formularios
+   * @returns void
+   */
+  buildForms(): void {
     this.formSubModule = new FormGroup({
       id: new FormControl(this.subModule ? this.subModule.id : null),
       name: new FormControl(this.subModule ? this.subModule.name : null, [Validators.required]),
@@ -67,10 +71,10 @@ export class EditSubModuleComponent {
 
   saveData() {
     this.formSubModule.markAllAsTouched();
-    if (this.formSubModule.invalid) return this.toast.info('Debes llenar todos los datos requiridos del formulario', 'Modulos')
+    if (this.formSubModule.invalid) return this.toast.info('Debes llenar todos los datos requiridos del formulario', ETitleMessages.SUBMODULE)
     const rawValue: ISubModule = this.formSubModule.value;
-    firstValueFrom(this.subModule ? this.modulesSubService.editModule(rawValue) : this.modulesSubService.newModule(rawValue)).then(item => {
-      this.toast.success(` SubModulo ${this.subModule ? 'modificado' : 'creado'} correctamente`, 'SubModulo')
+    firstValueFrom(this.subModule ? this.modulesSubService.editSubModule(rawValue) : this.modulesSubService.newSubModule(rawValue)).then(_ => {
+      this.toast.success(` SubModulo ${this.subModule ? 'modificado' : 'creado'} correctamente`, ETitleMessages.SUBMODULE)
       this.bsModalRef.hide()
     }, err => {
       const errorObject = this.errorService.showNotification(err);

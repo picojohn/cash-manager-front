@@ -14,7 +14,7 @@ export class ModulesSubService {
   private url = environment.endpoint
   constructor(private http: HttpClient) { }
 
-//  moduelos
+  //  moduelos
   getModulesAll(): Observable<Array<IModule>> {
     return this.http.get<Array<IModule>>(`${this.url}/modules`)
   }
@@ -29,11 +29,28 @@ export class ModulesSubService {
   }
 
 
-// submodulos
+  // submodulos
 
-getSubModulesAll(): Observable<Array<ISubModule>> {
-  return this.http.get<Array<ISubModule>>(`${this.url}/subModules`)
-}
+  getSubModulesAll(): Observable<Array<ISubModule>> {
+    return this.http.get<Array<ISubModule>>(`${this.url}/subModules`)
+  }
 
+  newSubModule(subModule: ISubModule): Observable<ISubModule> {
+    return this.http.post<ISubModule>(`${this.url}/subModules`, subModule)
+  }
+
+
+  editSubModule(subModule: ISubModule): Observable<ISubModule> {
+    return this.http.patch<ISubModule>(`${this.url}/subModules`, subModule)
+  }
+
+    /**
+   * metodo del servicio para cambiar el estado del BusinessAccount
+   * @param id
+   * @returns
+   */
+    public cambiarEstadosByid(id: number): Observable<Array<any>> {
+      return this.http.get<Array<any>>(`${this.url}/subModules/estados/${id}`);
+    }
 
 }

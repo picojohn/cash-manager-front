@@ -50,6 +50,19 @@
           </div>
         </div>
 
+        <div class="card_form col-md-6">
+          <div class="form-group">
+            <label> Módulos </label>
+            <ng-select [items]="modules" bindLabel="name" bindValue="id" formControlName="idModule" >
+            </ng-select>
+            <div *ngIf="formSubModule.controls.idModule.touched && formSubModule.controls.idModule.errors?.required"
+              class="text text-danger">
+              El modulo es requerido
+            </div>
+          </div>
+        </div>
+
+
         <div class="card_select p-3 col-md-10">
         </div>
         <div class="row justify-content-between p-3 col-md-10">

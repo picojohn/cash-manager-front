@@ -19,7 +19,7 @@ import { EditTaxComponent } from './components/edit-tax/edit-tax.component';
 export class CurrencyComponent implements OnInit {
 
   private bsModalRef: BsModalRef;
-  public selectedTab: number = 3;
+  public selectedTab: number = 1;
 
   // currencies
   public currencys: Array<ICurrency> = [];
