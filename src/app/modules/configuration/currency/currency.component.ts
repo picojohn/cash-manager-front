@@ -8,6 +8,8 @@ import { ICountry, ICurrency, ITax } from './interface/currency.interface';
 import { CurrencyService } from './services/currency.service';
 import { EditCurrencyComponent } from './components/edit-currency/edit-currency.component';
 import { EditCountryComponent } from './components/edit-country/edit-country.component';
+import { ETitleMessages } from 'src/app/shared/enums/error.service.eum';
+import { EditTaxComponent } from './components/edit-tax/edit-tax.component';
 
 @Component({
   selector: 'app-currency',
@@ -17,7 +19,7 @@ import { EditCountryComponent } from './components/edit-country/edit-country.com
 export class CurrencyComponent implements OnInit {
 
   private bsModalRef: BsModalRef;
-  public selectedTab: number = 3;
+  public selectedTab: number = 1;
 
   // currencies
   public currencys: Array<ICurrency> = [];
@@ -105,7 +107,7 @@ export class CurrencyComponent implements OnInit {
   async deleteCurrency(id: number) {
     if (await this.sweetAlertService.alertDeleteMessage()) {
       firstValueFrom(this.currencyService.deleteCurrency(id)).then(i => {
-        this.toast.success('Moneda eliminada correctamente', 'Monedas')
+        this.toast.success('Moneda eliminada correctamente', ETitleMessages.CURRENCY)
         this.loadData()
       }, err => {
         const errorObject = this.errorService.showNotification(err);
@@ -164,7 +166,7 @@ export class CurrencyComponent implements OnInit {
   async deleteCountry(id: number) {
     if (await this.sweetAlertService.alertDeleteMessage()) {
       firstValueFrom(this.currencyService.deleteCountry(id)).then(i => {
-        this.toast.success('País eliminada correctamente', 'País')
+        this.toast.success('País eliminado correctamente', ETitleMessages.COUNTRY)
         this.loadData()
       }, err => {
         const errorObject = this.errorService.showNotification(err);
@@ -203,31 +205,31 @@ export class CurrencyComponent implements OnInit {
   // taxes
 
   newTax() {
-    // this.bsModalRef = this.modalService.show(EditCountryComponent, { backdrop: 'static', class: 'modal-lg p-5', });
-    // this.bsModalRef.content.title = 'Crear Pais';
-    // this.bsModalRef.onHidden?.subscribe((_) => {
-    //   this.loadData();
-    // });
+    this.bsModalRef = this.modalService.show(EditTaxComponent, { backdrop: 'static', class: 'modal-lg p-5', });
+    this.bsModalRef.content.title = 'Crear Impuesto';
+    this.bsModalRef.onHidden?.subscribe((_) => {
+      this.loadData();
+    });
   }
 
   editTax(tax: ITax) {
-    // this.bsModalRef = this.modalService.show(EditCountryComponent, { backdrop: 'static', class: 'modal-lg p-5', });
-    // this.bsModalRef.content.title = 'Editar Pais';
-    // this.bsModalRef.content.country = country;
-    // this.bsModalRef.onHidden?.subscribe((_) => {
-    //   this.loadData();
-    // });
+    this.bsModalRef = this.modalService.show(EditTaxComponent, { backdrop: 'static', class: 'modal-lg p-5', });
+    this.bsModalRef.content.title = 'Editar Impuesto';
+    this.bsModalRef.content.tax = tax;
+    this.bsModalRef.onHidden?.subscribe((_) => {
+      this.loadData();
+    });
   }
 
   async deleteTax(id: number) {
     if (await this.sweetAlertService.alertDeleteMessage()) {
-      // firstValueFrom(this.currencyService.deleteCountry(id)).then(i => {
-      //   this.toast.success('País eliminada correctamente', 'País')
-      //   this.loadData()
-      // }, err => {
-      //   const errorObject = this.errorService.showNotification(err);
-      //   this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
-      // })
+      firstValueFrom(this.currencyService.deleteTax(id)).then(i => {
+        this.toast.success('Impuesto eliminado correctamente', ETitleMessages.TAX)
+        this.loadData()
+      }, err => {
+        const errorObject = this.errorService.showNotification(err);
+        this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
+      })
 
     }
   }

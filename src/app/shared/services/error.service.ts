@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ICustomError } from "../interface/error.service.interface";
+import { ETitleMessages } from '../enums/error.service.eum';
 @Injectable({
   providedIn: 'root'
 })
@@ -50,19 +51,19 @@ export class ErrorService {
 
 
       case '3001':
-        customError.typeMessage = 'Login';
+        customError.typeMessage = ETitleMessages.LOGIN;
         customError.timeOut = this.timeOut;
         customError.typeToast = 'info';
         this.messageObject = customError;
         break;
       case '3002':
-        customError.typeMessage = 'Moneda';
+        customError.typeMessage = ETitleMessages.CURRENCY;
         customError.timeOut = this.timeOut;
         customError.typeToast = 'info';
         this.messageObject = customError;
         break;
-      case '3003': // va esta
-        customError.typeMessage = 'Login';
+      case '3003':
+        customError.typeMessage = ETitleMessages.COUNTRY;
         customError.timeOut = this.timeOut;
         customError.typeToast = 'info';
         this.messageObject = customError;

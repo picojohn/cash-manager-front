@@ -6,15 +6,15 @@
     </div>
   </div>
   <div *ngIf="cargarFormularioBooleam">
-    <form [formGroup]="formSubModule">
+    <form [formGroup]="formTax">
 
       <div class="row justify-content-center px-5">
 
         <div class="card_form col-md-6 mb-3">
           <div class="form-group">
             <label> Nombre </label>
-            <input type="text" class="form-control" formControlName="name" placeholder="Ingrese el nombre del modulo">
-            <div *ngIf="formSubModule.controls.name.touched && formSubModule.controls.name.errors?.required"
+            <input type="text" class="form-control" formControlName="name" placeholder="Ingrese el nombre del impuesto">
+            <div *ngIf="formTax.controls.name.touched && formTax.controls.name.errors?.required"
               class="text text-danger">
               El nombre es requerido
             </div>
@@ -23,41 +23,34 @@
 
         <div class="card_form col-md-6 mb-3">
           <div class="form-group">
-            <label> Url </label>
-            <input type="text" class="form-control" formControlName="path" placeholder="Ingrese la url">
-            <div *ngIf="formSubModule.controls.path.touched && formSubModule.controls.path.errors?.required"
+            <label> Descripcion </label>
+            <input type="text" class="form-control" formControlName="description" placeholder="Ingrese la descripcion">
+            <div *ngIf="formTax.controls.description.touched && formTax.controls.description.errors?.required"
               class="text text-danger">
-              La url es requerida
+              La descripcion es requerida
             </div>
           </div>
         </div>
 
         <div class="card_form col-md-6">
           <div class="form-group">
-            <label>Icono</label>
-            <ng-select formControlName="icon" [items]="freeIcons" bindValue="value" placeholder="Seleccione un ícono">
-              <ng-template ng-option-tmp let-item="item">
-                <i [class]="'fas ' + item"></i>
-              </ng-template>
-              <ng-template ng-label-tmp let-item="item">
-                <i [class]="'fas ' + item"></i>
-              </ng-template>
-            </ng-select>
-            <div *ngIf="formSubModule.controls.icon.touched && formSubModule.controls.icon.errors?.required"
+            <label> Tasas de Impuestos </label>
+            <input type="number" class="form-control" formControlName="defaultRate" placeholder="Ingrese la tasa de impuesto">
+            <div *ngIf="formTax.controls.defaultRate.touched && formTax.controls.defaultRate.errors?.required"
               class="text text-danger">
-              El icono es requerido
+              La Tasas de Impuestos es requerida
             </div>
           </div>
         </div>
 
         <div class="card_form col-md-6">
           <div class="form-group">
-            <label> Módulos </label>
-            <ng-select [items]="modules" bindLabel="name" bindValue="id" formControlName="idModule" >
+            <label> País </label>
+            <ng-select [items]="countries" bindLabel="name" bindValue="id" formControlName="idCountry">
             </ng-select>
-            <div *ngIf="formSubModule.controls.idModule.touched && formSubModule.controls.idModule.errors?.required"
+            <div *ngIf="formTax.controls.idCountry.touched && formTax.controls.idCountry.errors?.required"
               class="text text-danger">
-              El modulo es requerido
+              El País es requerido
             </div>
           </div>
         </div>
@@ -74,6 +67,7 @@
           </button>
         </div>
       </div>
+
     </form>
   </div>
 </div>

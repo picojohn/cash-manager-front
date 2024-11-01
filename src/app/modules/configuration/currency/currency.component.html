@@ -195,7 +195,7 @@
                 <th>ID</th>
                 <th>NOMBRE</th>
                 <th>DESCRIPCION</th>
-                <th>TASA</th>
+                <th>TASA DE IMPUESTO</th>
                 <th>PAIS</th>
                 <th>ACCIONES</th>
               </tr>
@@ -208,7 +208,7 @@
                   <p id="td_1">{{tax.name}}</p>
                 </td>
                 <td> {{tax.description}} </td>
-                <td> {{tax.defaultRate}} </td>
+                <td> {{tax.defaultRate}}%</td>
                 <td> {{tax.nameCountry}} </td>
                 <td>
                   <i (click)="editTax(tax)" class="fa-solid fa-pen-to-square" id="table_icon_edit"></i>

@@ -6,6 +6,7 @@ import { AuthenticationService } from '../../service/authentication.service';
 import { Router } from '@angular/router';
 import { ErrorService } from '../../../shared/services/error.service';
 import jwt_decode from 'jwt-decode';
+import { ETitleMessages } from 'src/app/shared/enums/error.service.eum';
 
 @Component({
   selector: 'app-login',
@@ -58,7 +59,7 @@ export class LoginComponent implements OnInit {
   login(): void {
     this.loginForm.markAllAsTouched()
     if (this.loginForm.invalid) {
-      this.toast.info('Todos los campos son obligatorios', 'Información');
+      this.toast.info('Todos los campos son obligatorios', ETitleMessages.LOGIN);
     }
     else {
       this.loadingSession = true;
@@ -88,7 +89,7 @@ export class LoginComponent implements OnInit {
           //       localStorage.setItem('permission', permisos);
                 this.router.navigate(['gestiones'])
         } else {
-          this.toast.error('Usuario o contraseña errada', 'Información');
+          this.toast.error('Usuario o contraseña errada', ETitleMessages.LOGIN);
         }
 
       }, err => {
