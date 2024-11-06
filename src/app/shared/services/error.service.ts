@@ -68,8 +68,8 @@ export class ErrorService {
         customError.typeToast = 'info';
         this.messageObject = customError;
         break;
-      case '3004': // va esta
-        customError.typeMessage = 'Login';
+      case '3004':
+        customError.typeMessage = ETitleMessages.CURRENCY;
         customError.timeOut = this.timeOut;
         customError.typeToast = 'info';
         this.messageObject = customError;

@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, map, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { ICountry, ICurrency, ITax } from '../interface/currency.interface';
+import { ICountry, ICurrency, IGroup, ITax } from '../interface/currency.interface';
 
 
 
@@ -124,6 +124,44 @@ export class CurrencyService {
    */
   deleteTax(id: number): Observable<void> {
     return this.http.delete<void>(`${this.url}/taxes/${id}`,)
+  }
+
+  ///// Groups
+
+
+  /**
+   * metodo del servicio para traer los Groups
+   * @returns Array<IGroup>
+   */
+  getGroups(): Observable<Array<IGroup>> {
+    return this.http.get<Array<IGroup>>(`${this.url}/groups`)
+  }
+
+  /**
+   * metodo del servicio para crear un Groups
+   * @param group
+   * @returns Array<IGroup>
+   */
+  newGroup(group: IGroup): Observable<IGroup> {
+    return this.http.post<IGroup>(`${this.url}/groups`, group)
+  }
+
+  /**
+   * metodo del servicio para editar un Group
+   * @param group
+   * @returns
+   */
+  editGroup(group: IGroup): Observable<IGroup> {
+    return this.http.patch<IGroup>(`${this.url}/groups`, group)
+  }
+
+  /**
+   * metodo del servicio para eliminar un Group por id
+   * @param id
+   * @returns
+   */
+  deleteGroup(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.url}/groups/${id}`,)
   }
 
 }

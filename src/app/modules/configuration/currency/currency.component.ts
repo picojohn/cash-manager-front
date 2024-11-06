@@ -4,12 +4,13 @@ import { ToastrService } from 'ngx-toastr';
 import { ErrorService } from 'src/app/shared/services/error.service';
 import { SweetAlertService } from 'src/app/shared/services/sweetAlert.service';
 import { firstValueFrom } from 'rxjs';
-import { ICountry, ICurrency, ITax } from './interface/currency.interface';
+import { ICountry, ICurrency, IGroup, ITax } from './interface/currency.interface';
 import { CurrencyService } from './services/currency.service';
 import { EditCurrencyComponent } from './components/edit-currency/edit-currency.component';
 import { EditCountryComponent } from './components/edit-country/edit-country.component';
 import { ETitleMessages } from 'src/app/shared/enums/error.service.eum';
 import { EditTaxComponent } from './components/edit-tax/edit-tax.component';
+import { EditGroupComponent } from './components/edit-group/edit-group.component';
 
 @Component({
   selector: 'app-currency',
@@ -19,7 +20,7 @@ import { EditTaxComponent } from './components/edit-tax/edit-tax.component';
 export class CurrencyComponent implements OnInit {
 
   private bsModalRef: BsModalRef;
-  public selectedTab: number = 1;
+  public selectedTab: number = 4;
 
   // currencies
   public currencys: Array<ICurrency> = [];
@@ -41,6 +42,13 @@ export class CurrencyComponent implements OnInit {
   public pageTaxes: number = 1;
   public totalPaginasTaxes = 5;
   public _buscadorTaxes: string = '';
+
+  //Groups
+  public groups: Array<IGroup> = [];
+  public nPaginasGroups = [5, 10, 20, 50, 100];
+  public pageGroups: number = 1;
+  public totalPaginasGroups= 5;
+  public _buscadorGroups: string = '';
 
 
   constructor(
@@ -80,6 +88,13 @@ export class CurrencyComponent implements OnInit {
 
     firstValueFrom(this.currencyService.getTaxes()).then(taxesBack => {
       this.taxes = taxesBack;
+    }, err => {
+      const errorObject = this.errorService.showNotification(err);
+      this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
+    });
+
+    firstValueFrom(this.currencyService.getGroups()).then(groupsBack => {
+      this.groups = groupsBack;
     }, err => {
       const errorObject = this.errorService.showNotification(err);
       this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
@@ -256,6 +271,64 @@ export class CurrencyComponent implements OnInit {
     }
     return this.taxes.filter((tax) =>
       tax.name.toLowerCase().includes(this.buscadorTaxes.toLowerCase())
+    );
+  }
+
+
+  // Groups
+
+  newGroup() {
+    this.bsModalRef = this.modalService.show(EditGroupComponent, { backdrop: 'static', class: 'modal-lg p-5', });
+    this.bsModalRef.content.title = 'Crear Grupo';
+    this.bsModalRef.onHidden?.subscribe((_) => {
+      this.loadData();
+    });
+  }
+
+  editGroup(group: IGroup) {
+    this.bsModalRef = this.modalService.show(EditGroupComponent, { backdrop: 'static', class: 'modal-lg p-5', });
+    this.bsModalRef.content.title = 'Editar Grupo';
+    this.bsModalRef.content.group = group;
+    this.bsModalRef.onHidden?.subscribe((_) => {
+      this.loadData();
+    });
+  }
+
+  async deleteGroup(id: number) {
+    if (await this.sweetAlertService.alertDeleteMessage()) {
+      firstValueFrom(this.currencyService.deleteGroup(id)).then(i => {
+        this.toast.success('Grupo eliminado correctamente', ETitleMessages.GROUPS)
+        this.loadData()
+      }, err => {
+        const errorObject = this.errorService.showNotification(err);
+        this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
+      })
+
+    }
+  }
+
+
+  numeroPaginasGroup($event: any) {
+    const { value } = $event.target;
+    this.totalPaginasGroups = value;
+    this.pageGroups = 1;
+  }
+
+  set buscadorGroups(value: string) {
+    this._buscadorGroups = value;
+    this.pageGroups = 1;
+  }
+
+  get buscadorGroups(): string {
+    return this._buscadorGroups;
+  }
+
+  filterGroups() {
+    if (!this.buscadorGroups) {
+      return this.groups;
+    }
+    return this.groups.filter((group) =>
+      group.name.toLowerCase().includes(this.buscadorGroups.toLowerCase())
     );
   }
 

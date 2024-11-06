@@ -52,6 +52,7 @@ export interface IDatosUsuario {
   lastName: string;
   userName: string;
   id: number
+  idCompany: number
 }
 
 

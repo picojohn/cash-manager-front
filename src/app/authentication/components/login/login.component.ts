@@ -75,6 +75,7 @@ export class LoginComponent implements OnInit {
                   mobile: decodedJSON['userLogin']['mobile'],
                   email: decodedJSON['userLogin']['email'],
                   id: decodedJSON['userLogin']['id'],
+                  idCompany: decodedJSON['userLogin']['idCompany'],
                 }
                 localStorage.setItem('datosUsuario', JSON.stringify(datosUsuario));
           //       localStorage.setItem('role', JSON.stringify(decodedJSON['userLogin']['role']));
