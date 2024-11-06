@@ -1,9 +1,11 @@
+/* Interfaz pora un Currency */
 export interface ICurrency {
   id: number;
   code: string;
   name: string;
 }
 
+/* Interfaz pora un Country */
 export interface ICountry {
   id: number;
   name: string;
@@ -15,6 +17,7 @@ export interface ICountry {
   state: number;
 }
 
+/* Interfaz pora un Tax */
 export interface ITax {
   id: number;
   name: string;
@@ -23,5 +26,12 @@ export interface ITax {
   idCountry: number;
   nameCountry?: string;
   state: number;
+}
+
+/* Interfaz pora una Groups */
+export interface IGroup {
+  id: number;
+  name: string;
+  idCompany: number;
 }
 

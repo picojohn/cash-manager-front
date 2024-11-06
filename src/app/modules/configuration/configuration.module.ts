@@ -15,6 +15,7 @@ import { ModulesSubService } from './modulesSub/services/modulesSub.service';
 import { EditModuleComponent } from './modulesSub/components/edit-module/edit-module.component';
 import { EditSubModuleComponent } from './modulesSub/components/edit-subModule/edit-subModule.component';
 import { EditTaxComponent } from './currency/components/edit-tax/edit-tax.component';
+import { EditGroupComponent } from './currency/components/edit-group/edit-group.component';
 
 
 
@@ -28,6 +29,7 @@ import { EditTaxComponent } from './currency/components/edit-tax/edit-tax.compon
     EditModuleComponent,
     EditSubModuleComponent,
     EditTaxComponent,
+    EditGroupComponent,
 
 
   ],
