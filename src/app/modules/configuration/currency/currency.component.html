@@ -15,6 +15,8 @@
     <button (click)="selectTab(2)" [class.active]="selectedTab === 2">Países</button>
     <button (click)="selectTab(3)" [class.active]="selectedTab === 3">Impuestos</button>
     <button (click)="selectTab(4)" [class.active]="selectedTab === 4">Grupos</button>
+    <button (click)="selectTab(5)" [class.active]="selectedTab === 5">Tipos</button>
+    <button (click)="selectTab(6)" [class.active]="selectedTab === 6">Cuentas Contables</button>
   </div>
 
   <div class="container px-5">
@@ -314,12 +316,176 @@
             {{ filterGroups().length }}</strong></span>
         </div>
 
-        <pagination-controls class="col-md-5" style="padding-top: 13px; color: #0a3754;font-weight: 400;" id="itemGroups"
-          (pageChange)="pageGroups =$event" previousLabel="Anterior" nextLabel="Siguiente"
+        <pagination-controls class="col-md-5" style="padding-top: 13px; color: #0a3754;font-weight: 400;"
+          id="itemGroups" (pageChange)="pageGroups =$event" previousLabel="Anterior" nextLabel="Siguiente"
           screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
           screenReaderCurrentLabel="You're on page 5 de 10">
         </pagination-controls>
       </div>
+
+    </div>
+  </div>
+
+  <div class="container px-5">
+    <div *ngIf="selectedTab === 5">
+
+      <div class="row justify-content-center">
+        <div class="row justify-content-between p-3">
+          <h3 class="col-md-6"><i class="fa-solid fa-square-pen" id="icon_subtitle"></i> Gestión de tipos
+          </h3>
+          <div class="card_search col-md-3 position-relative">
+            <input id="search" type="search" [(ngModel)]="buscadorTypes" class="form-control" placeholder="Buscar">
+            <i class="fas fa-search position-absolute" id="icon_search"></i>
+          </div>
+          <button (click)="newType()" class="btn btn-outline-primary btn-ms btn-block col-md-2" id="create_boton">
+            <i class="fa-solid fa-circle-plus"></i> Crear
+          </button>
+        </div>
+
+        <div class="scroll col-md-12">
+          <table class="table table-responsive">
+            <thead class="cont_head">
+              <tr>
+                <th>ID</th>
+                <th>NOMBRE</th>
+                <th>ACCIONES</th>
+              </tr>
+            </thead>
+            <tbody class="cont_body">
+              <tr
+                *ngFor="let type of filterTypes() | paginate: {itemsPerPage: totalPaginasTypes, currentPage: pageTypes, id: 'itemTypes'}">
+                <td>{{type.id}}</td>
+                <td>
+                  <p id="td_1">{{type.name}}</p>
+                </td>
+
+
+                <td>
+                  <i (click)="editType(type)" class="fa-solid fa-pen-to-square" id="table_icon_edit"></i>
+                  <i (click)="deleteType(type.id)" class="fa-regular fa-trash-can" style="color: red;"></i>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="row justify-content-between text-center p-3">
+
+        <div class="select col-md-1">
+          <select class="form-select co-md-1" (change)="numeroPaginasTypes($event)">
+            <option *ngFor="let option of nPaginasTypes" [value]="option" [selected]="option === totalPaginasTypes">
+              {{ option }}
+            </option>
+          </select>
+        </div>
+
+        <div class="col-md-3 p-3" *ngIf="filterTypes().length"><span
+            style="color: gray; font-weight: 300;justify-content: center !important;"><strong>Mostrando </strong>
+            <strong style="color: #0a3754;">{{
+              (pageTypes - 1) * totalPaginasTypes+ 1 }} <strong style="color: gray;">-</strong> {{
+              (pageTypes * totalPaginasTypes < filterTypes().length) ? (pageTypes * totalPaginasTypes) :
+                filterTypes().length }} <strong style="color: gray;font-weight: 300;">
+                de</strong>
+            {{ filterTypes().length }}</strong></span>
+        </div>
+
+        <pagination-controls class="col-md-5" style="padding-top: 13px; color: #0a3754;font-weight: 400;" id="itemTypes"
+          (pageChange)="pageTypes =$event" previousLabel="Anterior" nextLabel="Siguiente"
+          screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
+          screenReaderCurrentLabel="You're on page 5 de 10">
+        </pagination-controls>
+      </div>
+
+
+    </div>
+  </div>
+
+  <div class="container px-5">
+    <div *ngIf="selectedTab === 6">
+
+      <div class="row justify-content-center">
+        <div class="row justify-content-between p-3">
+          <h3 class="col-md-6"><i class="fa-solid fa-square-pen" id="icon_subtitle"></i> Gestión de Cuentas Contables
+          </h3>
+          <div class="card_search col-md-3 position-relative">
+            <input id="search" type="search" [(ngModel)]="buscadorCategories" class="form-control" placeholder="Buscar">
+            <i class="fas fa-search position-absolute" id="icon_search"></i>
+          </div>
+          <button (click)="newCategory()" class="btn btn-outline-primary btn-ms btn-block col-md-2" id="create_boton">
+            <i class="fa-solid fa-circle-plus"></i> Crear
+          </button>
+        </div>
+
+        <div class="scroll col-md-12">
+          <table class="table table-responsive">
+            <thead class="cont_head">
+              <tr>
+                <th>ID</th>
+                <th>CÓDIGO</th>
+                <th>CATEGORIA</th>
+                <th>CLASIFICACIÓN</th>
+                <th>TIPO</th>
+                <th>INACTIVO</th>
+                <th>GRUPO</th>
+                <th>SECCIÓN</th>
+                <th>SALDO INICIAL</th>
+                <th>ACCIONES</th>
+              </tr>
+            </thead>
+            <tbody class="cont_body">
+              <tr
+                *ngFor="let category of filterCategories() | paginate: {itemsPerPage: totalPaginasCategories, currentPage: pageCategories, id: 'itemCategories'}">
+                <td>{{category.id}}</td>
+                <td>
+                  <p id="td_1">{{category.code}}</p>
+                </td>
+                <td> {{category.category}} </td>
+                <td> {{ getClassificationName (category.idClassification)}} </td>
+                <td> {{getTypeName (category.idType)}} </td>
+                <td> {{category.state}} </td>
+                <td> {{getGroupName( category.idGroup)}} </td>
+                <td> {{getSeccionName(category.idSection)}} </td>
+                <td> {{category.initialBalance}} </td>
+
+                <td>
+                  <i (click)="editCategory(category)" class="fa-solid fa-pen-to-square" id="table_icon_edit"></i>
+                  <i (click)="deleteCategory(category.id)" class="fa-regular fa-trash-can" style="color: red;"></i>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="row justify-content-between text-center p-3">
+
+        <div class="select col-md-1">
+          <select class="form-select co-md-1" (change)="numeroPaginasCategories($event)">
+            <option *ngFor="let option of nPaginasCategories" [value]="option"
+              [selected]="option === totalPaginasCategories">
+              {{ option }}
+            </option>
+          </select>
+        </div>
+
+        <div class="col-md-3 p-3" *ngIf="filterCategories().length"><span
+            style="color: gray; font-weight: 300;justify-content: center !important;"><strong>Mostrando </strong>
+            <strong style="color: #0a3754;">{{
+              (pageCategories - 1) * totalPaginasCategories+ 1 }} <strong style="color: gray;">-</strong> {{
+              (pageCategories * totalPaginasCategories < filterCategories().length) ? (pageCategories *
+                totalPaginasCategories) : filterCategories().length }} <strong style="color: gray;font-weight: 300;">
+                de</strong>
+            {{ filterCategories().length }}</strong></span>
+        </div>
+
+        <pagination-controls class="col-md-5" style="padding-top: 13px; color: #0a3754;font-weight: 400;"
+          id="itemCategories" (pageChange)="pageCategories =$event" previousLabel="Anterior" nextLabel="Siguiente"
+          screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
+          screenReaderCurrentLabel="You're on page 5 de 10">
+        </pagination-controls>
+      </div>
+
 
     </div>
   </div>
