@@ -23,9 +23,19 @@ export const constFreeIcons = [
   'fa-solid fa-square-pen'
 ];
 
+export const constClassificationDate = [
+  { id: 1, name: 'Activos' },
+  { id: 2, name: 'Pasivos' },
+  { id: 3, name: 'Patrimonio' },
+  { id: 4, name: 'Ingresos' },
+  { id: 5, name: 'Costos' },
+  { id: 6, name: 'Gastos' }
+]
 
-
-
+export const constSeccionDate = [
+  { id: 1, name: 'Ingresos' },
+  { id: 2, name: 'Egresos' },
+]
 
 
 

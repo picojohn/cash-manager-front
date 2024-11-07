@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, map, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { ICountry, ICurrency, IGroup, ITax } from '../interface/currency.interface';
+import { ICategory, ICountry, ICurrency, IGroup, ITax, IType } from '../interface/currency.interface';
 
 
 
@@ -163,5 +163,90 @@ export class CurrencyService {
   deleteGroup(id: number): Observable<void> {
     return this.http.delete<void>(`${this.url}/groups/${id}`,)
   }
+
+
+  ///// Types
+
+
+  /**
+   * metodo del servicio para traer los Types
+   * @returns Array<IType>
+   */
+  getTypes(): Observable<Array<IType>> {
+    return this.http.get<Array<IType>>(`${this.url}/types`)
+  }
+
+  /**
+   * metodo del servicio para crear un Type
+   * @param type
+   * @returns Array<IType>
+   */
+  newType(type: IType): Observable<IType> {
+    return this.http.post<IType>(`${this.url}/types`, type)
+  }
+
+  /**
+   * metodo del servicio para editar un Type
+   * @param type
+   * @returns
+   */
+  editType(type: IType): Observable<IType> {
+    return this.http.patch<IType>(`${this.url}/types`, type)
+  }
+
+  /**
+   * metodo del servicio para eliminar un Type por id
+   * @param id
+   * @returns
+   */
+  deleteType(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.url}/types/${id}`,)
+  }
+
+
+  
+  ///// Categories
+
+
+  /**
+   * metodo del servicio para traer los Categories
+   * @returns Array<ICategory>
+   */
+  getCategories(): Observable<Array<ICategory>> {
+    return this.http.get<Array<ICategory>>(`${this.url}/categories`)
+  }
+
+  /**
+   * metodo del servicio para crear un Category
+   * @param category
+   * @returns Array<ICategory>
+   */
+  newCategory(category: ICategory): Observable<ICategory> {
+    return this.http.post<ICategory>(`${this.url}/categories`, category)
+  }
+
+  /**
+   * metodo del servicio para editar un Category
+   * @param category
+   * @returns
+   */
+  editCategory(category: ICategory): Observable<ICategory> {
+    return this.http.patch<ICategory>(`${this.url}/categories`, category)
+  }
+
+  /**
+   * metodo del servicio para eliminar un Category por id
+   * @param id
+   * @returns
+   */
+  deleteCategory(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.url}/categories/${id}`,)
+  }
+
+
+
+
+
+
 
 }

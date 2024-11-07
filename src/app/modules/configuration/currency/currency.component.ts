@@ -4,13 +4,15 @@ import { ToastrService } from 'ngx-toastr';
 import { ErrorService } from 'src/app/shared/services/error.service';
 import { SweetAlertService } from 'src/app/shared/services/sweetAlert.service';
 import { firstValueFrom } from 'rxjs';
-import { ICountry, ICurrency, IGroup, ITax } from './interface/currency.interface';
+import { ICategory, ICountry, ICurrency, IGroup, IName, ITax, IType } from './interface/currency.interface';
 import { CurrencyService } from './services/currency.service';
 import { EditCurrencyComponent } from './components/edit-currency/edit-currency.component';
 import { EditCountryComponent } from './components/edit-country/edit-country.component';
 import { ETitleMessages } from 'src/app/shared/enums/error.service.eum';
 import { EditTaxComponent } from './components/edit-tax/edit-tax.component';
 import { EditGroupComponent } from './components/edit-group/edit-group.component';
+import { constClassificationDate, constSeccionDate } from 'src/app/shared/data/const';
+import { EditTypeComponent } from './components/edit-type/edit-type.component';
 
 @Component({
   selector: 'app-currency',
@@ -20,7 +22,12 @@ import { EditGroupComponent } from './components/edit-group/edit-group.component
 export class CurrencyComponent implements OnInit {
 
   private bsModalRef: BsModalRef;
-  public selectedTab: number = 4;
+  public selectedTab: number = 1;
+
+  //constantes para los datos
+  public classifications: Array<IName> = constClassificationDate
+  public seccions: Array<IName> = constSeccionDate
+
 
   // currencies
   public currencys: Array<ICurrency> = [];
@@ -47,8 +54,22 @@ export class CurrencyComponent implements OnInit {
   public groups: Array<IGroup> = [];
   public nPaginasGroups = [5, 10, 20, 50, 100];
   public pageGroups: number = 1;
-  public totalPaginasGroups= 5;
+  public totalPaginasGroups = 5;
   public _buscadorGroups: string = '';
+
+  //Types
+  public types: Array<IType> = [];
+  public nPaginasTypes = [5, 10, 20, 50, 100];
+  public pageTypes: number = 1;
+  public totalPaginasTypes = 5;
+  public _buscadorTypes: string = '';
+
+  //Categories
+  public categories: Array<ICategory> = [];
+  public nPaginasCategories = [5, 10, 20, 50, 100];
+  public pageCategories: number = 1;
+  public totalPaginasCategories = 5;
+  public _buscadorCategories: string = '';
 
 
   constructor(
@@ -95,6 +116,20 @@ export class CurrencyComponent implements OnInit {
 
     firstValueFrom(this.currencyService.getGroups()).then(groupsBack => {
       this.groups = groupsBack;
+    }, err => {
+      const errorObject = this.errorService.showNotification(err);
+      this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
+    });
+
+    firstValueFrom(this.currencyService.getTypes()).then(typessBack => {
+      this.types = typessBack;
+    }, err => {
+      const errorObject = this.errorService.showNotification(err);
+      this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
+    });
+
+    firstValueFrom(this.currencyService.getCategories()).then(categoriesBack => {
+      this.categories = categoriesBack;
     }, err => {
       const errorObject = this.errorService.showNotification(err);
       this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
@@ -331,6 +366,145 @@ export class CurrencyComponent implements OnInit {
       group.name.toLowerCase().includes(this.buscadorGroups.toLowerCase())
     );
   }
+
+  // Types
+
+  newType() {
+    this.bsModalRef = this.modalService.show(EditTypeComponent, { backdrop: 'static', class: 'modal-lg p-5', });
+    this.bsModalRef.content.title = 'Crear Tipo';
+    this.bsModalRef.onHidden?.subscribe((_) => {
+      this.loadData();
+    });
+  }
+
+  editType(type: IType) {
+    this.bsModalRef = this.modalService.show(EditTypeComponent, { backdrop: 'static', class: 'modal-lg p-5', });
+    this.bsModalRef.content.title = 'Editar Tipo';
+    this.bsModalRef.content.type = type;
+    this.bsModalRef.onHidden?.subscribe((_) => {
+      this.loadData();
+    });
+  }
+
+  async deleteType(id: number) {
+    // if (await this.sweetAlertService.alertDeleteMessage()) {
+    //   firstValueFrom(this.currencyService.deleteCategory(id)).then(i => {
+    //     this.toast.success('Grupo eliminado correctamente', ETitleMessages.GROUPS)
+    //     this.loadData()
+    //   }, err => {
+    //     const errorObject = this.errorService.showNotification(err);
+    //     this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
+    //   })
+
+    // }
+  }
+
+
+  numeroPaginasTypes($event: any) {
+    const { value } = $event.target;
+    this.totalPaginasTypes = value;
+    this.pageTypes = 1;
+  }
+
+  set buscadorTypes(value: string) {
+    this._buscadorTypes = value;
+    this.pageTypes = 1;
+  }
+
+  get buscadorTypes(): string {
+    return this._buscadorTypes;
+  }
+
+  filterTypes() {
+    if (!this.buscadorTypes) {
+      return this.types;
+    }
+    return this.types.filter((type) =>
+      type.name.toLowerCase().includes(this.buscadorTypes.toLowerCase())
+    );
+  }
+
+
+
+  // Categories
+
+  newCategory() {
+    // this.bsModalRef = this.modalService.show(EditGroupComponent, { backdrop: 'static', class: 'modal-lg p-5', });
+    // this.bsModalRef.content.title = 'Crear Grupo';
+    // this.bsModalRef.onHidden?.subscribe((_) => {
+    //   this.loadData();
+    // });
+  }
+
+  editCategory(category: ICategory) {
+    // this.bsModalRef = this.modalService.show(EditGroupComponent, { backdrop: 'static', class: 'modal-lg p-5', });
+    // this.bsModalRef.content.title = 'Editar Grupo';
+    // this.bsModalRef.content.group = group;
+    // this.bsModalRef.onHidden?.subscribe((_) => {
+    //   this.loadData();
+    // });
+  }
+
+  async deleteCategory(id: number) {
+    // if (await this.sweetAlertService.alertDeleteMessage()) {
+    //   firstValueFrom(this.currencyService.deleteCategory(id)).then(i => {
+    //     this.toast.success('Grupo eliminado correctamente', ETitleMessages.GROUPS)
+    //     this.loadData()
+    //   }, err => {
+    //     const errorObject = this.errorService.showNotification(err);
+    //     this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
+    //   })
+
+    // }
+  }
+
+  getClassificationName(id: number) {
+    const itemClassification = this.classifications.find(i => i.id === id)?.name
+    return itemClassification ? itemClassification : '- 0 -'
+  }
+
+  getTypeName(id: number) {
+    const itemType = this.types.find(i => i.id === id)?.name
+    return itemType ? itemType : '- 0 -'
+  }
+
+  getGroupName(id: number) {
+    const itemGroup = this.groups.find(i => i.id === id)?.name
+    return itemGroup ? itemGroup : '- 0 -'
+  }
+
+  getSeccionName(id: number) {
+    const itemSeccion = this.seccions.find(i => i.id === id)?.name
+    return itemSeccion ? itemSeccion : '- 0 -'
+  }
+
+
+  numeroPaginasCategories($event: any) {
+    const { value } = $event.target;
+    this.totalPaginasCategories = value;
+    this.pageCategories = 1;
+  }
+
+  set buscadorCategories(value: string) {
+    this._buscadorCategories = value;
+    this.pageCategories = 1;
+  }
+
+  get buscadorCategories(): string {
+    return this._buscadorCategories;
+  }
+
+  filterCategories() {
+    if (!this.buscadorCategories) {
+      return this.categories;
+    }
+    return this.categories.filter((category) =>
+      category.category.toLowerCase().includes(this.buscadorCategories.toLowerCase())
+    );
+  }
+
+
+
 
 
 }

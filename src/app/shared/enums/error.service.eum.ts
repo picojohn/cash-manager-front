@@ -7,6 +7,7 @@ export enum ETitleMessages {
   TAX = 'Impuestos',
   MODULE = 'Modulos',
   SUBMODULE = 'SubModulos',
-  GROUPS = 'Grupos'
+  GROUPS = 'Grupos',
+  TYPES = 'Tipos'
 
 }

@@ -35,3 +35,29 @@ export interface IGroup {
   idCompany: number;
 }
 
+/* Interfaz pora una Type */
+export interface IType {
+  id: number;
+  name: string;
+  idCompany: number;
+}
+
+/* Interfaz pora una category */
+export interface ICategory {
+  id: number;
+  code: string;
+  category: string;
+  idClassification: number;
+  idType: number;
+  state: number;
+  idGroup: number;
+  idSection: number;
+  idCompany: number;
+  initialBalance: number;
+}
+
+export interface IName {
+  id: number,
+  name: string
+}
+
