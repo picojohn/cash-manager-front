@@ -204,7 +204,7 @@ export class CurrencyService {
   }
 
 
-  
+
   ///// Categories
 
 
@@ -243,7 +243,9 @@ export class CurrencyService {
     return this.http.delete<void>(`${this.url}/categories/${id}`,)
   }
 
-
+  public cambiarEstadosByidCategory(id: number): Observable<Array<any>> {
+    return this.http.get<Array<any>>(`${this.url}/categories/estados/${id}`);
+  }
 
 
 

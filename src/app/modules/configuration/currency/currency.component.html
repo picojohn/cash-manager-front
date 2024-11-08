@@ -16,7 +16,7 @@
     <button (click)="selectTab(3)" [class.active]="selectedTab === 3">Impuestos</button>
     <button (click)="selectTab(4)" [class.active]="selectedTab === 4">Grupos</button>
     <button (click)="selectTab(5)" [class.active]="selectedTab === 5">Tipos</button>
-    <button (click)="selectTab(6)" [class.active]="selectedTab === 6">Cuentas Contables</button>
+    <button (click)="selectTab(6)" [class.active]="selectedTab === 6">Categorías</button>
   </div>
 
   <div class="container px-5">
@@ -358,8 +358,6 @@
                 <td>
                   <p id="td_1">{{type.name}}</p>
                 </td>
-
-
                 <td>
                   <i (click)="editType(type)" class="fa-solid fa-pen-to-square" id="table_icon_edit"></i>
                   <i (click)="deleteType(type.id)" class="fa-regular fa-trash-can" style="color: red;"></i>
@@ -406,7 +404,7 @@
 
       <div class="row justify-content-center">
         <div class="row justify-content-between p-3">
-          <h3 class="col-md-6"><i class="fa-solid fa-square-pen" id="icon_subtitle"></i> Gestión de Cuentas Contables
+          <h3 class="col-md-6"><i class="fa-solid fa-square-pen" id="icon_subtitle"></i> Gestión de Categorías
           </h3>
           <div class="card_search col-md-3 position-relative">
             <input id="search" type="search" [(ngModel)]="buscadorCategories" class="form-control" placeholder="Buscar">
@@ -426,7 +424,7 @@
                 <th>CATEGORIA</th>
                 <th>CLASIFICACIÓN</th>
                 <th>TIPO</th>
-                <th>INACTIVO</th>
+                <th>ESTADO</th>
                 <th>GRUPO</th>
                 <th>SECCIÓN</th>
                 <th>SALDO INICIAL</th>
@@ -440,13 +438,19 @@
                 <td>
                   <p id="td_1">{{category.code}}</p>
                 </td>
-                <td> {{category.category}} </td>
+                <td>
+                  <p id="td_1">{{category.category}}</p>
+
+                </td>
                 <td> {{ getClassificationName (category.idClassification)}} </td>
                 <td> {{getTypeName (category.idType)}} </td>
-                <td> {{category.state}} </td>
+                <td> <button class="button_estado" (click)="statesCategory(category.id)"
+                  [ngStyle]="{background: category.state == 1 ? 'chartreuse' : 'red' }"><i class="fa-solid fa-check"
+                    style="color: white;"></i></button>
+              </td>
                 <td> {{getGroupName( category.idGroup)}} </td>
                 <td> {{getSeccionName(category.idSection)}} </td>
-                <td> {{category.initialBalance}} </td>
+                <td> {{category.initialBalance | currency:'USD':'symbol':'1.0-0'}} </td>
 
                 <td>
                   <i (click)="editCategory(category)" class="fa-solid fa-pen-to-square" id="table_icon_edit"></i>

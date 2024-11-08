@@ -13,6 +13,7 @@ import { EditTaxComponent } from './components/edit-tax/edit-tax.component';
 import { EditGroupComponent } from './components/edit-group/edit-group.component';
 import { constClassificationDate, constSeccionDate } from 'src/app/shared/data/const';
 import { EditTypeComponent } from './components/edit-type/edit-type.component';
+import { EditCategoryComponent } from './components/edit-category/edit-category.component';
 
 @Component({
   selector: 'app-currency',
@@ -387,16 +388,16 @@ export class CurrencyComponent implements OnInit {
   }
 
   async deleteType(id: number) {
-    // if (await this.sweetAlertService.alertDeleteMessage()) {
-    //   firstValueFrom(this.currencyService.deleteCategory(id)).then(i => {
-    //     this.toast.success('Grupo eliminado correctamente', ETitleMessages.GROUPS)
-    //     this.loadData()
-    //   }, err => {
-    //     const errorObject = this.errorService.showNotification(err);
-    //     this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
-    //   })
+    if (await this.sweetAlertService.alertDeleteMessage()) {
+      firstValueFrom(this.currencyService.deleteType(id)).then(i => {
+        this.toast.success('Tipo eliminado correctamente', ETitleMessages.TYPES)
+        this.loadData()
+      }, err => {
+        const errorObject = this.errorService.showNotification(err);
+        this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
+      })
 
-    // }
+    }
   }
 
 
@@ -429,33 +430,46 @@ export class CurrencyComponent implements OnInit {
   // Categories
 
   newCategory() {
-    // this.bsModalRef = this.modalService.show(EditGroupComponent, { backdrop: 'static', class: 'modal-lg p-5', });
-    // this.bsModalRef.content.title = 'Crear Grupo';
-    // this.bsModalRef.onHidden?.subscribe((_) => {
-    //   this.loadData();
-    // });
+    this.bsModalRef = this.modalService.show(EditCategoryComponent, { backdrop: 'static', class: 'modal-lg p-5', });
+    this.bsModalRef.content.title = 'Crear Categoría';
+    this.bsModalRef.onHidden?.subscribe((_) => {
+      this.loadData();
+    });
   }
 
   editCategory(category: ICategory) {
-    // this.bsModalRef = this.modalService.show(EditGroupComponent, { backdrop: 'static', class: 'modal-lg p-5', });
-    // this.bsModalRef.content.title = 'Editar Grupo';
-    // this.bsModalRef.content.group = group;
-    // this.bsModalRef.onHidden?.subscribe((_) => {
-    //   this.loadData();
-    // });
+    this.bsModalRef = this.modalService.show(EditCategoryComponent, { backdrop: 'static', class: 'modal-lg p-5', });
+    this.bsModalRef.content.title = 'Editar Categoría';
+    this.bsModalRef.content.category = category;
+    this.bsModalRef.onHidden?.subscribe((_) => {
+      this.loadData();
+    });
   }
 
   async deleteCategory(id: number) {
-    // if (await this.sweetAlertService.alertDeleteMessage()) {
-    //   firstValueFrom(this.currencyService.deleteCategory(id)).then(i => {
-    //     this.toast.success('Grupo eliminado correctamente', ETitleMessages.GROUPS)
-    //     this.loadData()
-    //   }, err => {
-    //     const errorObject = this.errorService.showNotification(err);
-    //     this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
-    //   })
+    if (await this.sweetAlertService.alertDeleteMessage()) {
+      firstValueFrom(this.currencyService.deleteCategory(id)).then(i => {
+        this.toast.success('Cuenta Contable eliminada correctamente', ETitleMessages.CATEGORIES)
+        this.loadData()
+      }, err => {
+        const errorObject = this.errorService.showNotification(err);
+        this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
+      })
+    }
+  }
 
-    // }
+  async statesCategory(id): Promise<void> {
+    if (await this.sweetAlertService.alertStatesMessage()) {
+      await firstValueFrom(this.currencyService.cambiarEstadosByidCategory(id)).then(_ => {
+        this.toast.success('Estado cambiado correctamente', ETitleMessages.CATEGORIES);
+        this.loadData();
+      },
+        (err) => {
+          const errorObject = this.errorService.showNotification(err);
+          this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
+        }
+      );
+    }
   }
 
   getClassificationName(id: number) {

@@ -46,7 +46,7 @@
         <div class="card_form col-md-6">
           <div class="form-group">
             <label> Moneda </label>
-            <ng-select [items]="currencies" bindLabel="name" bindValue="id" formControlName="idCurrency" >
+            <ng-select [items]="currencies" bindLabel="name" bindValue="id" formControlName="idCurrency" placeholder="Ingresa la modeda" >
             </ng-select>
             <div *ngIf="formCountry.controls.idCurrency.touched && formCountry.controls.idCurrency.errors?.required"
               class="text text-danger">

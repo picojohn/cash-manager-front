@@ -34,8 +34,6 @@ export class EditTypeComponent {
 
   ngOnInit(): void {
     this.datosUsuario = JSON.parse(localStorage.getItem('datosUsuario'))
-    console.log(this.datosUsuario);
-
     setTimeout(() => {
       this.buildForms()
       this.cargarFormularioBooleam = true
