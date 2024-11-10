@@ -204,7 +204,7 @@ export class CurrencyService {
   }
 
 
-  
+
   ///// Categories
 
 
@@ -229,22 +229,29 @@ export class CurrencyService {
    * metodo del servicio para editar un Category
    * @param category
    * @returns
-   */
-  editCategory(category: ICategory): Observable<ICategory> {
-    return this.http.patch<ICategory>(`${this.url}/categories`, category)
+  */
+ editCategory(category: ICategory): Observable<ICategory> {
+   return this.http.patch<ICategory>(`${this.url}/categories`, category)
   }
 
   /**
    * metodo del servicio para eliminar un Category por id
    * @param id
    * @returns
-   */
-  deleteCategory(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.url}/categories/${id}`,)
+  */
+ deleteCategory(id: number): Observable<void> {
+   return this.http.delete<void>(`${this.url}/categories/${id}`,)
+  }
+
+  public cambiarEstadosByidCategory(id: number): Observable<Array<any>> {
+    return this.http.get<Array<any>>(`${this.url}/categories/estados/${id}`);
   }
 
 
-
+  ///// Companies
+  getCompanies(): Observable<Array<any>> {
+    return this.http.get<Array<any>>(`${this.url}/companies`)
+  }
 
 
 

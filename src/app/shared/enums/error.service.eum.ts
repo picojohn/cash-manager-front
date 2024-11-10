@@ -8,6 +8,7 @@ export enum ETitleMessages {
   MODULE = 'Modulos',
   SUBMODULE = 'SubModulos',
   GROUPS = 'Grupos',
-  TYPES = 'Tipos'
+  TYPES = 'Tipos',
+  CATEGORIES = 'Categorías',
 
 }

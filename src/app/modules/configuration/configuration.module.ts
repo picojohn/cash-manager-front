@@ -17,6 +17,7 @@ import { EditSubModuleComponent } from './modulesSub/components/edit-subModule/e
 import { EditTaxComponent } from './currency/components/edit-tax/edit-tax.component';
 import { EditGroupComponent } from './currency/components/edit-group/edit-group.component';
 import { EditTypeComponent } from './currency/components/edit-type/edit-type.component';
+import { EditCategoryComponent } from './currency/components/edit-category/edit-category.component';
 
 
 
@@ -32,6 +33,7 @@ import { EditTypeComponent } from './currency/components/edit-type/edit-type.com
     EditTaxComponent,
     EditGroupComponent,
     EditTypeComponent,
+    EditCategoryComponent,
 
 
   ],
