@@ -72,6 +72,8 @@ export class CurrencyComponent implements OnInit {
   public totalPaginasCategories = 5;
   public _buscadorCategories: string = '';
 
+  public companies: Array<any> = []
+
 
   constructor(
     private modalService: BsModalService,
@@ -131,6 +133,13 @@ export class CurrencyComponent implements OnInit {
 
     firstValueFrom(this.currencyService.getCategories()).then(categoriesBack => {
       this.categories = categoriesBack;
+    }, err => {
+      const errorObject = this.errorService.showNotification(err);
+      this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
+    });
+
+    firstValueFrom(this.currencyService.getCompanies()).then(companiesBack => {
+      this.companies = companiesBack;
     }, err => {
       const errorObject = this.errorService.showNotification(err);
       this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
@@ -343,6 +352,10 @@ export class CurrencyComponent implements OnInit {
     }
   }
 
+  getCompanyName(id: number){
+    let company = this.companies.find(i => i.id == id)?.name
+    return company? company : '- 0 -'
+  }
 
   numeroPaginasGroup($event: any) {
     const { value } = $event.target;

@@ -261,6 +261,10 @@
         <div class="row justify-content-between p-3">
           <h3 class="col-md-6"><i class="fa-solid fa-square-pen" id="icon_subtitle"></i> Gestión de Grupos</h3>
           <div class="card_search col-md-3 position-relative">
+            <ng-select [items]="companies" bindLabel="name" bindValue="id" placeholder="Compañias">
+          </ng-select>
+          </div>
+          <div class="card_search col-md-3 position-relative">
             <input id="search" type="search" [(ngModel)]="buscadorGroups" class="form-control" placeholder="Buscar">
             <i class="fas fa-search position-absolute" id="icon_search"></i>
           </div>
@@ -275,6 +279,7 @@
               <tr>
                 <th>ID</th>
                 <th>NOMBRE</th>
+                <th>COMPAÑIA</th>
                 <th>ACCIONES</th>
               </tr>
             </thead>
@@ -285,6 +290,7 @@
                 <td>
                   <p id="td_1">{{group.name}}</p>
                 </td>
+                <td>{{ getCompanyName (group.idCompany)}}</td>
 
                 <td>
                   <i (click)="editGroup(group)" class="fa-solid fa-pen-to-square" id="table_icon_edit"></i>
@@ -330,16 +336,25 @@
     <div *ngIf="selectedTab === 5">
 
       <div class="row justify-content-center">
+
         <div class="row justify-content-between p-3">
           <h3 class="col-md-6"><i class="fa-solid fa-square-pen" id="icon_subtitle"></i> Gestión de tipos
           </h3>
+
+          <div class="card_search col-md-3 position-relative">
+            <ng-select [items]="companies" bindLabel="name" bindValue="id" placeholder="Compañias">
+          </ng-select>
+          </div>
+
           <div class="card_search col-md-3 position-relative">
             <input id="search" type="search" [(ngModel)]="buscadorTypes" class="form-control" placeholder="Buscar">
             <i class="fas fa-search position-absolute" id="icon_search"></i>
           </div>
+
           <button (click)="newType()" class="btn btn-outline-primary btn-ms btn-block col-md-2" id="create_boton">
             <i class="fa-solid fa-circle-plus"></i> Crear
           </button>
+
         </div>
 
         <div class="scroll col-md-12">
@@ -348,6 +363,7 @@
               <tr>
                 <th>ID</th>
                 <th>NOMBRE</th>
+                <th>COMPAÑIA</th>
                 <th>ACCIONES</th>
               </tr>
             </thead>
@@ -358,6 +374,7 @@
                 <td>
                   <p id="td_1">{{type.name}}</p>
                 </td>
+                <td>{{ getCompanyName (type.idCompany)}}</td>
                 <td>
                   <i (click)="editType(type)" class="fa-solid fa-pen-to-square" id="table_icon_edit"></i>
                   <i (click)="deleteType(type.id)" class="fa-regular fa-trash-can" style="color: red;"></i>
@@ -445,9 +462,9 @@
                 <td> {{ getClassificationName (category.idClassification)}} </td>
                 <td> {{getTypeName (category.idType)}} </td>
                 <td> <button class="button_estado" (click)="statesCategory(category.id)"
-                  [ngStyle]="{background: category.state == 1 ? 'chartreuse' : 'red' }"><i class="fa-solid fa-check"
-                    style="color: white;"></i></button>
-              </td>
+                    [ngStyle]="{background: category.state == 1 ? 'chartreuse' : 'red' }"><i class="fa-solid fa-check"
+                      style="color: white;"></i></button>
+                </td>
                 <td> {{getGroupName( category.idGroup)}} </td>
                 <td> {{getSeccionName(category.idSection)}} </td>
                 <td> {{category.initialBalance | currency:'USD':'symbol':'1.0-0'}} </td>
