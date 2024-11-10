@@ -259,10 +259,11 @@
 
       <div class="row justify-content-center">
         <div class="row justify-content-between p-3">
-          <h3 class="col-md-6"><i class="fa-solid fa-square-pen" id="icon_subtitle"></i> Gestión de Grupos</h3>
+          <h3 class="col-md-4"><i class="fa-solid fa-square-pen" id="icon_subtitle"></i> Gestión de Grupos</h3>
           <div class="card_search col-md-3 position-relative">
-            <ng-select [items]="companies" bindLabel="name" bindValue="id" placeholder="Compañias">
-          </ng-select>
+            <ng-select (change)="selectedGroup()" [(ngModel)]="valueGroupsSelected" [items]="companies" bindLabel="name"
+              bindValue="id" placeholder="Compañias">
+            </ng-select>
           </div>
           <div class="card_search col-md-3 position-relative">
             <input id="search" type="search" [(ngModel)]="buscadorGroups" class="form-control" placeholder="Buscar">
@@ -338,12 +339,13 @@
       <div class="row justify-content-center">
 
         <div class="row justify-content-between p-3">
-          <h3 class="col-md-6"><i class="fa-solid fa-square-pen" id="icon_subtitle"></i> Gestión de tipos
+          <h3 class="col-md-4"><i class="fa-solid fa-square-pen" id="icon_subtitle"></i> Gestión de tipos
           </h3>
 
           <div class="card_search col-md-3 position-relative">
-            <ng-select [items]="companies" bindLabel="name" bindValue="id" placeholder="Compañias">
-          </ng-select>
+            <ng-select [items]="companies" (change)="selectedTypes()" [(ngModel)]="valueTypesSelected" bindLabel="name"
+              bindValue="id" placeholder="Compañias">
+            </ng-select>
           </div>
 
           <div class="card_search col-md-3 position-relative">
@@ -421,8 +423,13 @@
 
       <div class="row justify-content-center">
         <div class="row justify-content-between p-3">
-          <h3 class="col-md-6"><i class="fa-solid fa-square-pen" id="icon_subtitle"></i> Gestión de Categorías
+          <h3 class="col-md-4"><i class="fa-solid fa-square-pen" id="icon_subtitle"></i> Gestión de Categorías
           </h3>
+          <div class="card_search col-md-3 position-relative">
+            <ng-select [items]="companies" (change)="selectedCategories()" [(ngModel)]="valueCategoriesSelected" bindLabel="name"
+              bindValue="id" placeholder="Compañias">
+            </ng-select>
+          </div>
           <div class="card_search col-md-3 position-relative">
             <input id="search" type="search" [(ngModel)]="buscadorCategories" class="form-control" placeholder="Buscar">
             <i class="fas fa-search position-absolute" id="icon_search"></i>
@@ -445,6 +452,7 @@
                 <th>GRUPO</th>
                 <th>SECCIÓN</th>
                 <th>SALDO INICIAL</th>
+                <th>COMPAÑIA</th>
                 <th>ACCIONES</th>
               </tr>
             </thead>
@@ -468,6 +476,7 @@
                 <td> {{getGroupName( category.idGroup)}} </td>
                 <td> {{getSeccionName(category.idSection)}} </td>
                 <td> {{category.initialBalance | currency:'USD':'symbol':'1.0-0'}} </td>
+                <td> {{getCompanyName(category.idCompany)}} </td>
 
                 <td>
                   <i (click)="editCategory(category)" class="fa-solid fa-pen-to-square" id="table_icon_edit"></i>
