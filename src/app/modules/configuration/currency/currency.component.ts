@@ -23,7 +23,7 @@ import { EditCategoryComponent } from './components/edit-category/edit-category.
 export class CurrencyComponent implements OnInit {
 
   private bsModalRef: BsModalRef;
-  public selectedTab: number = 1;
+  public selectedTab: number = 6;
 
   //constantes para los datos
   public classifications: Array<IName> = constClassificationDate
@@ -53,24 +53,30 @@ export class CurrencyComponent implements OnInit {
 
   //Groups
   public groups: Array<IGroup> = [];
+  public groupsSelected: Array<IGroup> = [];
   public nPaginasGroups = [5, 10, 20, 50, 100];
   public pageGroups: number = 1;
   public totalPaginasGroups = 5;
   public _buscadorGroups: string = '';
+  public valueGroupsSelected = null
 
   //Types
   public types: Array<IType> = [];
+  public typesSelected: Array<IType> = [];
   public nPaginasTypes = [5, 10, 20, 50, 100];
   public pageTypes: number = 1;
   public totalPaginasTypes = 5;
   public _buscadorTypes: string = '';
+  public valueTypesSelected = null
 
   //Categories
   public categories: Array<ICategory> = [];
+  public categoriesSelected: Array<ICategory> = [];
   public nPaginasCategories = [5, 10, 20, 50, 100];
   public pageCategories: number = 1;
   public totalPaginasCategories = 5;
   public _buscadorCategories: string = '';
+  public valueCategoriesSelected = null
 
   public companies: Array<any> = []
 
@@ -119,6 +125,7 @@ export class CurrencyComponent implements OnInit {
 
     firstValueFrom(this.currencyService.getGroups()).then(groupsBack => {
       this.groups = groupsBack;
+      this.groupsSelected = groupsBack;
     }, err => {
       const errorObject = this.errorService.showNotification(err);
       this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
@@ -126,6 +133,7 @@ export class CurrencyComponent implements OnInit {
 
     firstValueFrom(this.currencyService.getTypes()).then(typessBack => {
       this.types = typessBack;
+      this.typesSelected = typessBack;
     }, err => {
       const errorObject = this.errorService.showNotification(err);
       this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
@@ -133,6 +141,7 @@ export class CurrencyComponent implements OnInit {
 
     firstValueFrom(this.currencyService.getCategories()).then(categoriesBack => {
       this.categories = categoriesBack;
+      this.categoriesSelected = categoriesBack;
     }, err => {
       const errorObject = this.errorService.showNotification(err);
       this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
@@ -352,9 +361,19 @@ export class CurrencyComponent implements OnInit {
     }
   }
 
-  getCompanyName(id: number){
+  getCompanyName(id: number) {
     let company = this.companies.find(i => i.id == id)?.name
-    return company? company : '- 0 -'
+    return company ? company : '- 0 -'
+  }
+
+  selectedGroup() {
+    console.log(this.valueGroupsSelected);
+    if (this.valueGroupsSelected !== null) {
+      this.groups = this.groupsSelected.filter(i => i.idCompany == this.valueGroupsSelected)
+      this.pageGroups = 1
+    } else {
+      this.groups = this.groupsSelected
+    }
   }
 
   numeroPaginasGroup($event: any) {
@@ -413,6 +432,15 @@ export class CurrencyComponent implements OnInit {
     }
   }
 
+  selectedTypes() {
+    console.log(this.valueTypesSelected);
+    if (this.valueTypesSelected !== null) {
+      this.types = this.typesSelected.filter(i => i.idCompany == this.valueTypesSelected)
+      this.pageTypes = 1
+    } else {
+      this.types = this.typesSelected
+    }
+  }
 
   numeroPaginasTypes($event: any) {
     const { value } = $event.target;
@@ -490,13 +518,24 @@ export class CurrencyComponent implements OnInit {
     return itemClassification ? itemClassification : '- 0 -'
   }
 
+  selectedCategories() {
+    console.log(this.valueCategoriesSelected);
+    if (this.valueCategoriesSelected !== null) {
+      this.categories = this.categoriesSelected.filter(i => i.idCompany == this.valueCategoriesSelected)
+      this.pageCategories = 1
+    } else {
+      this.categories = this.categoriesSelected
+    }
+  }
+
+
   getTypeName(id: number) {
-    const itemType = this.types.find(i => i.id === id)?.name
+    const itemType = this.typesSelected.find(i => i.id === id)?.name
     return itemType ? itemType : '- 0 -'
   }
 
   getGroupName(id: number) {
-    const itemGroup = this.groups.find(i => i.id === id)?.name
+    const itemGroup = this.groupsSelected.find(i => i.id === id)?.name
     return itemGroup ? itemGroup : '- 0 -'
   }
 
