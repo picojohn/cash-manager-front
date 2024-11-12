@@ -56,6 +56,12 @@ export interface ICategory {
   initialBalance: number;
 }
 
+/* Interfaz para una PaymentMethods */
+export interface IPaymentMethod {
+  id: number;
+  name: string;
+}
+
 export interface IName {
   id: number,
   name: string

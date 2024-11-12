@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, map, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { ICategory, ICountry, ICurrency, IGroup, ITax, IType } from '../interface/currency.interface';
+import { ICategory, ICountry, ICurrency, IGroup, IPaymentMethod, ITax, IType } from '../interface/currency.interface';
 
 
 
@@ -230,8 +230,8 @@ export class CurrencyService {
    * @param category
    * @returns
   */
- editCategory(category: ICategory): Observable<ICategory> {
-   return this.http.patch<ICategory>(`${this.url}/categories`, category)
+  editCategory(category: ICategory): Observable<ICategory> {
+    return this.http.patch<ICategory>(`${this.url}/categories`, category)
   }
 
   /**
@@ -239,13 +239,54 @@ export class CurrencyService {
    * @param id
    * @returns
   */
- deleteCategory(id: number): Observable<void> {
-   return this.http.delete<void>(`${this.url}/categories/${id}`,)
+  deleteCategory(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.url}/categories/${id}`,)
   }
 
   public cambiarEstadosByidCategory(id: number): Observable<Array<any>> {
     return this.http.get<Array<any>>(`${this.url}/categories/estados/${id}`);
   }
+
+  ///// PaymentMethods
+  getPaymentMethods(): Observable<Array<IPaymentMethod>> {
+    return this.http.get<Array<IPaymentMethod>>(`${this.url}/paymentMethods`)
+  }
+
+  newPaymentMethod(paymentMethod: IPaymentMethod): Observable<IPaymentMethod> {
+    return this.http.post<IPaymentMethod>(`${this.url}/paymentMethods`, paymentMethod)
+  }
+
+
+  editPaymentMethod(paymentMethod: IPaymentMethod): Observable<IPaymentMethod> {
+    return this.http.patch<IPaymentMethod>(`${this.url}/paymentMethods`, paymentMethod)
+  }
+
+
+  deletePaymentMethod(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.url}/paymentMethods/${id}`,)
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   ///// Companies

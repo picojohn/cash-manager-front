@@ -10,5 +10,6 @@ export enum ETitleMessages {
   GROUPS = 'Grupos',
   TYPES = 'Tipos',
   CATEGORIES = 'Categorías',
+  PAYMENTMETHOD = 'Formas de Pago',
 
 }

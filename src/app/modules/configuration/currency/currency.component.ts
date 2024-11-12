@@ -4,7 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ErrorService } from 'src/app/shared/services/error.service';
 import { SweetAlertService } from 'src/app/shared/services/sweetAlert.service';
 import { firstValueFrom } from 'rxjs';
-import { ICategory, ICountry, ICurrency, IGroup, IName, ITax, IType } from './interface/currency.interface';
+import { ICategory, ICountry, ICurrency, IGroup, IName, IPaymentMethod, ITax, IType } from './interface/currency.interface';
 import { CurrencyService } from './services/currency.service';
 import { EditCurrencyComponent } from './components/edit-currency/edit-currency.component';
 import { EditCountryComponent } from './components/edit-country/edit-country.component';
@@ -14,6 +14,7 @@ import { EditGroupComponent } from './components/edit-group/edit-group.component
 import { constClassificationDate, constSeccionDate } from 'src/app/shared/data/const';
 import { EditTypeComponent } from './components/edit-type/edit-type.component';
 import { EditCategoryComponent } from './components/edit-category/edit-category.component';
+import { EditPaymentMethodComponent } from './components/edit-paymentMethod/edit-paymentMethod.component';
 
 @Component({
   selector: 'app-currency',
@@ -23,7 +24,7 @@ import { EditCategoryComponent } from './components/edit-category/edit-category.
 export class CurrencyComponent implements OnInit {
 
   private bsModalRef: BsModalRef;
-  public selectedTab: number = 6;
+  public selectedTab: number = 1;
 
   //constantes para los datos
   public classifications: Array<IName> = constClassificationDate
@@ -77,6 +78,15 @@ export class CurrencyComponent implements OnInit {
   public totalPaginasCategories = 5;
   public _buscadorCategories: string = '';
   public valueCategoriesSelected = null
+
+  //PaymentMethods
+  public paymentMethods: Array<IPaymentMethod> = [];
+  public nPaginasPaymentMethods = [5, 10, 20, 50, 100];
+  public pagePaymentMethods: number = 1;
+  public totalPaginasPaymentMethods = 5;
+  public _buscadorPaymentMethods: string = '';
+
+
 
   public companies: Array<any> = []
 
@@ -149,6 +159,13 @@ export class CurrencyComponent implements OnInit {
 
     firstValueFrom(this.currencyService.getCompanies()).then(companiesBack => {
       this.companies = companiesBack;
+    }, err => {
+      const errorObject = this.errorService.showNotification(err);
+      this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
+    });
+
+    firstValueFrom(this.currencyService.getPaymentMethods()).then(paymentMethodsBack => {
+      this.paymentMethods = paymentMethodsBack;
     }, err => {
       const errorObject = this.errorService.showNotification(err);
       this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
@@ -568,6 +585,69 @@ export class CurrencyComponent implements OnInit {
       category.category.toLowerCase().includes(this.buscadorCategories.toLowerCase())
     );
   }
+
+
+  // PaymentMethod
+
+  newPaymentMethod() {
+    this.bsModalRef = this.modalService.show(EditPaymentMethodComponent, { backdrop: 'static', class: 'modal-lg p-5', });
+    this.bsModalRef.content.title = 'Crear forma de pago';
+    this.bsModalRef.onHidden?.subscribe((_) => {
+      this.loadData();
+    });
+  }
+
+  editPaymentMethod(paymentMethod: IPaymentMethod) {
+    this.bsModalRef = this.modalService.show(EditPaymentMethodComponent, { backdrop: 'static', class: 'modal-lg p-5', });
+    this.bsModalRef.content.title = 'Editar forma de pago';
+    this.bsModalRef.content.paymentMethod = paymentMethod;
+    this.bsModalRef.onHidden?.subscribe((_) => {
+      this.loadData();
+    });
+  }
+
+  async deletePaymentMethod(id: number) {
+    if (await this.sweetAlertService.alertDeleteMessage()) {
+      firstValueFrom(this.currencyService.deletePaymentMethod(id)).then(i => {
+        this.toast.success('Forma de pago eliminada correctamente', ETitleMessages.PAYMENTMETHOD)
+        this.loadData()
+      }, err => {
+        const errorObject = this.errorService.showNotification(err);
+        this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
+      })
+    }
+  }
+
+
+  numeroPaginasPaymentMethods($event: any) {
+    const { value } = $event.target;
+    this.totalPaginasPaymentMethods = value;
+    this.pagePaymentMethods = 1;
+  }
+
+  set buscadorPaymentMethods(value: string) {
+    this._buscadorPaymentMethods = value;
+    this.pagePaymentMethods = 1;
+  }
+
+  get buscadorPaymentMethods(): string {
+    return this._buscadorPaymentMethods;
+  }
+
+  filterPaymentMethods() {
+    if (!this.buscadorPaymentMethods) {
+      return this.paymentMethods;
+    }
+    return this.paymentMethods.filter((paymentMethod) =>
+      paymentMethod.name.toLowerCase().includes(this.buscadorPaymentMethods.toLowerCase())
+    );
+  }
+
+
+
+
+
+
 
 
 
