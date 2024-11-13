@@ -67,3 +67,10 @@ export interface IName {
   name: string
 }
 
+export interface ITypesPayment {
+  id: number;
+  name: string;
+  idCompany: number;
+}
+
+

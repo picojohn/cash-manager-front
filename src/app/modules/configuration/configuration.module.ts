@@ -19,6 +19,7 @@ import { EditGroupComponent } from './currency/components/edit-group/edit-group.
 import { EditTypeComponent } from './currency/components/edit-type/edit-type.component';
 import { EditCategoryComponent } from './currency/components/edit-category/edit-category.component';
 import { EditPaymentMethodComponent } from './currency/components/edit-paymentMethod/edit-paymentMethod.component';
+import { EditTypesPaymentsComponent } from './currency/components/edit-typesPayment/edit-typesPayments.component';
 
 
 
@@ -36,6 +37,7 @@ import { EditPaymentMethodComponent } from './currency/components/edit-paymentMe
     EditTypeComponent,
     EditCategoryComponent,
     EditPaymentMethodComponent,
+    EditTypesPaymentsComponent,
 
 
   ],

@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, map, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { ICategory, ICountry, ICurrency, IGroup, IPaymentMethod, ITax, IType } from '../interface/currency.interface';
+import { ICategory, ICountry, ICurrency, IGroup, IPaymentMethod, ITax, IType, ITypesPayment } from '../interface/currency.interface';
 
 
 
@@ -264,6 +264,26 @@ export class CurrencyService {
 
   deletePaymentMethod(id: number): Observable<void> {
     return this.http.delete<void>(`${this.url}/paymentMethods/${id}`,)
+  }
+
+
+  ///// TypesPayments
+  getTypesPayments(): Observable<Array<ITypesPayment>> {
+    return this.http.get<Array<ITypesPayment>>(`${this.url}/typesPayments`)
+  }
+
+  newTypesPayment(typesPayment: ITypesPayment): Observable<ITypesPayment> {
+    return this.http.post<ITypesPayment>(`${this.url}/typesPayments`, typesPayment)
+  }
+
+
+  editTypesPayment(typesPayment: ITypesPayment): Observable<ITypesPayment> {
+    return this.http.patch<ITypesPayment>(`${this.url}/typesPayments`, typesPayment)
+  }
+
+
+  deleteTypesPayment(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.url}/typesPayments/${id}`,)
   }
 
 

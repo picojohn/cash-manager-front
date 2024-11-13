@@ -4,7 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ErrorService } from 'src/app/shared/services/error.service';
 import { SweetAlertService } from 'src/app/shared/services/sweetAlert.service';
 import { firstValueFrom } from 'rxjs';
-import { ICategory, ICountry, ICurrency, IGroup, IName, IPaymentMethod, ITax, IType } from './interface/currency.interface';
+import { ICategory, ICountry, ICurrency, IGroup, IName, IPaymentMethod, ITax, IType, ITypesPayment } from './interface/currency.interface';
 import { CurrencyService } from './services/currency.service';
 import { EditCurrencyComponent } from './components/edit-currency/edit-currency.component';
 import { EditCountryComponent } from './components/edit-country/edit-country.component';
@@ -15,6 +15,7 @@ import { constClassificationDate, constSeccionDate } from 'src/app/shared/data/c
 import { EditTypeComponent } from './components/edit-type/edit-type.component';
 import { EditCategoryComponent } from './components/edit-category/edit-category.component';
 import { EditPaymentMethodComponent } from './components/edit-paymentMethod/edit-paymentMethod.component';
+import { EditTypesPaymentsComponent } from './components/edit-typesPayment/edit-typesPayments.component';
 
 @Component({
   selector: 'app-currency',
@@ -24,7 +25,7 @@ import { EditPaymentMethodComponent } from './components/edit-paymentMethod/edit
 export class CurrencyComponent implements OnInit {
 
   private bsModalRef: BsModalRef;
-  public selectedTab: number = 1;
+  public selectedTab: number = 8;
 
   //constantes para los datos
   public classifications: Array<IName> = constClassificationDate
@@ -59,7 +60,7 @@ export class CurrencyComponent implements OnInit {
   public pageGroups: number = 1;
   public totalPaginasGroups = 5;
   public _buscadorGroups: string = '';
-  public valueGroupsSelected = null
+  public valueGroupsSelected = null;
 
   //Types
   public types: Array<IType> = [];
@@ -68,7 +69,7 @@ export class CurrencyComponent implements OnInit {
   public pageTypes: number = 1;
   public totalPaginasTypes = 5;
   public _buscadorTypes: string = '';
-  public valueTypesSelected = null
+  public valueTypesSelected = null;
 
   //Categories
   public categories: Array<ICategory> = [];
@@ -77,7 +78,7 @@ export class CurrencyComponent implements OnInit {
   public pageCategories: number = 1;
   public totalPaginasCategories = 5;
   public _buscadorCategories: string = '';
-  public valueCategoriesSelected = null
+  public valueCategoriesSelected = null;
 
   //PaymentMethods
   public paymentMethods: Array<IPaymentMethod> = [];
@@ -85,6 +86,15 @@ export class CurrencyComponent implements OnInit {
   public pagePaymentMethods: number = 1;
   public totalPaginasPaymentMethods = 5;
   public _buscadorPaymentMethods: string = '';
+
+    //TypesPayments
+    public typesPayments: Array<ITypesPayment> = [];
+    public typesPaymentsSelected: Array<ITypesPayment> = [];
+    public nPaginasTypesPayments = [5, 10, 20, 50, 100];
+    public pageTypesPayments: number = 1;
+    public totalPaginasTypesPayments = 5;
+    public _buscadorTypesPayments: string = '';
+    public valueTypesPaymentsSelected = null;
 
 
 
@@ -166,6 +176,14 @@ export class CurrencyComponent implements OnInit {
 
     firstValueFrom(this.currencyService.getPaymentMethods()).then(paymentMethodsBack => {
       this.paymentMethods = paymentMethodsBack;
+    }, err => {
+      const errorObject = this.errorService.showNotification(err);
+      this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
+    });
+
+    firstValueFrom(this.currencyService.getTypesPayments()).then(typesPaymentsBack => {
+      this.typesPayments = typesPaymentsBack;
+      this.typesPaymentsSelected = typesPaymentsBack;
     }, err => {
       const errorObject = this.errorService.showNotification(err);
       this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
@@ -643,6 +661,71 @@ export class CurrencyComponent implements OnInit {
     );
   }
 
+  // Types
+
+  newTypesPayment() {
+    this.bsModalRef = this.modalService.show(EditTypesPaymentsComponent, { backdrop: 'static', class: 'modal-lg p-5', });
+    this.bsModalRef.content.title = 'Crear Medio de pago';
+    this.bsModalRef.onHidden?.subscribe((_) => {
+      this.loadData();
+    });
+  }
+
+  editTypesPayment(typesPayment: ITypesPayment) {
+    this.bsModalRef = this.modalService.show(EditTypesPaymentsComponent, { backdrop: 'static', class: 'modal-lg p-5', });
+    this.bsModalRef.content.title = 'Editar Medio de pago';
+    this.bsModalRef.content.typesPayment = typesPayment;
+    this.bsModalRef.onHidden?.subscribe((_) => {
+      this.loadData();
+    });
+  }
+
+  async deleteTypesPayment(id: number) {
+    if (await this.sweetAlertService.alertDeleteMessage()) {
+      firstValueFrom(this.currencyService.deleteTypesPayment(id)).then(i => {
+        this.toast.success('Tipo eliminado correctamente', ETitleMessages.TYPESPAYMENTS)
+        this.loadData()
+      }, err => {
+        const errorObject = this.errorService.showNotification(err);
+        this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
+      })
+
+    }
+  }
+
+  selectedTypesPayment() {
+    console.log(this.valueTypesPaymentsSelected);
+    if (this.valueTypesPaymentsSelected !== null) {
+      this.typesPayments = this.typesPaymentsSelected.filter(i => i.idCompany == this.valueTypesPaymentsSelected)
+      this.pageTypesPayments = 1
+    } else {
+      this.typesPayments = this.typesPaymentsSelected
+    }
+  }
+
+  numeroPaginasTypesPayment($event: any) {
+    const { value } = $event.target;
+    this.totalPaginasTypesPayments = value;
+    this.pageTypesPayments = 1;
+  }
+
+  set buscadorTypesPayments(value: string) {
+    this._buscadorTypesPayments = value;
+    this.pageTypesPayments = 1;
+  }
+
+  get buscadorTypesPayments(): string {
+    return this._buscadorTypesPayments;
+  }
+
+  filterTypesPayments() {
+    if (!this.buscadorTypesPayments) {
+      return this.typesPayments;
+    }
+    return this.typesPayments.filter((type) =>
+      type.name.toLowerCase().includes(this.buscadorTypesPayments.toLowerCase())
+    );
+  }
 
 
 
