@@ -4,8 +4,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ErrorService } from 'src/app/shared/services/error.service';
 import { firstValueFrom } from 'rxjs';
-import { ITypesPayment } from '../../interface/currency.interface';
-import { CurrencyService } from '../../services/currency.service';
+import { ITypesPayment } from '../../interface/application.interface';
+import { ApplicationService } from '../../services/application.service';
 import { ETitleMessages } from 'src/app/shared/enums/error.service.eum';
 import { IDatosUsuario } from 'src/app/authentication/interface/authentication';
 
@@ -25,7 +25,7 @@ export class EditTypesPaymentsComponent {
 
   constructor(
     public bsModalRef: BsModalRef,
-    private currencyService: CurrencyService,
+    private applicationService: ApplicationService,
     public toast: ToastrService,
     private errorService: ErrorService,
   ) {
@@ -55,13 +55,13 @@ export class EditTypesPaymentsComponent {
 
   /**
    * metodo para guardar los datos en el backend
-   * @returns ICurrency
+   * @returns ITypesPayment
    */
   saveData() {
     this.formTypesPayments.markAllAsTouched();
     if (this.formTypesPayments.invalid) return this.toast.info('Debes llenar todos los datos requeridos del formulario', ETitleMessages.TYPESPAYMENTS)
     const rawValue: ITypesPayment = this.formTypesPayments.value;
-    firstValueFrom(this.typesPayment ? this.currencyService.editTypesPayment(rawValue) : this.currencyService.newTypesPayment(rawValue)).then(_ => {
+    firstValueFrom(this.typesPayment ? this.applicationService.editTypesPayment(rawValue) : this.applicationService.newTypesPayment(rawValue)).then(_ => {
       this.toast.success(`Medio de pago ${this.typesPayment ? 'modificado' : 'creado'} correctamente`, ETitleMessages.TYPESPAYMENTS)
       this.bsModalRef.hide()
     }, err => {

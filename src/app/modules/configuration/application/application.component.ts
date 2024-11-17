@@ -4,8 +4,8 @@ import { ToastrService } from 'ngx-toastr';
 import { ErrorService } from 'src/app/shared/services/error.service';
 import { SweetAlertService } from 'src/app/shared/services/sweetAlert.service';
 import { firstValueFrom } from 'rxjs';
-import { ICategory, ICountry, ICurrency, IGroup, IName, IPaymentMethod, ITax, IType, ITypesPayment } from './interface/currency.interface';
-import { CurrencyService } from './services/currency.service';
+import { ICategory, ICountry, ICurrency, IGroup, IName, IPaymentMethod, ITax, IType, ITypesPayment } from './interface/application.interface';
+import { ApplicationService } from './services/application.service';
 import { EditCurrencyComponent } from './components/edit-currency/edit-currency.component';
 import { EditCountryComponent } from './components/edit-country/edit-country.component';
 import { ETitleMessages } from 'src/app/shared/enums/error.service.eum';
@@ -18,14 +18,14 @@ import { EditPaymentMethodComponent } from './components/edit-paymentMethod/edit
 import { EditTypesPaymentsComponent } from './components/edit-typesPayment/edit-typesPayments.component';
 
 @Component({
-  selector: 'app-currency',
-  templateUrl: './currency.component.html',
-  styleUrls: ['./currency.component.css'],
+  selector: 'app-application',
+  templateUrl: './application.component.html',
+  styleUrls: ['./application.component.css'],
 })
-export class CurrencyComponent implements OnInit {
+export class ApplicationComponent implements OnInit {
 
   private bsModalRef: BsModalRef;
-  public selectedTab: number = 8;
+  public selectedTab: number = 1;
 
   //constantes para los datos
   public classifications: Array<IName> = constClassificationDate
@@ -105,7 +105,7 @@ export class CurrencyComponent implements OnInit {
     private modalService: BsModalService,
     public toast: ToastrService,
     private errorService: ErrorService,
-    private currencyService: CurrencyService,
+    private applicationService: ApplicationService,
     private sweetAlertService: SweetAlertService,
   ) { }
 
@@ -122,28 +122,28 @@ export class CurrencyComponent implements OnInit {
    * carga inicial de datos
    */
   loadData() {
-    firstValueFrom(this.currencyService.getCurrencys()).then(currencysBack => {
+    firstValueFrom(this.applicationService.getCurrencys()).then(currencysBack => {
       this.currencys = currencysBack;
     }, err => {
       const errorObject = this.errorService.showNotification(err);
       this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
     });
 
-    firstValueFrom(this.currencyService.getCountries()).then(countriesBack => {
+    firstValueFrom(this.applicationService.getCountries()).then(countriesBack => {
       this.countries = countriesBack;
     }, err => {
       const errorObject = this.errorService.showNotification(err);
       this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
     });
 
-    firstValueFrom(this.currencyService.getTaxes()).then(taxesBack => {
+    firstValueFrom(this.applicationService.getTaxes()).then(taxesBack => {
       this.taxes = taxesBack;
     }, err => {
       const errorObject = this.errorService.showNotification(err);
       this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
     });
 
-    firstValueFrom(this.currencyService.getGroups()).then(groupsBack => {
+    firstValueFrom(this.applicationService.getGroups()).then(groupsBack => {
       this.groups = groupsBack;
       this.groupsSelected = groupsBack;
     }, err => {
@@ -151,7 +151,7 @@ export class CurrencyComponent implements OnInit {
       this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
     });
 
-    firstValueFrom(this.currencyService.getTypes()).then(typessBack => {
+    firstValueFrom(this.applicationService.getTypes()).then(typessBack => {
       this.types = typessBack;
       this.typesSelected = typessBack;
     }, err => {
@@ -159,7 +159,7 @@ export class CurrencyComponent implements OnInit {
       this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
     });
 
-    firstValueFrom(this.currencyService.getCategories()).then(categoriesBack => {
+    firstValueFrom(this.applicationService.getCategories()).then(categoriesBack => {
       this.categories = categoriesBack;
       this.categoriesSelected = categoriesBack;
     }, err => {
@@ -167,21 +167,21 @@ export class CurrencyComponent implements OnInit {
       this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
     });
 
-    firstValueFrom(this.currencyService.getCompanies()).then(companiesBack => {
+    firstValueFrom(this.applicationService.getCompanies()).then(companiesBack => {
       this.companies = companiesBack;
     }, err => {
       const errorObject = this.errorService.showNotification(err);
       this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
     });
 
-    firstValueFrom(this.currencyService.getPaymentMethods()).then(paymentMethodsBack => {
+    firstValueFrom(this.applicationService.getPaymentMethods()).then(paymentMethodsBack => {
       this.paymentMethods = paymentMethodsBack;
     }, err => {
       const errorObject = this.errorService.showNotification(err);
       this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
     });
 
-    firstValueFrom(this.currencyService.getTypesPayments()).then(typesPaymentsBack => {
+    firstValueFrom(this.applicationService.getTypesPayments()).then(typesPaymentsBack => {
       this.typesPayments = typesPaymentsBack;
       this.typesPaymentsSelected = typesPaymentsBack;
     }, err => {
@@ -210,7 +210,7 @@ export class CurrencyComponent implements OnInit {
 
   async deleteCurrency(id: number) {
     if (await this.sweetAlertService.alertDeleteMessage()) {
-      firstValueFrom(this.currencyService.deleteCurrency(id)).then(i => {
+      firstValueFrom(this.applicationService.deleteCurrency(id)).then(i => {
         this.toast.success('Moneda eliminada correctamente', ETitleMessages.CURRENCY)
         this.loadData()
       }, err => {
@@ -269,7 +269,7 @@ export class CurrencyComponent implements OnInit {
 
   async deleteCountry(id: number) {
     if (await this.sweetAlertService.alertDeleteMessage()) {
-      firstValueFrom(this.currencyService.deleteCountry(id)).then(i => {
+      firstValueFrom(this.applicationService.deleteCountry(id)).then(i => {
         this.toast.success('País eliminado correctamente', ETitleMessages.COUNTRY)
         this.loadData()
       }, err => {
@@ -327,7 +327,7 @@ export class CurrencyComponent implements OnInit {
 
   async deleteTax(id: number) {
     if (await this.sweetAlertService.alertDeleteMessage()) {
-      firstValueFrom(this.currencyService.deleteTax(id)).then(i => {
+      firstValueFrom(this.applicationService.deleteTax(id)).then(i => {
         this.toast.success('Impuesto eliminado correctamente', ETitleMessages.TAX)
         this.loadData()
       }, err => {
@@ -385,7 +385,7 @@ export class CurrencyComponent implements OnInit {
 
   async deleteGroup(id: number) {
     if (await this.sweetAlertService.alertDeleteMessage()) {
-      firstValueFrom(this.currencyService.deleteGroup(id)).then(i => {
+      firstValueFrom(this.applicationService.deleteGroup(id)).then(i => {
         this.toast.success('Grupo eliminado correctamente', ETitleMessages.GROUPS)
         this.loadData()
       }, err => {
@@ -456,7 +456,7 @@ export class CurrencyComponent implements OnInit {
 
   async deleteType(id: number) {
     if (await this.sweetAlertService.alertDeleteMessage()) {
-      firstValueFrom(this.currencyService.deleteType(id)).then(i => {
+      firstValueFrom(this.applicationService.deleteType(id)).then(i => {
         this.toast.success('Tipo eliminado correctamente', ETitleMessages.TYPES)
         this.loadData()
       }, err => {
@@ -524,7 +524,7 @@ export class CurrencyComponent implements OnInit {
 
   async deleteCategory(id: number) {
     if (await this.sweetAlertService.alertDeleteMessage()) {
-      firstValueFrom(this.currencyService.deleteCategory(id)).then(i => {
+      firstValueFrom(this.applicationService.deleteCategory(id)).then(i => {
         this.toast.success('Cuenta Contable eliminada correctamente', ETitleMessages.CATEGORIES)
         this.loadData()
       }, err => {
@@ -536,7 +536,7 @@ export class CurrencyComponent implements OnInit {
 
   async statesCategory(id): Promise<void> {
     if (await this.sweetAlertService.alertStatesMessage()) {
-      await firstValueFrom(this.currencyService.cambiarEstadosByidCategory(id)).then(_ => {
+      await firstValueFrom(this.applicationService.cambiarEstadosByidCategory(id)).then(_ => {
         this.toast.success('Estado cambiado correctamente', ETitleMessages.CATEGORIES);
         this.loadData();
       },
@@ -626,7 +626,7 @@ export class CurrencyComponent implements OnInit {
 
   async deletePaymentMethod(id: number) {
     if (await this.sweetAlertService.alertDeleteMessage()) {
-      firstValueFrom(this.currencyService.deletePaymentMethod(id)).then(i => {
+      firstValueFrom(this.applicationService.deletePaymentMethod(id)).then(i => {
         this.toast.success('Forma de pago eliminada correctamente', ETitleMessages.PAYMENTMETHOD)
         this.loadData()
       }, err => {
@@ -682,7 +682,7 @@ export class CurrencyComponent implements OnInit {
 
   async deleteTypesPayment(id: number) {
     if (await this.sweetAlertService.alertDeleteMessage()) {
-      firstValueFrom(this.currencyService.deleteTypesPayment(id)).then(i => {
+      firstValueFrom(this.applicationService.deleteTypesPayment(id)).then(i => {
         this.toast.success('Tipo eliminado correctamente', ETitleMessages.TYPESPAYMENTS)
         this.loadData()
       }, err => {

@@ -2,14 +2,14 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, map, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { ICategory, ICountry, ICurrency, IGroup, IPaymentMethod, ITax, IType, ITypesPayment } from '../interface/currency.interface';
+import { ICategory, ICountry, ICurrency, IGroup, IPaymentMethod, ITax, IType, ITypesPayment } from '../interface/application.interface';
 
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class CurrencyService {
+export class ApplicationService {
 
   private url = environment.endpoint
   constructor(private http: HttpClient) { }

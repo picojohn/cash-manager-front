@@ -4,8 +4,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ErrorService } from 'src/app/shared/services/error.service';
 import { firstValueFrom } from 'rxjs';
-import { ICountry, ITax } from '../../interface/currency.interface';
-import { CurrencyService } from '../../services/currency.service';
+import { ICountry, ITax } from '../../interface/application.interface';
+import { ApplicationService } from '../../services/application.service';
 import { ETitleMessages } from 'src/app/shared/enums/error.service.eum';
 
 
@@ -25,7 +25,7 @@ export class EditTaxComponent {
 
   constructor(
     public bsModalRef: BsModalRef,
-    private currencyService: CurrencyService,
+    private applicationService: ApplicationService,
     public toast: ToastrService,
     private errorService: ErrorService,
   ) {
@@ -44,7 +44,7 @@ export class EditTaxComponent {
  * carga inicial de datos
  */
   loadData() {
-    firstValueFrom(this.currencyService.getCountries()).then(item => {
+    firstValueFrom(this.applicationService.getCountries()).then(item => {
       this.countries = item
     }, err => {
       const errorObject = this.errorService.showNotification(err);
@@ -76,7 +76,7 @@ export class EditTaxComponent {
     this.formTax.markAllAsTouched();
     if (this.formTax.invalid) return this.toast.info('Debes llenar todos los datos requiridos del formulario', ETitleMessages.TAX)
     const rawValue: ITax = this.formTax.value;
-    firstValueFrom(this.tax ? this.currencyService.editTax(rawValue) : this.currencyService.newTax(rawValue)).then(item => {
+    firstValueFrom(this.tax ? this.applicationService.editTax(rawValue) : this.applicationService.newTax(rawValue)).then(item => {
       this.toast.success(` Impuesto ${this.tax ? 'modificado' : 'creado'} correctamente`, ETitleMessages.TAX)
       this.bsModalRef.hide()
     }, err => {

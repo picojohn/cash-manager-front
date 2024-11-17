@@ -4,8 +4,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ErrorService } from 'src/app/shared/services/error.service';
 import { firstValueFrom } from 'rxjs';
-import { ICategory, IGroup, IName, IType } from '../../interface/currency.interface';
-import { CurrencyService } from '../../services/currency.service';
+import { ICategory, IGroup, IName, IType } from '../../interface/application.interface';
+import { ApplicationService } from '../../services/application.service';
 import { ETitleMessages } from 'src/app/shared/enums/error.service.eum';
 import { constClassificationDate, constSeccionDate } from 'src/app/shared/data/const';
 import { IDatosUsuario } from 'src/app/authentication/interface/authentication';
@@ -34,7 +34,7 @@ export class EditCategoryComponent {
 
   constructor(
     public bsModalRef: BsModalRef,
-    private currencyService: CurrencyService,
+    private applicationService: ApplicationService,
     public toast: ToastrService,
     private errorService: ErrorService,
   ) {
@@ -55,14 +55,14 @@ export class EditCategoryComponent {
  */
   loadData() {
 
-    firstValueFrom(this.currencyService.getTypes()).then(typesBack => {
+    firstValueFrom(this.applicationService.getTypes()).then(typesBack => {
       this.types = typesBack
     }, err => {
       const errorObject = this.errorService.showNotification(err);
       this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
     })
 
-    firstValueFrom(this.currencyService.getGroups()).then(groupsBack => {
+    firstValueFrom(this.applicationService.getGroups()).then(groupsBack => {
       this.groups = groupsBack
     }, err => {
       const errorObject = this.errorService.showNotification(err);
@@ -98,7 +98,7 @@ export class EditCategoryComponent {
     this.formCategory.markAllAsTouched();
     if (this.formCategory.invalid) return this.toast.info('Debes llenar todos los datos requiridos del formulario', ETitleMessages.CATEGORIES)
     const rawValue: ICategory = this.formCategory.value;
-    firstValueFrom(this.category ? this.currencyService.editCategory(rawValue) : this.currencyService.newCategory(rawValue)).then(_ => {
+    firstValueFrom(this.category ? this.applicationService.editCategory(rawValue) : this.applicationService.newCategory(rawValue)).then(_ => {
       this.toast.success(` Categoría ${this.category ? 'modificada' : 'creada'} correctamente`, ETitleMessages.CATEGORIES)
       this.bsModalRef.hide()
     }, err => {

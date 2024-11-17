@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ConfigurationComponent } from './configuration.component';
-import { CurrencyComponent } from './currency/currency.component';
+import { ApplicationComponent } from './application/application.component';
 import { ModulesSubComponent } from './modulesSub/modulesSub.component';
 
 const routes: Routes = [
@@ -11,8 +11,8 @@ const routes: Routes = [
     children: [
 
      {
-       path: 'currency',
-       component: CurrencyComponent,
+       path: 'application',
+       component: ApplicationComponent,
      },
      {
        path: 'modulesSub',

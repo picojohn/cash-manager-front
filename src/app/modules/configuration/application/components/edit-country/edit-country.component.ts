@@ -4,8 +4,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ErrorService } from 'src/app/shared/services/error.service';
 import { firstValueFrom } from 'rxjs';
-import { ICountry, ICurrency } from '../../interface/currency.interface';
-import { CurrencyService } from '../../services/currency.service';
+import { ICountry, ICurrency } from '../../interface/application.interface';
+import { ApplicationService } from '../../services/application.service';
 import { ETitleMessages } from 'src/app/shared/enums/error.service.eum';
 
 
@@ -25,7 +25,7 @@ export class EditCountryComponent {
 
   constructor(
     public bsModalRef: BsModalRef,
-    private currencyService: CurrencyService,
+    private applicationService: ApplicationService,
     public toast: ToastrService,
     private errorService: ErrorService,
   ) {
@@ -44,7 +44,7 @@ export class EditCountryComponent {
  * carga inicial de datos
  */
   loadData() {
-    firstValueFrom(this.currencyService.getCurrencys()).then(item => {
+    firstValueFrom(this.applicationService.getCurrencys()).then(item => {
       this.currencies = item
     }, err => {
       const errorObject = this.errorService.showNotification(err);
@@ -75,7 +75,7 @@ export class EditCountryComponent {
     this.formCountry.markAllAsTouched();
     if (this.formCountry.invalid) return this.toast.info('Debes llenar todos los datos requiridos del formulario', ETitleMessages.COUNTRY)
     const rawValue: ICountry = this.formCountry.value;
-    firstValueFrom(this.country ? this.currencyService.editCountry(rawValue) : this.currencyService.newCountry(rawValue)).then(item => {
+    firstValueFrom(this.country ? this.applicationService.editCountry(rawValue) : this.applicationService.newCountry(rawValue)).then(item => {
       this.toast.success(` Pais ${this.country ? 'modificado' : 'creado'} correctamente`, ETitleMessages.COUNTRY)
       this.bsModalRef.hide()
     }, err => {

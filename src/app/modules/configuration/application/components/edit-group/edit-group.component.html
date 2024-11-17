@@ -11,6 +11,7 @@
       <div class="row justify-content-center px-3">
         <div class="card_form col-md-8">
           <div class="row">
+
             <div class="card_form col-md-7">
               <div class="form-group">
                 <label> Nombre </label>
@@ -21,6 +22,19 @@
                 </div>
               </div>
             </div>
+
+            <!-- <div class="card_form col-md-6 mb-3">
+              <div class="form-group">
+                <label> Grupos </label>
+                <ng-select [items]="groups" bindLabel="name" bindValue="id" formControlName="idGroup"
+                  placeholder="Ingresa el grupo">
+                </ng-select>
+                <div *ngIf="formCategory.controls.idGroup.touched && formCategory.controls.idGroup.errors?.required"
+                  class="text text-danger">
+                  El grupo es requerido
+                </div>
+              </div>
+            </div> -->
 
           </div>
         </div>

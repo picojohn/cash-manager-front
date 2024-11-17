@@ -4,8 +4,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ErrorService } from 'src/app/shared/services/error.service';
 import { firstValueFrom } from 'rxjs';
-import { ICurrency, IPaymentMethod } from '../../interface/currency.interface';
-import { CurrencyService } from '../../services/currency.service';
+import { IPaymentMethod } from '../../interface/application.interface';
+import { ApplicationService } from '../../services/application.service';
 import { ETitleMessages } from 'src/app/shared/enums/error.service.eum';
 
 
@@ -23,7 +23,7 @@ export class EditPaymentMethodComponent {
 
   constructor(
     public bsModalRef: BsModalRef,
-    private currencyService: CurrencyService,
+    private applicationService: ApplicationService,
     public toast: ToastrService,
     private errorService: ErrorService,
   ) {
@@ -51,13 +51,13 @@ export class EditPaymentMethodComponent {
 
   /**
    * metodo para guardar los datos en el backend
-   * @returns ICurrency
+   * @returns IPaymenMethod
    */
   saveData() {
     this.formPaymentMethod.markAllAsTouched();
     if (this.formPaymentMethod.invalid) return this.toast.info('Debes llenar todos los datos requiridos del formulario', ETitleMessages.PAYMENTMETHOD)
     const rawValue: IPaymentMethod = this.formPaymentMethod.value;
-    firstValueFrom(this.paymentMethod ? this.currencyService.editPaymentMethod(rawValue) : this.currencyService.newPaymentMethod(rawValue)).then(item => {
+    firstValueFrom(this.paymentMethod ? this.applicationService.editPaymentMethod(rawValue) : this.applicationService.newPaymentMethod(rawValue)).then(item => {
       this.toast.success(` Forma de pago ${this.paymentMethod ? 'modificada' : 'creada'} correctamente`, ETitleMessages.PAYMENTMETHOD)
       this.bsModalRef.hide()
     }, err => {

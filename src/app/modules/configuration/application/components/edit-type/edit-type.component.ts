@@ -4,8 +4,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ErrorService } from 'src/app/shared/services/error.service';
 import { firstValueFrom } from 'rxjs';
-import { IType } from '../../interface/currency.interface';
-import { CurrencyService } from '../../services/currency.service';
+import { IType } from '../../interface/application.interface';
+import { ApplicationService } from '../../services/application.service';
 import { ETitleMessages } from 'src/app/shared/enums/error.service.eum';
 import { IDatosUsuario } from 'src/app/authentication/interface/authentication';
 
@@ -25,7 +25,7 @@ export class EditTypeComponent {
 
   constructor(
     public bsModalRef: BsModalRef,
-    private currencyService: CurrencyService,
+    private applicationService: ApplicationService,
     public toast: ToastrService,
     private errorService: ErrorService,
   ) {
@@ -55,13 +55,13 @@ export class EditTypeComponent {
 
   /**
    * metodo para guardar los datos en el backend
-   * @returns ICurrency
+   * @returns IType
    */
   saveData() {
     this.formType.markAllAsTouched();
     if (this.formType.invalid) return this.toast.info('Debes llenar todos los datos requeridos del formulario', ETitleMessages.TYPES)
     const rawValue: IType = this.formType.value;
-    firstValueFrom(this.type ? this.currencyService.editType(rawValue) : this.currencyService.newType(rawValue)).then(_ => {
+    firstValueFrom(this.type ? this.applicationService.editType(rawValue) : this.applicationService.newType(rawValue)).then(_ => {
       this.toast.success(`Tipo ${this.type ? 'modificado' : 'creado'} correctamente`, ETitleMessages.TYPES)
       this.bsModalRef.hide()
     }, err => {

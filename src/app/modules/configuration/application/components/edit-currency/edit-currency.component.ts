@@ -4,8 +4,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ErrorService } from 'src/app/shared/services/error.service';
 import { firstValueFrom } from 'rxjs';
-import { ICurrency } from '../../interface/currency.interface';
-import { CurrencyService } from '../../services/currency.service';
+import { ICurrency } from '../../interface/application.interface';
+import { ApplicationService } from '../../services/application.service';
 import { ETitleMessages } from 'src/app/shared/enums/error.service.eum';
 
 
@@ -23,7 +23,7 @@ export class EditCurrencyComponent {
 
   constructor(
     public bsModalRef: BsModalRef,
-    private currencyService: CurrencyService,
+    private applicationService: ApplicationService,
     public toast: ToastrService,
     private errorService: ErrorService,
   ) {
@@ -59,7 +59,7 @@ export class EditCurrencyComponent {
     this.formCurrency.markAllAsTouched();
     if (this.formCurrency.invalid) return this.toast.info('Debes llenar todos los datos requiridos del formulario', ETitleMessages.CURRENCY)
     const rawValue: ICurrency = this.formCurrency.value;
-    firstValueFrom(this.currency ? this.currencyService.editCurrency(rawValue) : this.currencyService.newCurrency(rawValue)).then(item => {
+    firstValueFrom(this.currency ? this.applicationService.editCurrency(rawValue) : this.applicationService.newCurrency(rawValue)).then(item => {
       this.toast.success(` Moneda ${this.currency ? 'modificada' : 'creada'} correctamente`, ETitleMessages.CURRENCY)
       this.bsModalRef.hide()
     }, err => {
