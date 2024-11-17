@@ -4,8 +4,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ErrorService } from 'src/app/shared/services/error.service';
 import { firstValueFrom } from 'rxjs';
-import { IModule, ISubModule } from '../../interface/modulesSub.interface';
-import { ModulesSubService } from '../../services/modulesSub.service';
+import { IModule, ISubModule } from '../../interface/panel.interface';
+import { PanelService } from '../../services/panel.service';
 import { constFreeIcons } from 'src/app/shared/data/const';
 import { ETitleMessages } from 'src/app/shared/enums/error.service.eum';
 
@@ -26,7 +26,7 @@ export class EditSubModuleComponent {
 
   constructor(
     public bsModalRef: BsModalRef,
-    private modulesSubService: ModulesSubService,
+    private panelService: PanelService,
     public toast: ToastrService,
     private errorService: ErrorService,
   ) {
@@ -45,7 +45,7 @@ export class EditSubModuleComponent {
  * carga inicial de datos
  */
   loadData() {
-    firstValueFrom(this.modulesSubService.getModulesAll()).then(item => {
+    firstValueFrom(this.panelService.getModulesAll()).then(item => {
       this.modules = item
     }, err => {
       const errorObject = this.errorService.showNotification(err);
@@ -73,7 +73,7 @@ export class EditSubModuleComponent {
     this.formSubModule.markAllAsTouched();
     if (this.formSubModule.invalid) return this.toast.info('Debes llenar todos los datos requiridos del formulario', ETitleMessages.SUBMODULE)
     const rawValue: ISubModule = this.formSubModule.value;
-    firstValueFrom(this.subModule ? this.modulesSubService.editSubModule(rawValue) : this.modulesSubService.newSubModule(rawValue)).then(_ => {
+    firstValueFrom(this.subModule ? this.panelService.editSubModule(rawValue) : this.panelService.newSubModule(rawValue)).then(_ => {
       this.toast.success(` SubModulo ${this.subModule ? 'modificado' : 'creado'} correctamente`, ETitleMessages.SUBMODULE)
       this.bsModalRef.hide()
     }, err => {

@@ -4,18 +4,18 @@ import { ToastrService } from 'ngx-toastr';
 import { ErrorService } from 'src/app/shared/services/error.service';
 import { SweetAlertService } from 'src/app/shared/services/sweetAlert.service';
 import { firstValueFrom } from 'rxjs';
-import { IModule, ISubModule } from './interface/modulesSub.interface';
-import { ModulesSubService } from './services/modulesSub.service';
+import { IModule, ISubModule } from './interface/panel.interface';
+import { PanelService } from './services/panel.service';
 import { EditModuleComponent } from './components/edit-module/edit-module.component';
 import { EditSubModuleComponent } from './components/edit-subModule/edit-subModule.component';
 import { ETitleMessages } from 'src/app/shared/enums/error.service.eum';
 
 @Component({
-  selector: 'app-modulesSub',
-  templateUrl: './modulesSub.component.html',
-  styleUrls: ['./modulesSub.component.css'],
+  selector: 'app-panel',
+  templateUrl: './panel.component.html',
+  styleUrls: ['./panel.component.css'],
 })
-export class ModulesSubComponent implements OnInit {
+export class PanelComponent implements OnInit {
 
   public selectedTab: number = 2;
   private bsModalRef: BsModalRef;
@@ -40,7 +40,7 @@ export class ModulesSubComponent implements OnInit {
     private modalService: BsModalService,
     public toast: ToastrService,
     private errorService: ErrorService,
-    private modulesSubService: ModulesSubService,
+    private panelService: PanelService,
     private sweetAlertService: SweetAlertService
   ) { }
 
@@ -56,13 +56,13 @@ export class ModulesSubComponent implements OnInit {
    * carga inicial de datos
    */
   loadData() {
-    firstValueFrom(this.modulesSubService.getModulesAll()).then(modulesBack => {
+    firstValueFrom(this.panelService.getModulesAll()).then(modulesBack => {
       this.modules = modulesBack;
     }, err => {
       const errorObject = this.errorService.showNotification(err);
       this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
     });
-    firstValueFrom(this.modulesSubService.getSubModulesAll()).then(subModulesBack => {
+    firstValueFrom(this.panelService.getSubModulesAll()).then(subModulesBack => {
       this.subModules = subModulesBack;
     }, err => {
       const errorObject = this.errorService.showNotification(err);
@@ -143,7 +143,7 @@ export class ModulesSubComponent implements OnInit {
    */
   async statesSubModule(id): Promise<void> {
     if (await this.sweetAlertService.alertStatesMessage()) {
-      await firstValueFrom(this.modulesSubService.cambiarEstadosByid(id)).then(
+      await firstValueFrom(this.panelService.cambiarEstadosByid(id)).then(
         (_) => {
           this.toast.success('Estado cambiado correctamente', ETitleMessages.SUBMODULE);
           this.loadData();

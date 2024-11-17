@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ConfigurationComponent } from './configuration.component';
 import { ApplicationComponent } from './application/application.component';
-import { ModulesSubComponent } from './modulesSub/modulesSub.component';
+import { PanelComponent } from './panel/panel.component';
 
 const routes: Routes = [
   {
@@ -15,8 +15,8 @@ const routes: Routes = [
        component: ApplicationComponent,
      },
      {
-       path: 'modulesSub',
-       component: ModulesSubComponent,
+       path: 'panel',
+       component: PanelComponent,
      },
 
     ]

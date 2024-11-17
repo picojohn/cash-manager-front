@@ -4,8 +4,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ErrorService } from 'src/app/shared/services/error.service';
 import { firstValueFrom } from 'rxjs';
-import { IModule } from '../../interface/modulesSub.interface';
-import { ModulesSubService } from '../../services/modulesSub.service';
+import { IModule } from '../../interface/panel.interface';
+import { PanelService } from '../../services/panel.service';
 import { constFreeIcons } from 'src/app/shared/data/const';
 import { ETitleMessages } from 'src/app/shared/enums/error.service.eum';
 
@@ -25,7 +25,7 @@ export class EditModuleComponent {
 
   constructor(
     public bsModalRef: BsModalRef,
-    private modulesSubService: ModulesSubService,
+    private panelService: PanelService,
     public toast: ToastrService,
     private errorService: ErrorService,
   ) {
@@ -63,7 +63,7 @@ export class EditModuleComponent {
     this.formModule.markAllAsTouched();
     if (this.formModule.invalid) return this.toast.info('Debes llenar todos los datos requiridos del formulario', ETitleMessages.MODULE)
     const rawValue: IModule = this.formModule.value;
-    firstValueFrom(this.module ? this.modulesSubService.editModule(rawValue) : this.modulesSubService.newModule(rawValue)).then(item => {
+    firstValueFrom(this.module ? this.panelService.editModule(rawValue) : this.panelService.newModule(rawValue)).then(item => {
       this.toast.success(` Modulos ${this.module ? 'modificado' : 'creado'} correctamente`, ETitleMessages.MODULE)
       this.bsModalRef.hide()
     }, err => {
