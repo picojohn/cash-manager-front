@@ -20,6 +20,7 @@ import { EditTypeComponent } from './application/components/edit-type/edit-type.
 import { EditCategoryComponent } from './application/components/edit-category/edit-category.component';
 import { EditPaymentMethodComponent } from './application/components/edit-paymentMethod/edit-paymentMethod.component';
 import { EditTypesPaymentsComponent } from './application/components/edit-typesPayment/edit-typesPayments.component';
+import { EditApplicationTabComponent } from './panel/components/edit-applicationTab/edit-applicationTab.component';
 
 
 
@@ -38,6 +39,7 @@ import { EditTypesPaymentsComponent } from './application/components/edit-typesP
     EditCategoryComponent,
     EditPaymentMethodComponent,
     EditTypesPaymentsComponent,
+    EditApplicationTabComponent,
 
 
   ],

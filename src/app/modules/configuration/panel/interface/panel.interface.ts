@@ -16,8 +16,16 @@ export interface ISubModule{
   state: number;
  }
 
+/* Interfaz pora un ApplicationTabs */
+export interface IApplicationTab{
+  id: number;
+  name: string;
+  idModule: number;
+  idSubModule: number;
+  icon: string;
+  state: number;
+ }
 
 
 
 
- 

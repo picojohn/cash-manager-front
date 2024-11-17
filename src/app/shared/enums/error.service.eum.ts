@@ -11,6 +11,7 @@ export enum ETitleMessages {
   TYPES = 'Tipos',
   CATEGORIES = 'Categorías',
   PAYMENTMETHOD = 'Formas de Pago',
-  TYPESPAYMENTS = `Medio de pago`
+  TYPESPAYMENTS = `Medio de pago`,
+  APPLICATIONTAB = `Pestañas`,
 
 }

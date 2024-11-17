@@ -402,7 +402,6 @@ export class ApplicationComponent implements OnInit {
   }
 
   selectedGroup() {
-    console.log(this.valueGroupsSelected);
     if (this.valueGroupsSelected !== null) {
       this.groups = this.groupsSelected.filter(i => i.idCompany == this.valueGroupsSelected)
       this.pageGroups = 1
@@ -468,7 +467,6 @@ export class ApplicationComponent implements OnInit {
   }
 
   selectedTypes() {
-    console.log(this.valueTypesSelected);
     if (this.valueTypesSelected !== null) {
       this.types = this.typesSelected.filter(i => i.idCompany == this.valueTypesSelected)
       this.pageTypes = 1
@@ -554,7 +552,6 @@ export class ApplicationComponent implements OnInit {
   }
 
   selectedCategories() {
-    console.log(this.valueCategoriesSelected);
     if (this.valueCategoriesSelected !== null) {
       this.categories = this.categoriesSelected.filter(i => i.idCompany == this.valueCategoriesSelected)
       this.pageCategories = 1
@@ -694,7 +691,6 @@ export class ApplicationComponent implements OnInit {
   }
 
   selectedTypesPayment() {
-    console.log(this.valueTypesPaymentsSelected);
     if (this.valueTypesPaymentsSelected !== null) {
       this.typesPayments = this.typesPaymentsSelected.filter(i => i.idCompany == this.valueTypesPaymentsSelected)
       this.pageTypesPayments = 1

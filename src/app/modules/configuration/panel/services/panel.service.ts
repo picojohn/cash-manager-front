@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, map, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { IModule, ISubModule } from '../interface/panel.interface';
+import { IApplicationTab, IModule, ISubModule } from '../interface/panel.interface';
 
 
 
@@ -15,7 +15,7 @@ export class PanelService {
   constructor(private http: HttpClient) { }
 
   //  moduelos
-  getModulesAll(): Observable<Array<IModule>> {
+  getAllModules(): Observable<Array<IModule>> {
     return this.http.get<Array<IModule>>(`${this.url}/modules`)
   }
 
@@ -31,7 +31,7 @@ export class PanelService {
 
   // submodulos
 
-  getSubModulesAll(): Observable<Array<ISubModule>> {
+  getAllSubModules(): Observable<Array<ISubModule>> {
     return this.http.get<Array<ISubModule>>(`${this.url}/subModules`)
   }
 
@@ -44,13 +44,39 @@ export class PanelService {
     return this.http.patch<ISubModule>(`${this.url}/subModules`, subModule)
   }
 
-    /**
-   * metodo del servicio para cambiar el estado del BusinessAccount
-   * @param id
-   * @returns
-   */
-    public cambiarEstadosByid(id: number): Observable<Array<any>> {
-      return this.http.get<Array<any>>(`${this.url}/subModules/estados/${id}`);
-    }
+  /**
+ * metodo del servicio para cambiar el estado del submoduele
+ * @param id
+ * @returns
+ */
+  public cambiarEstadosByidSubModule(id: number): Observable<Array<any>> {
+    return this.http.get<Array<any>>(`${this.url}/subModules/estados/${id}`);
+  }
+
+
+
+  // ApplicationTab
+
+  getAllApplicationTabs(): Observable<Array<IApplicationTab>> {
+    return this.http.get<Array<IApplicationTab>>(`${this.url}/applicationTabs`)
+  }
+
+  newApplicationTab(applicationTab: IApplicationTab): Observable<IApplicationTab> {
+    return this.http.post<IApplicationTab>(`${this.url}/applicationTabs`, applicationTab)
+  }
+
+
+  editApplicationTab(applicationTab: IApplicationTab): Observable<IApplicationTab> {
+    return this.http.patch<IApplicationTab>(`${this.url}/applicationTabs`, applicationTab)
+  }
+
+  /**
+ * metodo del servicio para cambiar el estado del BusinessAccount
+ * @param id
+ * @returns
+ */
+  public cambiarEstadosByidApplicationTab(id: number): Observable<Array<any>> {
+    return this.http.get<Array<any>>(`${this.url}/applicationTabs/estados/${id}`);
+  }
 
 }

@@ -25,7 +25,7 @@ export class SidebarComponent implements OnInit {
 
    toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
-    console.log('Menu estado: ', this.isMenuOpen);
+    console.info('Menu estado: ', this.isMenuOpen);
 }
 
 toggleDropdown() {

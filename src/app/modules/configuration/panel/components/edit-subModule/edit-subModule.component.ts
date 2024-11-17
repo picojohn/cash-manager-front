@@ -45,7 +45,7 @@ export class EditSubModuleComponent {
  * carga inicial de datos
  */
   loadData() {
-    firstValueFrom(this.panelService.getModulesAll()).then(item => {
+    firstValueFrom(this.panelService.getAllModules()).then(item => {
       this.modules = item
     }, err => {
       const errorObject = this.errorService.showNotification(err);

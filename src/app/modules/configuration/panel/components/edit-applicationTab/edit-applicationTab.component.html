@@ -1,0 +1,92 @@
+<div class="container p-3">
+  <div class="row justify-content-center">
+    <div class="row justify-content-center text-center">
+      <h2 class="p-3 col-md-6"><i class="fa-solid fa-id-badge" id="icon_subtitle"></i>
+        {{title}}</h2>
+    </div>
+  </div>
+  <div *ngIf="cargarFormularioBooleam">
+    <form [formGroup]="formApplicationTab">
+
+      <div class="row justify-content-center px-5">
+
+        <div class="card_form col-md-6 mb-3">
+          <div class="form-group">
+            <label> Nombre </label>
+            <input type="text" class="form-control" formControlName="name" placeholder="Ingrese el nombre de la pestaña">
+            <div *ngIf="formApplicationTab.controls.name.touched && formApplicationTab.controls.name.errors?.required"
+              class="text text-danger">
+              El nombre es requerido
+            </div>
+          </div>
+        </div>
+
+        <!-- <div class="card_form col-md-6 mb-3">
+          <div class="form-group">
+            <label> Url </label>
+            <input type="text" class="form-control" formControlName="path" placeholder="Ingrese la url">
+            <div *ngIf="formSubModule.controls.path.touched && formSubModule.controls.path.errors?.required"
+              class="text text-danger">
+              La url es requerida
+            </div>
+          </div>
+        </div> -->
+
+        <div class="card_form col-md-6">
+          <div class="form-group">
+            <label>Icono</label>
+            <ng-select formControlName="icon" [items]="freeIcons" bindValue="value" placeholder="Seleccione un ícono">
+              <ng-template ng-option-tmp let-item="item">
+                <i [class]="'fas ' + item"></i>
+              </ng-template>
+              <ng-template ng-label-tmp let-item="item">
+                <i [class]="'fas ' + item"></i>
+              </ng-template>
+            </ng-select>
+            <div *ngIf="formApplicationTab.controls.icon.touched && formApplicationTab.controls.icon.errors?.required"
+              class="text text-danger">
+              El icono es requerido
+            </div>
+          </div>
+        </div>
+
+        <div class="card_form col-md-6">
+          <div class="form-group">
+            <label> Módulos </label>
+            <ng-select [items]="modules" bindLabel="name" bindValue="id" formControlName="idModule" (change)="selectModule()" >
+            </ng-select>
+            <div *ngIf="formApplicationTab.controls.idModule.touched && formApplicationTab.controls.idModule.errors?.required"
+              class="text text-danger">
+              El modulo es requerido
+            </div>
+          </div>
+        </div>
+
+        <div class="card_form col-md-6">
+          <div class="form-group">
+            <label> SubMódulos </label>
+            <ng-select [items]="subModules" bindLabel="name" bindValue="id" formControlName="idSubModule"  >
+            </ng-select>
+            <div *ngIf="formApplicationTab.controls.idModule.touched && formApplicationTab.controls.idModule.errors?.required"
+              class="text text-danger">
+              El modulo es requerido
+            </div>
+          </div>
+        </div>
+
+
+        <div class="card_select p-3 col-md-10">
+        </div>
+        <div class="row justify-content-between p-3 col-md-10">
+          <button (click)="saveData()" class="btn btn-outline-primary btn-ms btn-block col-md-5">
+            <i class="fa-solid fa-floppy-disk" style="color: #0a3754"></i><strong> Guardar</strong>
+          </button>
+          <button (click)="bsModalRef.hide()" class="btn btn-outline-secondary btn-ms btn-block col-md-5">
+            <i class="fa-solid fa-ban" id="icon_cancel"></i><strong> Cerrar</strong>
+          </button>
+        </div>
+      </div>
+    </form>
+    <!-- <p>{{formApplicationTab.value | json}}</p> -->
+  </div>
+</div>
