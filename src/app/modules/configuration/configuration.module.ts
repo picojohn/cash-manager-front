@@ -21,6 +21,8 @@ import { EditCategoryComponent } from './application/components/edit-category/ed
 import { EditPaymentMethodComponent } from './application/components/edit-paymentMethod/edit-paymentMethod.component';
 import { EditTypesPaymentsComponent } from './application/components/edit-typesPayment/edit-typesPayments.component';
 import { EditApplicationTabComponent } from './panel/components/edit-applicationTab/edit-applicationTab.component';
+import { EditRoleComponent } from './panel/components/edit-role/edit-role.component';
+import { EditMenuPermissionsComponent } from './panel/components/edit-menu-permissions/edit-menu-permissions.component';
 
 
 
@@ -40,6 +42,8 @@ import { EditApplicationTabComponent } from './panel/components/edit-application
     EditPaymentMethodComponent,
     EditTypesPaymentsComponent,
     EditApplicationTabComponent,
+    EditRoleComponent,
+    EditMenuPermissionsComponent,
 
 
   ],

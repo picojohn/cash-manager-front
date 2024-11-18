@@ -26,6 +26,21 @@ export interface IApplicationTab{
   state: number;
  }
 
+ export interface IRole {
+  id: number;
+  name: string;
+  state: number
+}
+
+
+export interface IMenuPermissions {
+  id?: number;
+  idModule: number;
+  idSubModule: number;
+  idApplicationTab: number;
+  idRole: number;
+  actions: string;
+}
 
 
 

@@ -33,11 +33,6 @@ export interface IMenuChildren {
   actions: string;
 }
 
-export interface Irole {
-  id: number;
-  name: string;
-}
-
 export interface ILoginInfo {
   userName?: string;
   password?: string;

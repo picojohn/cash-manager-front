@@ -14,6 +14,7 @@
     <button (click)="selectTab(1)" [class.active]="selectedTab === 1">Modulos</button>
     <button (click)="selectTab(2)" [class.active]="selectedTab === 2">Submodulos</button>
     <button (click)="selectTab(3)" [class.active]="selectedTab === 3">Pestañas</button>
+    <button (click)="selectTab(4)" [class.active]="selectedTab === 4">Roles</button>
   </div>
 
   <div class="container px-5">
@@ -47,7 +48,7 @@
             <tbody class="cont_body">
               <tr
                 *ngFor="let module of filterModules() | paginate: {itemsPerPage: totalPaginasModule, currentPage: pageModule, id: 'itemsModules'}">
-               <td>{{module.id}}</td>
+                <td>{{module.id}}</td>
                 <td>
                   <p id="td_1">{{module.name}}</p>
                 </td>
@@ -120,7 +121,7 @@
             <tbody class="cont_body">
               <tr
                 *ngFor="let subModule of filterSubModules() | paginate: {itemsPerPage: totalPaginasSubModule, currentPage: pageSubModule, id: 'itemSubmodule'}">
-              <td>{{subModule.id}}</td>
+                <td>{{subModule.id}}</td>
                 <td>
                   <p id="td_1">{{subModule.name}}</p>
                 </td>
@@ -142,14 +143,14 @@
 
       <div class="row justify-content-between text-center p-3">
 
-          <div class="select col-md-1">
-            <select class="form-select co-md-1" (change)="numeroPaginasSubModule($event)">
-              <option *ngFor="let option of nPaginasSubModule" [value]="option"
-                [selected]="option === totalPaginasSubModule">
-                {{ option }}
-              </option>
-            </select>
-          </div>
+        <div class="select col-md-1">
+          <select class="form-select co-md-1" (change)="numeroPaginasSubModule($event)">
+            <option *ngFor="let option of nPaginasSubModule" [value]="option"
+              [selected]="option === totalPaginasSubModule">
+              {{ option }}
+            </option>
+          </select>
+        </div>
 
         <div class="col-md-3 p-3" *ngIf="filterSubModules().length"><span
             style="color: gray; font-weight: 300;justify-content: center !important;"><strong>Mostrando </strong>
@@ -177,10 +178,12 @@
           <h3 class="col-md-6"><i class="fa-solid fa-square-poll-horizontal" id="icon_subtitle"></i> Gestión de
             pestañas</h3>
           <div class="card_search col-md-3 position-relative">
-            <input id="search" type="search" [(ngModel)]="buscadorApplicationTab" class="form-control" placeholder="Buscar">
+            <input id="search" type="search" [(ngModel)]="buscadorApplicationTab" class="form-control"
+              placeholder="Buscar">
             <i class="fas fa-search position-absolute" id="icon_search"></i>
           </div>
-          <button (click)="newApplicationTab()" class="btn btn-outline-primary btn-ms btn-block col-md-2" id="create_boton">
+          <button (click)="newApplicationTab()" class="btn btn-outline-primary btn-ms btn-block col-md-2"
+            id="create_boton">
             <i class="fa-solid fa-circle-plus"></i> Crear
           </button>
         </div>
@@ -201,7 +204,7 @@
             <tbody class="cont_body">
               <tr
                 *ngFor="let applicationTab of filterApplicationTabs() | paginate: {itemsPerPage: totalPaginasApplicationTab, currentPage: pageApplicationTab, id: 'itemApplicationTabs'}">
-              <td>{{applicationTab.id}}</td>
+                <td>{{applicationTab.id}}</td>
                 <td>
                   <p id="td_1">{{applicationTab.name}}</p>
                 </td>
@@ -209,11 +212,12 @@
                 <td> {{getSubModulesId(applicationTab.idSubModule)}} </td>
                 <td> <i [class]="'fas ' + applicationTab.icon"></i> </td>
                 <td> <button class="button_estado" (click)="statesApplicationTab(applicationTab.id)"
-                    [ngStyle]="{background: applicationTab.state == 1 ? 'chartreuse' : 'red' }"><i class="fa-solid fa-check"
-                      style="color: white;"></i></button>
+                    [ngStyle]="{background: applicationTab.state == 1 ? 'chartreuse' : 'red' }"><i
+                      class="fa-solid fa-check" style="color: white;"></i></button>
                 </td>
                 <td>
-                  <i (click)="editApplicationTab(applicationTab)" class="fa-solid fa-pen-to-square" id="table_icon_edit"></i>
+                  <i (click)="editApplicationTab(applicationTab)" class="fa-solid fa-pen-to-square"
+                    id="table_icon_edit"></i>
                 </td>
               </tr>
             </tbody>
@@ -223,31 +227,108 @@
 
       <div class="row justify-content-between text-center p-3">
 
-          <div class="select col-md-1">
-            <select class="form-select co-md-1" (change)="numeroPaginasApplicationTab($event)">
-              <option *ngFor="let option of nPaginasApplicationTab" [value]="option"
-                [selected]="option === totalPaginasApplicationTab">
-                {{ option }}
-              </option>
-            </select>
-          </div>
+        <div class="select col-md-1">
+          <select class="form-select co-md-1" (change)="numeroPaginasApplicationTab($event)">
+            <option *ngFor="let option of nPaginasApplicationTab" [value]="option"
+              [selected]="option === totalPaginasApplicationTab">
+              {{ option }}
+            </option>
+          </select>
+        </div>
 
         <div class="col-md-3 p-3" *ngIf="filterApplicationTabs().length"><span
             style="color: gray; font-weight: 300;justify-content: center !important;"><strong>Mostrando </strong>
             <strong style="color: #0a3754;">{{
               (pageApplicationTab - 1) * totalPaginasApplicationTab + 1 }} <strong style="color: gray;">-</strong> {{
               (pageApplicationTab * totalPaginasApplicationTab < filterApplicationTabs().length) ? (pageApplicationTab *
-                totalPaginasApplicationTab) : filterApplicationTabs().length }} <strong style="color: gray;font-weight: 300;">
+                totalPaginasApplicationTab) : filterApplicationTabs().length }} <strong
+                style="color: gray;font-weight: 300;">
                 de</strong>
             {{ filterApplicationTabs().length }}</strong></span>
         </div>
         <pagination-controls class="col-md-5" style="padding-top: 13px; color: #0a3754;font-weight: 400;"
-          id="itemApplicationTabs" (pageChange)="pageApplicationTab =$event" previousLabel="Anterior" nextLabel="Siguiente"
-          screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
+          id="itemApplicationTabs" (pageChange)="pageApplicationTab =$event" previousLabel="Anterior"
+          nextLabel="Siguiente" screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
           screenReaderCurrentLabel="You're on page 5 de 10">
         </pagination-controls>
       </div>
 
+
+    </div>
+
+    <div *ngIf="selectedTab === 4">
+
+      <div class="row justify-content-center">
+        <div class="row justify-content-between p-3">
+          <h3 class="col-md-6"><i class="fa-solid fa-square-poll-horizontal" id="icon_subtitle"></i> Gestión de
+            Roles</h3>
+          <div class="card_search col-md-3 position-relative">
+            <input id="search" type="search" [(ngModel)]="buscadorRole" class="form-control" placeholder="Buscar">
+            <i class="fas fa-search position-absolute" id="icon_search"></i>
+          </div>
+          <button (click)="newRole()" class="btn btn-outline-primary btn-ms btn-block col-md-2" id="create_boton">
+            <i class="fa-solid fa-circle-plus"></i> Crear
+          </button>
+        </div>
+
+        <div class="scroll col-md-12">
+          <table class="table table-responsive">
+            <thead class="cont_head">
+              <tr>
+                <th>ID</th>
+                <th>NOMBRE</th>
+                <th>ESTADO</th>
+                <th>ACCIONES</th>
+              </tr>
+            </thead>
+            <tbody class="cont_body">
+              <tr
+                *ngFor="let role of filterRoles() | paginate: {itemsPerPage: totalPaginasRole, currentPage: pageRole, id: 'itemRoles'}">
+                <td>{{role.id}}</td>
+                <td>
+                  <p id="td_1">{{role.name}}</p>
+                </td>
+                <td> <button class="button_estado" (click)="statesRole(role.id)"
+                    [ngStyle]="{background: role.state == 1 ? 'chartreuse' : 'red' }"><i class="fa-solid fa-check"
+                      style="color: white;"></i></button>
+                </td>
+                <td>
+                  <i (click)="editRole(role)" class="fa-solid fa-pen-to-square" id="table_icon_edit"></i>
+                  <i (click)="editMenuPermissions(role)" class="fa-solid fa-address-book"
+
+                  style="color: gray; margin-right: 1rem;"></i>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="row justify-content-between text-center p-3">
+
+        <div class="select col-md-1">
+          <select class="form-select co-md-1" (change)="numeroPaginasRole($event)">
+            <option *ngFor="let option of nPaginasRole" [value]="option" [selected]="option === totalPaginasRole">
+              {{ option }}
+            </option>
+          </select>
+        </div>
+
+        <div class="col-md-3 p-3" *ngIf="filterRoles().length"><span
+            style="color: gray; font-weight: 300;justify-content: center !important;"><strong>Mostrando </strong>
+            <strong style="color: #0a3754;">{{
+              (pageRole - 1) * totalPaginasRole + 1 }} <strong style="color: gray;">-</strong> {{
+              (pageRole * totalPaginasRole < filterRoles().length) ? (pageRole * totalPaginasRole) :
+                filterRoles().length }} <strong style="color: gray;font-weight: 300;">
+                de</strong>
+            {{ filterRoles().length }}</strong></span>
+        </div>
+        <pagination-controls class="col-md-5" style="padding-top: 13px; color: #0a3754;font-weight: 400;" id="itemRoles"
+          (pageChange)="pageRole =$event" previousLabel="Anterior" nextLabel="Siguiente"
+          screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
+          screenReaderCurrentLabel="You're on page 5 de 10">
+        </pagination-controls>
+      </div>
 
     </div>
 

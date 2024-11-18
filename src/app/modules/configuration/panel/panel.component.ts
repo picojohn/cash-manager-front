@@ -4,12 +4,14 @@ import { ToastrService } from 'ngx-toastr';
 import { ErrorService } from 'src/app/shared/services/error.service';
 import { SweetAlertService } from 'src/app/shared/services/sweetAlert.service';
 import { firstValueFrom } from 'rxjs';
-import { IApplicationTab, IModule, ISubModule } from './interface/panel.interface';
+import { IApplicationTab, IModule, IRole, ISubModule } from './interface/panel.interface';
 import { PanelService } from './services/panel.service';
 import { EditModuleComponent } from './components/edit-module/edit-module.component';
 import { EditSubModuleComponent } from './components/edit-subModule/edit-subModule.component';
 import { ETitleMessages } from 'src/app/shared/enums/error.service.eum';
 import { EditApplicationTabComponent } from './components/edit-applicationTab/edit-applicationTab.component';
+import { EditRoleComponent } from './components/edit-role/edit-role.component';
+import { EditMenuPermissionsComponent } from './components/edit-menu-permissions/edit-menu-permissions.component';
 
 @Component({
   selector: 'app-panel',
@@ -18,7 +20,7 @@ import { EditApplicationTabComponent } from './components/edit-applicationTab/ed
 })
 export class PanelComponent implements OnInit {
 
-  public selectedTab: number = 3;
+  public selectedTab: number = 4;
   private bsModalRef: BsModalRef;
 
   //  pestaña de modulos
@@ -42,6 +44,13 @@ export class PanelComponent implements OnInit {
   public totalPaginasApplicationTab = 5;
   public _buscadorApplicationTab: string = '';
 
+
+  // pestaña de roles menu permisos
+  public roles: Array<IRole> = []
+  public nPaginasRole = [5, 10, 20, 50, 100];
+  public pageRole: number = 1;
+  public totalPaginasRole = 5;
+  public _buscadorRole: string = '';
 
 
   constructor(
@@ -84,6 +93,14 @@ export class PanelComponent implements OnInit {
       const errorObject = this.errorService.showNotification(err);
       this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
     });
+    firstValueFrom(this.panelService.roles()).then(rolesBack => {
+      console.log(rolesBack);
+
+      this.roles = rolesBack
+    }, err => {
+      const errorObject = this.errorService.showNotification(err);
+      this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
+    })
   }
 
 
@@ -196,7 +213,6 @@ export class PanelComponent implements OnInit {
     return this._buscadorSubModule;
   }
 
-
   filterSubModules() {
     if (!this.buscadorSubModule) {
       return this.subModules;
@@ -205,7 +221,6 @@ export class PanelComponent implements OnInit {
       currency.name.toLowerCase().includes(this.buscadorSubModule.toLowerCase())
     );
   }
-
 
 
   ///// ApplicationTab
@@ -220,7 +235,7 @@ export class PanelComponent implements OnInit {
 
   editApplicationTab(applicationTab: IApplicationTab) {
     this.bsModalRef = this.modalService.show(EditApplicationTabComponent, { backdrop: 'static', class: 'modal-lg p-5', });
-    this.bsModalRef.content.title = 'Editar SubModulo';
+    this.bsModalRef.content.title = 'Editar Pestaña';
     this.bsModalRef.content.applicationTab = applicationTab;
     this.bsModalRef.onHidden?.subscribe((_) => {
       this.loadData();
@@ -233,9 +248,89 @@ export class PanelComponent implements OnInit {
    */
   async statesApplicationTab(id): Promise<void> {
     if (await this.sweetAlertService.alertStatesMessage()) {
-      await firstValueFrom(this.panelService.cambiarEstadosByidApplicationTab(id)).then(
+      await firstValueFrom(this.panelService.cambiarEstadosByidApplicationTab(id)).then(_ => {
+        this.toast.success('Estado cambiado correctamente', ETitleMessages.APPLICATIONTAB);
+        this.loadData();
+      },
+        (err) => {
+          const errorObject = this.errorService.showNotification(err);
+          this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
+        }
+      );
+    }
+  }
+
+  getSubModulesId(idSubModule) {
+    const subModules = this.subModules.find(i => i.id == idSubModule)?.name
+    return subModules ? subModules : ''
+  }
+
+  numeroPaginasApplicationTab($event: any) {
+    const { value } = $event.target;
+    this.totalPaginasApplicationTab = value;
+    this.pageApplicationTab = 1;
+  }
+
+  set buscadorApplicationTab(value: string) {
+    this._buscadorApplicationTab = value;
+    this.pageApplicationTab = 1;
+  }
+
+  get buscadorApplicationTab(): string {
+    return this._buscadorApplicationTab;
+  }
+
+  filterApplicationTabs() {
+    if (!this.buscadorApplicationTab) {
+      return this.applicationTabs;
+    }
+    return this.applicationTabs.filter((ap) =>
+      ap.name.toLowerCase().includes(this.buscadorApplicationTab.toLowerCase())
+    );
+  }
+
+  ///// Role
+
+  newRole() {
+    this.bsModalRef = this.modalService.show(EditRoleComponent, { backdrop: 'static', class: 'modal-lg p-5', });
+    this.bsModalRef.content.title = 'Crear Rol';
+    this.bsModalRef.onHidden?.subscribe((_) => {
+      this.loadData();
+    });
+  }
+
+  editRole(role: IRole) {
+    this.bsModalRef = this.modalService.show(EditRoleComponent, { backdrop: 'static', class: 'modal-lg p-5', });
+    this.bsModalRef.content.title = 'Editar Rol';
+    this.bsModalRef.content.role = role;
+    this.bsModalRef.onHidden?.subscribe((_) => {
+      this.loadData();
+    });
+  }
+
+  editMenuPermissions(role: IRole) {
+    // let menuPermiso: IMenuPermiso = this.menuPermisos.find(i => i.idRole == role.id)
+    this.bsModalRef = this.modalService.show(EditMenuPermissionsComponent, {
+      backdrop: 'static',
+      class: 'modal-lg p-5',
+    });
+    this.bsModalRef.content.title = 'Editar Menú Permisos';
+    // this.bsModalRef.content.menuPermiso = menuPermiso;
+    this.bsModalRef.content.role = role;
+    this.bsModalRef.onHidden?.subscribe((_) => {
+      this.loadData();
+    });
+  }
+
+  /**
+   * metodo del controlador de colaborador para cambiar el estdo de un colaborador
+   * @param id
+   */
+  async statesRole(id): Promise<void> {
+    if (await this.sweetAlertService.alertStatesMessage()) {
+      await firstValueFrom(this.panelService.cambiarEstadosByidRole(id)).then(
         (_) => {
-          this.toast.success('Estado cambiado correctamente', ETitleMessages.APPLICATIONTAB);
+          this.toast.success('Estado cambiado correctamente', ETitleMessages.ROLES);
           this.loadData();
         },
         (err) => {
@@ -250,33 +345,27 @@ export class PanelComponent implements OnInit {
     }
   }
 
-  getSubModulesId(idSubModule) {
-    const subModules = this.subModules.find(i => i.id == idSubModule)?.name
-    return subModules ? subModules : ''
-  }
-
-  numeroPaginasApplicationTab($event: any) {
+  numeroPaginasRole($event: any) {
     const { value } = $event.target;
-    this.totalPaginasModule = value;
-    this.pageModule = 1;
+    this.totalPaginasRole = value;
+    this.pageRole = 1;
   }
 
-  set buscadorApplicationTab(value: string) {
-    this._buscadorApplicationTab = value;
-    this.pageApplicationTab = 1;
+  set buscadorRole(value: string) {
+    this._buscadorRole = value;
+    this.pageRole = 1;
   }
 
-  get buscadorApplicationTab(): string {
-    return this._buscadorApplicationTab;
+  get buscadorRole(): string {
+    return this._buscadorRole;
   }
 
-
-  filterApplicationTabs() {
-    if (!this.buscadorApplicationTab) {
-      return this.applicationTabs;
+  filterRoles() {
+    if (!this.buscadorRole) {
+      return this.roles;
     }
-    return this.applicationTabs.filter((ap) =>
-      ap.name.toLowerCase().includes(this.buscadorApplicationTab.toLowerCase())
+    return this.roles.filter((role) =>
+      role.name.toLowerCase().includes(this.buscadorRole.toLowerCase())
     );
   }
 
