@@ -19,7 +19,7 @@ export class EditMenuPermissionsComponent implements OnInit {
   public menuPermiso: IMenuPermissions;
   public roles: Array<any> = [];
   public modulos: Array<any> = [];
-  public submodulos = [];
+  public applicationTabs = [];
   public modulosUnicos = [];
   public idRole: number;
   public role: IRole
@@ -43,32 +43,79 @@ export class EditMenuPermissionsComponent implements OnInit {
    */
   async cargaDatos() {
 
-    // await firstValueFrom(this.menuPermisosService.subModulos()).then(subModulosBack => {
+     await firstValueFrom(this.panelService.getAllApplicationTabs()).then(ApplicationTabsBack => {
+      console.log(ApplicationTabsBack, 'datos del backend');
+
     //   this.modulosUnicos = this.obtenerModulosUnicos(subModulosBack);
-    //   this.submodulos = subModulosBack
-    //   subModulosBack.forEach(item => {
-    //     item.mostrarAdicionales = false,
-    //       item.actions = [
-    //         {
-    //           nombre: 'Crear',
-    //           action: "INSERT",
-    //           codeAction: "I",
-    //           status: false
-    //         },
-    //         {
-    //           nombre: 'Editar',
-    //           action: "UPDATE",
-    //           codeAction: "U",
-    //           status: false
-    //         },
-    //         {
-    //           nombre: 'Estado',
-    //           action: "STATUS",
-    //           codeAction: "S",
-    //           status: false
-    //         }
-    //       ]
-    //   })
+      //  this.applicationTabs = ApplicationTabsBack
+       ApplicationTabsBack.forEach(item => {
+         item.mostrarAdicionales = false,
+          item.actions = [
+            {
+              nombre: 'Crear',
+              action: "INSERT",
+              codeAction: "I",
+              status: false
+            },
+            {
+              nombre: 'Editar',
+              action: "UPDATE",
+              codeAction: "U",
+              status: false
+            },
+            {
+              nombre: 'Estado',
+              action: "STATUS",
+              codeAction: "S",
+              status: false
+            },
+            {
+              nombre: 'Borrar',
+              action: "DELETE",
+              codeAction: "D",
+              status: false
+            }
+          ]
+      })
+
+      // pasarmos la data a los filtros
+      const groupedByModule = ApplicationTabsBack.reduce((acc, item) => {
+        if (!acc[item.idModule]) {
+            acc[item.idModule] = {
+                idModule: item.idModule,
+                subModules: []
+            };
+        }
+
+        const { idModule, idSubModule, ...rest } = item;
+
+        // Buscamos si ya existe un submódulo con este `idSubModule`
+        let existingSubModule = acc[item.idModule].subModules.find(
+            subModule => subModule.idSubModule === idSubModule
+        );
+
+        if (!existingSubModule) {
+            existingSubModule = {
+                idSubModule: idSubModule,
+                applicationTabs: []
+            };
+            acc[item.idModule].subModules.push(existingSubModule);
+        }
+
+        // Agregamos los elementos al `applicationTabs`
+        existingSubModule.applicationTabs.push(rest);
+
+        return acc;
+    }, {});
+
+    // Convertir a un array si se desea
+    const groupedArray = Object.values(groupedByModule);
+
+    console.log(groupedArray);
+
+    console.log(groupedArray, 'array agrupado');
+
+
     //   if (this.menuPermiso) {
     //     let item = this.menuPermiso['submodulos']
     //     for (let i = 0; i < item.length; i++) {
@@ -87,10 +134,10 @@ export class EditMenuPermissionsComponent implements OnInit {
     //     this.buildForms()
     //     this.cargarFormularioMenuPermiso = true
     //   }, 500);
-    // }, err => {
-    //   const errorObject = this.errorService.showNotification(err);
-    //   this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
-    // })
+    }, err => {
+      const errorObject = this.errorService.showNotification(err);
+      this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
+    })
 
     // await firstValueFrom(this.menuPermisosService.roles()).then(rolesBack => {
     //   this.roles = rolesBack
@@ -123,8 +170,8 @@ export class EditMenuPermissionsComponent implements OnInit {
    */
   buildForms() {
     this.formMenuPermisos = new FormGroup({
-      // id: new FormControl(this.menuPermiso ? this.menuPermiso.id : null),
-      // idRole: new FormControl(this.menuPermiso ? this.menuPermiso.idRole : this.role.id, [Validators.required]),
+      id: new FormControl(this.menuPermiso ? this.menuPermiso.id : null),
+      idRole: new FormControl(this.menuPermiso ? this.menuPermiso.idRole : this.role.id, [Validators.required]),
       opciones: this.fb.array([])
     })
     this.agregarCheckboxesPrincipales();

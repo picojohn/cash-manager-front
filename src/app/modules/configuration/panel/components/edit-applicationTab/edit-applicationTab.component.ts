@@ -40,7 +40,7 @@ export class EditApplicationTabComponent {
     setTimeout(() => {
       this.buildForms()
       this.cargarFormularioBooleam = true
-    }, 300);
+    }, 500);
   }
 
   /**

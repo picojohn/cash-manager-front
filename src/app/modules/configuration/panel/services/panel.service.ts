@@ -57,7 +57,7 @@ export class PanelService {
 
   // ApplicationTab
 
-  getAllApplicationTabs(): Observable<Array<IApplicationTab>> {
+  getAllApplicationTabs(): Observable<Array<any>> {
     return this.http.get<Array<IApplicationTab>>(`${this.url}/applicationTabs`)
   }
 
