@@ -4,7 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { ErrorService } from '../../../../../shared/services/error.service';
-import { IMenuPermissions, IRole } from '../../interface/panel.interface';
+import { IMenuModuleFormArray, IMenuPermissions, IRole } from '../../interface/panel.interface';
 import { PanelService } from '../../services/panel.service';
 
 @Component({
@@ -20,10 +20,12 @@ export class EditMenuPermissionsComponent implements OnInit {
   public roles: Array<any> = [];
   public modulos: Array<any> = [];
   public applicationTabs = [];
-  public modulosUnicos = [];
+  // public modulosUnicos = [];
   public idRole: number;
   public role: IRole
   public guardarSolicitudBoleano: boolean = false;
+
+  public menuPermisosBackend: Array<IMenuModuleFormArray> = []
 
 
   constructor(
@@ -43,34 +45,34 @@ export class EditMenuPermissionsComponent implements OnInit {
    */
   async cargaDatos() {
 
-     await firstValueFrom(this.panelService.getAllApplicationTabs()).then(ApplicationTabsBack => {
+    await firstValueFrom(this.panelService.getAllApplicationTabs()).then(ApplicationTabsBack => {
       console.log(ApplicationTabsBack, 'datos del backend');
 
-    //   this.modulosUnicos = this.obtenerModulosUnicos(subModulosBack);
+      //   this.modulosUnicos = this.obtenerModulosUnicos(subModulosBack);
       //  this.applicationTabs = ApplicationTabsBack
-       ApplicationTabsBack.forEach(item => {
-         item.mostrarAdicionales = false,
+      ApplicationTabsBack.forEach(item => {
+        item.mostrarAdicionales = false,
           item.actions = [
             {
-              nombre: 'Crear',
+              name: 'Crear',
               action: "INSERT",
               codeAction: "I",
               status: false
             },
             {
-              nombre: 'Editar',
+              name: 'Editar',
               action: "UPDATE",
               codeAction: "U",
               status: false
             },
             {
-              nombre: 'Estado',
+              name: 'Estado',
               action: "STATUS",
               codeAction: "S",
               status: false
             },
             {
-              nombre: 'Borrar',
+              name: 'Borrar',
               action: "DELETE",
               codeAction: "D",
               status: false
@@ -78,62 +80,68 @@ export class EditMenuPermissionsComponent implements OnInit {
           ]
       })
 
-      // pasarmos la data a los filtros
-      const groupedByModule = ApplicationTabsBack.reduce((acc, item) => {
-        if (!acc[item.idModule]) {
-            acc[item.idModule] = {
-                idModule: item.idModule,
-                subModules: []
-            };
+
+      const groupedByModule = ApplicationTabsBack.reduce((modules, item) => {
+        if (!modules[item.idModule]) {
+          modules[item.idModule] = {
+            idModule: item.idModule,
+            nameModule: item.nameModule,
+            iconModule: item.iconModule,
+            subModules: []
+          };
         }
 
-        const { idModule, idSubModule, ...rest } = item;
-
-        // Buscamos si ya existe un submódulo con este `idSubModule`
-        let existingSubModule = acc[item.idModule].subModules.find(
-            subModule => subModule.idSubModule === idSubModule
+        let subModule = modules[item.idModule].subModules.find(
+          sub => sub.idSubModule === item.idSubModule
         );
 
-        if (!existingSubModule) {
-            existingSubModule = {
-                idSubModule: idSubModule,
-                applicationTabs: []
-            };
-            acc[item.idModule].subModules.push(existingSubModule);
+        if (!subModule) {
+          subModule = {
+            idSubModule: item.idSubModule,
+            nameSubModule: item.nameSubModule,
+            iconSubModule: item.iconSubModule,
+            applicationTabs: []
+          };
+          modules[item.idModule].subModules.push(subModule);
         }
 
-        // Agregamos los elementos al `applicationTabs`
-        existingSubModule.applicationTabs.push(rest);
+        subModule.applicationTabs.push({
+          id: item.id,
+          name: item.name,
+          icon: item.icon,
+          state: item.state,
+          mostrarAdicionales: item.mostrarAdicionales,
+          actions: item.actions
+        });
 
-        return acc;
-    }, {});
+        return modules;
+      }, {});
 
-    // Convertir a un array si se desea
-    const groupedArray = Object.values(groupedByModule);
-
-    console.log(groupedArray);
-
-    console.log(groupedArray, 'array agrupado');
+      // const result = Object.values(groupedByModule);
+      this.menuPermisosBackend = Object.values(groupedByModule);
+      console.log(this.menuPermisosBackend, 'data arreglada');
 
 
-    //   if (this.menuPermiso) {
-    //     let item = this.menuPermiso['submodulos']
-    //     for (let i = 0; i < item.length; i++) {
-    //       const idSubModule = item[i].idSubModule;
-    //       for (let j = 0; j < subModulosBack.length; j++) {
-    //         const submodulos1 = subModulosBack[j];
-    //         if (submodulos1.id == idSubModule) {
-    //           submodulos1.mostrarAdicionales = true
-    //           submodulos1.actions = JSON.parse(atob(item[i].actions)).permision
 
-    //         }
-    //       }
-    //     }
-    //   }
-    //   setTimeout(() => {
-    //     this.buildForms()
-    //     this.cargarFormularioMenuPermiso = true
-    //   }, 500);
+
+      //   if (this.menuPermiso) {
+      //     let item = this.menuPermiso['submodulos']
+      //     for (let i = 0; i < item.length; i++) {
+      //       const idSubModule = item[i].idSubModule;
+      //       for (let j = 0; j < subModulosBack.length; j++) {
+      //         const submodulos1 = subModulosBack[j];
+      //         if (submodulos1.id == idSubModule) {
+      //           submodulos1.mostrarAdicionales = true
+      //           submodulos1.actions = JSON.parse(atob(item[i].actions)).permision
+
+      //         }
+      //       }
+      //     }
+      //   }
+      setTimeout(() => {
+        this.buildForms()
+        this.cargarFormularioMenuPermiso = true
+      }, 1000);
     }, err => {
       const errorObject = this.errorService.showNotification(err);
       this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
@@ -155,15 +163,15 @@ export class EditMenuPermissionsComponent implements OnInit {
     // })
   }
 
-  obtenerModulosUnicos(subModulos) {
-    const modulosMap = new Map();
-    subModulos.forEach(subModulo => {
-      if (!modulosMap.has(subModulo.idModule)) {
-        modulosMap.set(subModulo.idModule, subModulo.idModule);
-      }
-    });
-    return Array.from(modulosMap.values());
-  }
+  // obtenerModulosUnicos(subModulos) {
+  //   const modulosMap = new Map();
+  //   subModulos.forEach(subModulo => {
+  //     if (!modulosMap.has(subModulo.idModule)) {
+  //       modulosMap.set(subModulo.idModule, subModulo.idModule);
+  //     }
+  //   });
+  //   return Array.from(modulosMap.values());
+  // }
 
   /**
    *  metodo para la creacion del formulario
@@ -172,34 +180,66 @@ export class EditMenuPermissionsComponent implements OnInit {
     this.formMenuPermisos = new FormGroup({
       id: new FormControl(this.menuPermiso ? this.menuPermiso.id : null),
       idRole: new FormControl(this.menuPermiso ? this.menuPermiso.idRole : this.role.id, [Validators.required]),
-      opciones: this.fb.array([])
+      options: this.fb.array([])
     })
     this.agregarCheckboxesPrincipales();
   }
 
   private agregarCheckboxesPrincipales() {
-    // const checkboxesPrincipalesArray = this.formMenuPermisos.get('opciones') as FormArray;
-    // this.submodulos.forEach(checkboxPrincipal => {
-    //   const checkboxPrincipalGroup = this.fb.group({
-    //     name: checkboxPrincipal.name,
-    //     mostrarAdicionales: checkboxPrincipal.mostrarAdicionales,
-    //     id: checkboxPrincipal.id,
-    //     idModule: checkboxPrincipal.idModule,
-    //     path: checkboxPrincipal.path,
-    //     actions: this.fb.array([])
-    //   });
-    //   checkboxPrincipal.actions.forEach(checkboxAdicional => {
-    //     (checkboxPrincipalGroup.get('actions') as FormArray).push(
-    //       this.fb.group({
-    //         action: [checkboxAdicional.action],
-    //         nombre: [checkboxAdicional.nombre],
-    //         status: [checkboxAdicional.status],
-    //         codeAction: [checkboxAdicional.codeAction]
-    //       })
-    //     );
-    //   });
-    //   checkboxesPrincipalesArray.push(checkboxPrincipalGroup);
-    // });
+    const checkboxesPrincipalesArray = this.formMenuPermisos.get('options') as FormArray;
+
+    this.menuPermisosBackend.forEach(itemModule => {
+      console.log(itemModule, 'check principal');
+
+      // Nivel principal: módulo
+      const checkboxPrincipalGroup = this.fb.group({
+        idModule: itemModule.idModule,
+        iconModule: itemModule.iconModule,
+        nameModule: itemModule.nameModule,
+        subModules: this.fb.array([])
+      });
+
+      // Nivel secundario: submódulo
+      itemModule.subModules.forEach(itemSubmodule => {
+        const subModuleGroup = this.fb.group({
+          idSubModule: itemSubmodule.idSubModule,
+          iconSubModule: itemSubmodule.iconSubModule,
+          nameSubModule: itemSubmodule.nameSubModule,
+          applicationTabs: this.fb.array([])
+        });
+        console.log(itemSubmodule, 'sub');
+
+        // Nivel terciario: pestañas de aplicación
+        itemSubmodule.applicationTabs.forEach(itemApplicationTab => {
+          const applicationTabGroup = this.fb.group({
+            idApplicationTab: itemApplicationTab.id,
+            nameApplicationTab: itemApplicationTab.name,
+            icon: itemApplicationTab.icon,
+            state: itemApplicationTab.state,
+            mostrarAdicionales: itemApplicationTab.mostrarAdicionales,
+            actions: this.fb.array([])
+          });
+
+          // Nivel adicional: permisos
+          itemApplicationTab.actions.forEach(permission => {
+            (applicationTabGroup.get('actions') as FormArray).push(
+              this.fb.group({
+                name: permission.name,
+                action: permission.action,
+                codeAction: permission.codeAction,
+                status: permission.status
+              })
+            );
+          });
+
+          (subModuleGroup.get('applicationTabs') as FormArray).push(applicationTabGroup);
+        });
+
+        (checkboxPrincipalGroup.get('subModules') as FormArray).push(subModuleGroup);
+      });
+
+      checkboxesPrincipalesArray.push(checkboxPrincipalGroup);
+    });
 
   }
 
@@ -214,10 +254,7 @@ export class EditMenuPermissionsComponent implements OnInit {
     // });
   }
 
-  getModulosNombres(id: number) {
-    // let modulo = this.modulos.find(i => i.id == id)
-    // return modulo ? modulo.name : ''
-  }
+
 
 
 
