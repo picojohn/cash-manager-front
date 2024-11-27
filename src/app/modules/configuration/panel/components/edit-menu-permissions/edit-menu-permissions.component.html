@@ -33,17 +33,16 @@
         </h6>
       </div> -->
 
+
       <div formArrayName="options" class="row justify-content-between p-3">
         <div *ngFor="let itemModule of formMenuPermisos.get('options')['controls']; let i = index" [formGroupName]="i">
           <div class="card_check shadow col-md-12 mb-3">
-            <div class="card_modulo p-2">
+            <div class="card_modulo p-2 text-center">
               <div class="form-check col-md">
                 <label class="form-check-label" for="remember">
                   <strong style="color: gray;">
-                    <!-- Icono del módulo con valor por defecto -->
-                    <i [ngClass]="['fa-solid', itemModule.value?.iconModule ]" style="color: blue;"></i>
-                    <!-- icon: {{ itemModule.value.iconModule }}, -->
-                    Modulo: {{ itemModule.value.nameModule }}
+                    <h3> <i [ngClass]="['fa-solid', itemModule.value?.iconModule ]" style="color: blue;"></i>
+                      Modulo: {{ itemModule.value.nameModule }} </h3>
                   </strong>
                 </label>
               </div>
@@ -54,65 +53,53 @@
             <div formArrayName="subModules">
               <div *ngFor="let itemSubmodule of itemModule.get('subModules')['controls']; let j = index"
                 [formGroupName]="j">
-                <div class="card_modulo p-2">
+                <div class="card_modulo p-2 text-center">
                   <div class="form-check col-md">
                     <label class="form-check-label" for="remember">
                       <strong style="color: gray;">
-                        <!-- Icono del submódulo con valor por defecto -->
-                        <i [ngClass]="['fa-solid', itemSubmodule.value?.iconSubModule ]" style="color: aqua;"></i>
-                        <!-- icon: {{ itemSubmodule.value.iconSubModule }}, -->
-                        SubModulo: {{ itemSubmodule.value.nameSubModule }}
+                        <h4> <i [ngClass]="['fa-solid', itemSubmodule.value?.iconSubModule ]" style="color: aqua;"></i>
+                          SubModulo: {{ itemSubmodule.value.nameSubModule }} </h4>
                       </strong>
                     </label>
                   </div>
                 </div>
+                <div class="row" formArrayName="applicationTabs">
+                  <div class="col-md-4"
+                    *ngFor="let itemApplicationTab of itemSubmodule.get('applicationTabs')['controls']; let l = index"
+                    [formGroupName]="l">
+                    <div class="card_modulo p-2">
+                      <div class="form-check col-md">
+                        <input aria-describedby="remember" class="form-check-input" type="checkbox" id="checkbox"
+                          formControlName="mostrarAdicionales">
+                        <label class="form-check-label" for="remember">
+                          <strong style="color: gray;">
+                            <i style="color: #16a500;" [ngClass]="['fa-solid', itemApplicationTab.value?.icon ]"></i>
+                            {{ itemApplicationTab.value.nameApplicationTab }}
+                          </strong>
+                        </label>
 
-
-
-                <div class="row">
-
-                  <div formArrayName="applicationTabs">
-                    <div
-                      *ngFor="let itemApplicationTab of itemSubmodule.get('applicationTabs')['controls']; let l = index"
-                      [formGroupName]="l">
-                      <div class="card_modulo p-2">
-                        <div class="form-check col-md">
-                          <input aria-describedby="remember" class="form-check-input" type="checkbox" id="checkbox"
-                            formControlName="mostrarAdicionales" class="form-check-input col-2">
-                          <label class="form-check-label" for="remember">
-                            <strong style="color: gray;"><i style="color: #16a500;"
-                                [ngClass]="['fa-solid', itemApplicationTab.value?.icon ]"></i>
-                               {{itemApplicationTab.value.nameApplicationTab}}</strong>
-                          </label>
-
-                          <div *ngIf="itemApplicationTab.value.mostrarAdicionales">
-                            <div formArrayName="actions" class="row justify-content-center">
-                              <div class="card_check col-md-12"
-                                *ngFor="let checkboxAdicional of itemApplicationTab.get('actions').controls; let j = index"
-                                [formGroupName]="j">
-                                <div class="form-check col-md">
-                                  <input class="form-check-input" type="checkbox" id="checkbox"
-                                    formControlName="status">
-                                  <div class="col-3">
-                                    <label for="remember" class="form-check-label">
-                                      <p>{{ checkboxAdicional.value.name }}</p>
-                                    </label>
-                                  </div>
+                        <div *ngIf="itemApplicationTab.value.mostrarAdicionales">
+                          <div formArrayName="actions" class="row justify-content-center">
+                            <div class="card_check col-md-12"
+                              *ngFor="let checkboxAdicional of itemApplicationTab.get('actions').controls; let j = index"
+                              [formGroupName]="j">
+                              <div class="form-check col-md">
+                                <input class="form-check-input" type="checkbox" id="checkbox" formControlName="status">
+                                <div class="col-3">
+                                  <label for="remember" class="form-check-label">
+                                    <p>{{ checkboxAdicional.value.name }}</p>
+                                  </label>
                                 </div>
                               </div>
                             </div>
                           </div>
-
                         </div>
+
                       </div>
-
-
-
-
                     </div>
                   </div>
-
                 </div>
+
 
               </div>
             </div>
@@ -123,7 +110,7 @@
 
 
 
-      <p>{{formMenuPermisos.value | json}}</p>
+      <!-- <p>{{formMenuPermisos.value | json}}</p> -->
 
       <div class="row justify-content-between p-3 col-md-12">
         <button (click)="guardarDatos()" [disabled]="guardarSolicitudBoleano"

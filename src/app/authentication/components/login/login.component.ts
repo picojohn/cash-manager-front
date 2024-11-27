@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { ErrorService } from '../../../shared/services/error.service';
 import jwt_decode from 'jwt-decode';
 import { ETitleMessages } from 'src/app/shared/enums/error.service.eum';
+import { IDatosUsuario } from '../../interface/authentication';
 
 @Component({
   selector: 'app-login',
@@ -64,31 +65,39 @@ export class LoginComponent implements OnInit {
     else {
       this.loadingSession = true;
       this.textIniSesssion = 'Iniciando sesión...';
-      firstValueFrom(this.authenticationService.login(this.loginForm.value)).then(item => {
+      firstValueFrom(this.authenticationService.login(this.loginForm.value)).then(itemLogin => {
 
-        if (item) {
+        if (itemLogin) {
           let permission = []
-          const decodedJSON = jwt_decode(item['token']);
-                const datosUsuario = {
-                  name: decodedJSON['userLogin']['name'],
-                  lastName: decodedJSON['userLogin']['lastName'],
-                  mobile: decodedJSON['userLogin']['mobile'],
-                  email: decodedJSON['userLogin']['email'],
-                  id: decodedJSON['userLogin']['id'],
-                  idCompany: decodedJSON['userLogin']['idCompany'],
-                }
-                localStorage.setItem('datosUsuario', JSON.stringify(datosUsuario));
-          //       localStorage.setItem('role', JSON.stringify(decodedJSON['userLogin']['role']));
-          localStorage.setItem('token', item.token);
-          //       localStorage.setItem('menu', JSON.stringify(item.menu));
-          //       item.menu.forEach(item => {
-          //         item.children.forEach(menuChild => {
-          //           permission.push(JSON.parse(atob(menuChild['actions'])));
-          //         });
-          //       });
-          //       let permisos = JSON.stringify(permission)
-          //       localStorage.setItem('permission', permisos);
-                this.router.navigate(['gestiones'])
+          const decodedJSON = jwt_decode(itemLogin['token']);
+          const datosUsuario: IDatosUsuario = {
+            id: decodedJSON['userLogin']['id'],
+            name: decodedJSON['userLogin']['name'],
+            lastName: decodedJSON['userLogin']['lastName'],
+            userName: decodedJSON['userLogin']['userName'],
+            email: decodedJSON['userLogin']['email'],
+            mobile: decodedJSON['userLogin']['mobile'],
+            idCompany: decodedJSON['userLogin']['idCompany'],
+          }
+          localStorage.setItem('datosUsuario', JSON.stringify(datosUsuario));
+          localStorage.setItem('role', JSON.stringify(decodedJSON['userLogin']['role']));
+          // localStorage.setItem('token', itemLogin.token);
+          localStorage.setItem('menu', JSON.stringify(itemLogin.menu));
+
+          itemLogin.menu.forEach(module => {
+            module.subModules.forEach(subModule => {
+              permission.push(subModule);
+              subModule.applicationTabs.forEach(applicationTab => {
+                const parsedActions = JSON.parse(atob(applicationTab.actions));
+                applicationTab.permission = parsedActions.permision;
+                delete applicationTab.actions
+              });
+            });
+          });
+
+          let permisos = JSON.stringify(permission)
+          localStorage.setItem('permission', permisos);
+          this.router.navigate(['gestiones'])
         } else {
           this.toast.error('Usuario o contraseña errada', ETitleMessages.LOGIN);
         }

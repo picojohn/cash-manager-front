@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IDatosUsuario } from 'src/app/authentication/interface/authentication';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { IMenuSidebar } from '../interface/menu.interface';
 
 @Component({
   selector: 'app-sidebar',
@@ -10,6 +11,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 })
 export class SidebarComponent implements OnInit {
   public datosUsuario: IDatosUsuario;
+  public menuSidebar: Array<IMenuSidebar> = []
   private bsModalRef!: BsModalRef;
 
   constructor(
@@ -18,6 +20,9 @@ export class SidebarComponent implements OnInit {
 
   ngOnInit(): void {
     this.datosUsuario = JSON.parse(localStorage.getItem('datosUsuario'))
+    this.menuSidebar = JSON.parse(localStorage.getItem('menu'))
+    console.log(this.menuSidebar);
+
   }
 
    isMenuOpen = true;

@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, map, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { IApplicationTab, IModule, IRole, ISubModule } from '../interface/panel.interface';
+import { IApplicationTab, IMenuPermissions, IModule, IRole, ISubModule } from '../interface/panel.interface';
 
 
 
@@ -92,7 +92,7 @@ export class PanelService {
    * @param rol
    * @returns IRol
   */
- newRol(rol: IRole): Observable<IRole> {
+  newRol(rol: IRole): Observable<IRole> {
     return this.http.post<IRole>(`${this.url}/roles`, rol);
   }
 
@@ -101,12 +101,37 @@ export class PanelService {
    * @param rol
    * @returns IRol
   */
- editRol(rol: IRole): Observable<IRole> {
-   return this.http.patch<IRole>(`${this.url}/roles`, rol);
+  editRol(rol: IRole): Observable<IRole> {
+    return this.http.patch<IRole>(`${this.url}/roles`, rol);
   }
 
   public cambiarEstadosByidRole(id: number): Observable<Array<any>> {
     return this.http.get<Array<any>>(`${this.url}/roles/estados/${id}`);
   }
 
+
+
+
+  // menuPermissions
+  public getAllMenuPermissions(): Observable<Array<any>> {
+    return this.http.get<Array<any>>(`${this.url}/menuPermissions`)
+  }
+
+  /**
+   * metodo del servicio de Roles para crear una Rol
+   * @param rol
+   * @returns IRol
+  */
+  newMenuPermissions(data): Observable<any> {
+    return this.http.post<any>(`${this.url}/menuPermissions`, data);
+  }
+
+  /**
+   * metodo del servicio de Roles para editar un Rol
+   * @param rol
+   * @returns IRol
+  */
+  editMenuPermissions(data): Observable<any> {
+    return this.http.patch<any>(`${this.url}/menuPermissions`, data);
+  }
 }
