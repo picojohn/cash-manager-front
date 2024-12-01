@@ -81,7 +81,7 @@ export class LoginComponent implements OnInit {
           }
           localStorage.setItem('datosUsuario', JSON.stringify(datosUsuario));
           localStorage.setItem('role', JSON.stringify(decodedJSON['userLogin']['role']));
-          // localStorage.setItem('token', itemLogin.token);
+          localStorage.setItem('token', itemLogin.token);
           localStorage.setItem('menu', JSON.stringify(itemLogin.menu));
 
           itemLogin.menu.forEach(module => {

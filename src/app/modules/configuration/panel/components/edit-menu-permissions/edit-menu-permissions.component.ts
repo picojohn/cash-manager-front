@@ -21,7 +21,6 @@ export class EditMenuPermissionsComponent implements OnInit {
   public roles: Array<any> = [];
   public modulos: Array<any> = [];
   public applicationTabs = [];
-  // public modulosUnicos = [];
   public idRole: number;
   public role: IRole
   public guardarSolicitudBoleano: boolean = false;
@@ -47,8 +46,6 @@ export class EditMenuPermissionsComponent implements OnInit {
   async cargaDatos() {
 
     await firstValueFrom(this.panelService.getAllApplicationTabs()).then(ApplicationTabsBack => {
-      console.log(ApplicationTabsBack, 'datos del backend');
-
       ApplicationTabsBack.forEach(item => {
         item.mostrarAdicionales = false,
           item.actions = [
@@ -82,7 +79,6 @@ export class EditMenuPermissionsComponent implements OnInit {
       if (this.menuPermission) {
         let options = this.menuPermission['options']
         const updatedArray = ApplicationTabsBack.map(item => {
-          // Buscar coincidencias en el nuevo array
           const match = options.find(newItem =>
             newItem.idModule === item.idModule &&
             newItem.idSubModule === item.idSubModule &&
@@ -99,8 +95,6 @@ export class EditMenuPermissionsComponent implements OnInit {
         this.loadDataFormArray(ApplicationTabsBack)
       }
 
-
-
       setTimeout(() => {
         this.buildForms()
         this.cargarFormularioMenuPermiso = true
@@ -109,21 +103,6 @@ export class EditMenuPermissionsComponent implements OnInit {
       const errorObject = this.errorService.showNotification(err);
       this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
     })
-
-    // await firstValueFrom(this.menuPermisosService.roles()).then(rolesBack => {
-    //   this.roles = rolesBack
-    //   // if (this.idRol != 1) this.roles = this.roles.filter(i => i.id != 1) // no muestre el superAdmin
-    // }, err => {
-    //   const errorObject = this.errorService.showNotification(err);
-    //   this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
-    // })
-    // await firstValueFrom(this.menuPermisosService.modulos()).then(modulosBack => {
-    //   this.modulos = modulosBack
-    //   // if (this.idRol != 1) this.roles = this.roles.filter(i => i.id != 1) // no muestre el superAdmin
-    // }, err => {
-    //   const errorObject = this.errorService.showNotification(err);
-    //   this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
-    // })
   }
 
   loadDataFormArray(ApplicationTabsBack) {
@@ -136,11 +115,9 @@ export class EditMenuPermissionsComponent implements OnInit {
           subModules: []
         };
       }
-
       let subModule = modules[item.idModule].subModules.find(
         sub => sub.idSubModule === item.idSubModule
       );
-
       if (!subModule) {
         subModule = {
           idSubModule: item.idSubModule,
@@ -150,7 +127,6 @@ export class EditMenuPermissionsComponent implements OnInit {
         };
         modules[item.idModule].subModules.push(subModule);
       }
-
       subModule.applicationTabs.push({
         id: item.id,
         name: item.name,
@@ -160,13 +136,9 @@ export class EditMenuPermissionsComponent implements OnInit {
         actions: item.actions,
 
       });
-
       return modules;
     }, {});
-
     this.menuPermisosBackend = Object.values(groupedByModule);
-    console.log(this.menuPermisosBackend, 'data ingresar');
-
   }
 
 
@@ -184,16 +156,13 @@ export class EditMenuPermissionsComponent implements OnInit {
 
   private agregarCheckboxesPrincipales() {
     const checkboxesPrincipalesArray = this.formMenuPermisos.get('options') as FormArray;
-
     this.menuPermisosBackend.forEach(itemModule => {
-
       const checkboxPrincipalGroup = this.fb.group({
         idModule: itemModule.idModule,
         iconModule: itemModule.iconModule,
         nameModule: itemModule.nameModule,
         subModules: this.fb.array([])
       });
-
       itemModule.subModules.forEach(itemSubmodule => {
         const subModuleGroup = this.fb.group({
           idSubModule: itemSubmodule.idSubModule,
@@ -201,8 +170,6 @@ export class EditMenuPermissionsComponent implements OnInit {
           nameSubModule: itemSubmodule.nameSubModule,
           applicationTabs: this.fb.array([])
         });
-
-        // Nivel terciario: pestañas de aplicación
         itemSubmodule.applicationTabs.forEach(itemApplicationTab => {
           const applicationTabGroup = this.fb.group({
             idApplicationTab: itemApplicationTab.id,
@@ -212,8 +179,6 @@ export class EditMenuPermissionsComponent implements OnInit {
             mostrarAdicionales: itemApplicationTab.mostrarAdicionales,
             actions: this.fb.array([])
           });
-
-          // Nivel adicional: permisos
           itemApplicationTab.actions.forEach(permission => {
             (applicationTabGroup.get('actions') as FormArray).push(
               this.fb.group({
@@ -242,10 +207,7 @@ export class EditMenuPermissionsComponent implements OnInit {
    * @returns
    */
   guardarDatos() {
-
-
     let data = this.formMenuPermisos.value
-    console.log(data, 'data');
     let countMostrarAdicionales = 0
     data.options.forEach(module => {
       module.subModules.forEach(submodule => {

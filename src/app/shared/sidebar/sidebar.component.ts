@@ -21,42 +21,40 @@ export class SidebarComponent implements OnInit {
   ngOnInit(): void {
     this.datosUsuario = JSON.parse(localStorage.getItem('datosUsuario'))
     this.menuSidebar = JSON.parse(localStorage.getItem('menu'))
-    console.log(this.menuSidebar);
-
   }
 
-   isMenuOpen = true;
-   isDropdownOpen = false;
+  isMenuOpen = true;
+  isDropdownOpen = false;
 
-   toggleMenu() {
+  toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
     console.info('Menu estado: ', this.isMenuOpen);
-}
+  }
 
-toggleDropdown() {
-  this.isDropdownOpen = !this.isDropdownOpen;
-}
+  toggleDropdown() {
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
 
-notifications = [
-  { icon: 'fas fa-info-circle', message: 'Tienes un nuevo mensaje.' },
-  { icon: 'fas fa-check-circle', message: 'Tu tarea ha sido completada.' },
-  { icon: 'fas fa-exclamation-triangle', message: 'Hay un problema con tu cuenta.' },
-  { icon: 'fas fa-users', message: 'Nuevo usuario se ha registrado.' }
-];
+  notifications = [
+    { icon: 'fas fa-info-circle', message: 'Tienes un nuevo mensaje.' },
+    { icon: 'fas fa-check-circle', message: 'Tu tarea ha sido completada.' },
+    { icon: 'fas fa-exclamation-triangle', message: 'Hay un problema con tu cuenta.' },
+    { icon: 'fas fa-users', message: 'Nuevo usuario se ha registrado.' }
+  ];
 
-isMobile(): boolean {
-  return window.innerWidth < 768;
-}
+  isMobile(): boolean {
+    return window.innerWidth < 768;
+  }
 
-changePassword(id: number) {
-  this.bsModalRef = this.modalService.show(ChangePasswordComponent, {
-    backdrop: 'static',
-    class: 'modal-lg p-5',
-  });
-  this.bsModalRef.content.idColaborador = id;
-  this.bsModalRef.content.title = 'Cambiar Contraseña';
-  this.bsModalRef.onHidden?.subscribe((_) => {
-  });
-}
+  changePassword(id: number) {
+    this.bsModalRef = this.modalService.show(ChangePasswordComponent, {
+      backdrop: 'static',
+      class: 'modal-lg p-5',
+    });
+    this.bsModalRef.content.idColaborador = id;
+    this.bsModalRef.content.title = 'Cambiar Contraseña';
+    this.bsModalRef.onHidden?.subscribe((_) => {
+    });
+  }
 
 }

@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { ErrorService } from './services/error.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-//import { PermissionService } from './services/permission.service';
+import { PermissionService } from './services/permission.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { ChangePasswordComponent } from './sidebar/change-password/change-password.component';
@@ -29,7 +29,7 @@ import { ChangePasswordComponent } from './sidebar/change-password/change-passwo
   providers: [
      ErrorService,
     //  SweetAlertService,
-    // PermissionService,
+     PermissionService,
 
 
   ]

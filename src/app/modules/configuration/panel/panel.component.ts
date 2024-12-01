@@ -12,6 +12,8 @@ import { ETitleMessages } from 'src/app/shared/enums/error.service.eum';
 import { EditApplicationTabComponent } from './components/edit-applicationTab/edit-applicationTab.component';
 import { EditRoleComponent } from './components/edit-role/edit-role.component';
 import { EditMenuPermissionsComponent } from './components/edit-menu-permissions/edit-menu-permissions.component';
+import { IPermisionValue, IPermissionAction, ITabsPermision } from 'src/app/shared/interface/permission.interface';
+import { PermissionService } from 'src/app/shared/services/permission.service';
 
 @Component({
   selector: 'app-panel',
@@ -53,21 +55,37 @@ export class PanelComponent implements OnInit {
   public totalPaginasRole = 5;
   public _buscadorRole: string = '';
 
+  //permisos
+  public permission: IPermissionAction;
+  public permisionBoolean: IPermisionValue;
+  public rolesUser: IRole;
+  public pestanas: IPermissionAction;
+  public selectedTabItem: ITabsPermision
+
 
   constructor(
     private modalService: BsModalService,
     public toast: ToastrService,
     private errorService: ErrorService,
     private panelService: PanelService,
-    private sweetAlertService: SweetAlertService
-  ) { }
+    private sweetAlertService: SweetAlertService,
+    private permissionService: PermissionService,
+  ) {
+    this.pestanas = this.permissionService.getPermissions('panel');
+    this.selectTab(this.pestanas.applicationTabs[0].idApplicationTab, this.pestanas.applicationTabs[0])
+
+    this.permisionBoolean = this.permissionService.permisionBoolean;
+  }
 
   ngOnInit(): void {
+    this.rolesUser = JSON.parse(localStorage.getItem('role'))
     this.loadData();
   }
 
-  selectTab(tabNumber: number) {
+  selectTab(tabNumber: number, item) {
     this.selectedTab = tabNumber;
+    this.selectedTabItem = item;
+    this.permissionService.getPermisionValue(this.selectedTabItem.permission)
   }
 
   /**
@@ -94,7 +112,7 @@ export class PanelComponent implements OnInit {
       const errorObject = this.errorService.showNotification(err);
       this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
     });
-    
+
     firstValueFrom(this.panelService.roles()).then(rolesBack => {
       this.roles = rolesBack
     }, err => {
@@ -104,25 +122,18 @@ export class PanelComponent implements OnInit {
 
     firstValueFrom(this.panelService.getAllMenuPermissions()).then(data => {
       const grouped = Object.values(data.reduce((acc, item) => {
-        const { idRole, id, ...options } = item; // Extraer idRole y el resto como options
+        const { idRole, id, ...options } = item;
         if (!acc[idRole]) {
-            acc[idRole] = { idRole, options: [] }; // Inicializar el grupo si no existe
+          acc[idRole] = { idRole, options: [] };
         }
-        acc[idRole].options.push(options); // Agregar las opciones al array correspondiente
+        acc[idRole].options.push(options);
         return acc;
-    }, {}));
-
-    console.log(grouped);
-
+      }, {}));
       this.menuPermissions = grouped
     }, err => {
       const errorObject = this.errorService.showNotification(err);
       this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
     })
-
-
-
-
   }
 
 
