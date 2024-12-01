@@ -4,7 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ErrorService } from 'src/app/shared/services/error.service';
 import { SweetAlertService } from 'src/app/shared/services/sweetAlert.service';
 import { firstValueFrom } from 'rxjs';
-import { IApplicationTab, IModule, IRole, ISubModule } from './interface/panel.interface';
+import { IApplicationTab, IMenuPermissions, IModule, IRole, ISubModule } from './interface/panel.interface';
 import { PanelService } from './services/panel.service';
 import { EditModuleComponent } from './components/edit-module/edit-module.component';
 import { EditSubModuleComponent } from './components/edit-subModule/edit-subModule.component';
@@ -12,6 +12,8 @@ import { ETitleMessages } from 'src/app/shared/enums/error.service.eum';
 import { EditApplicationTabComponent } from './components/edit-applicationTab/edit-applicationTab.component';
 import { EditRoleComponent } from './components/edit-role/edit-role.component';
 import { EditMenuPermissionsComponent } from './components/edit-menu-permissions/edit-menu-permissions.component';
+import { IPermisionValue, IPermissionAction, ITabsPermision } from 'src/app/shared/interface/permission.interface';
+import { PermissionService } from 'src/app/shared/services/permission.service';
 
 @Component({
   selector: 'app-panel',
@@ -47,10 +49,18 @@ export class PanelComponent implements OnInit {
 
   // pestaña de roles menu permisos
   public roles: Array<IRole> = []
+  public menuPermissions: Array<any> = []
   public nPaginasRole = [5, 10, 20, 50, 100];
   public pageRole: number = 1;
   public totalPaginasRole = 5;
   public _buscadorRole: string = '';
+
+  //permisos
+  public permission: IPermissionAction;
+  public permisionBoolean: IPermisionValue;
+  public rolesUser: IRole;
+  public pestanas: IPermissionAction;
+  public selectedTabItem: ITabsPermision
 
 
   constructor(
@@ -58,15 +68,24 @@ export class PanelComponent implements OnInit {
     public toast: ToastrService,
     private errorService: ErrorService,
     private panelService: PanelService,
-    private sweetAlertService: SweetAlertService
-  ) { }
+    private sweetAlertService: SweetAlertService,
+    private permissionService: PermissionService,
+  ) {
+    this.pestanas = this.permissionService.getPermissions('panel');
+    this.selectTab(this.pestanas.applicationTabs[0].idApplicationTab, this.pestanas.applicationTabs[0])
+
+    this.permisionBoolean = this.permissionService.permisionBoolean;
+  }
 
   ngOnInit(): void {
+    this.rolesUser = JSON.parse(localStorage.getItem('role'))
     this.loadData();
   }
 
-  selectTab(tabNumber: number) {
+  selectTab(tabNumber: number, item) {
     this.selectedTab = tabNumber;
+    this.selectedTabItem = item;
+    this.permissionService.getPermisionValue(this.selectedTabItem.permission)
   }
 
   /**
@@ -93,10 +112,24 @@ export class PanelComponent implements OnInit {
       const errorObject = this.errorService.showNotification(err);
       this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
     });
-    firstValueFrom(this.panelService.roles()).then(rolesBack => {
-      console.log(rolesBack);
 
+    firstValueFrom(this.panelService.roles()).then(rolesBack => {
       this.roles = rolesBack
+    }, err => {
+      const errorObject = this.errorService.showNotification(err);
+      this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
+    })
+
+    firstValueFrom(this.panelService.getAllMenuPermissions()).then(data => {
+      const grouped = Object.values(data.reduce((acc, item) => {
+        const { idRole, id, ...options } = item;
+        if (!acc[idRole]) {
+          acc[idRole] = { idRole, options: [] };
+        }
+        acc[idRole].options.push(options);
+        return acc;
+      }, {}));
+      this.menuPermissions = grouped
     }, err => {
       const errorObject = this.errorService.showNotification(err);
       this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
@@ -309,13 +342,13 @@ export class PanelComponent implements OnInit {
   }
 
   editMenuPermissions(role: IRole) {
-    // let menuPermiso: IMenuPermiso = this.menuPermisos.find(i => i.idRole == role.id)
+    let menuPermission: IMenuPermissions = this.menuPermissions.find(i => i.idRole == role.id)
     this.bsModalRef = this.modalService.show(EditMenuPermissionsComponent, {
       backdrop: 'static',
       class: 'modal-lg p-5',
     });
     this.bsModalRef.content.title = 'Editar Menú Permisos';
-    // this.bsModalRef.content.menuPermiso = menuPermiso;
+    this.bsModalRef.content.menuPermission = menuPermission;
     this.bsModalRef.content.role = role;
     this.bsModalRef.onHidden?.subscribe((_) => {
       this.loadData();

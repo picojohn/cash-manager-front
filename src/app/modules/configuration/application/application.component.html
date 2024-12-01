@@ -9,21 +9,13 @@
 </div>
 
 <div class="container">
-
   <div class="tabs col-md-12 py-5">
-    <button (click)="selectTab(1)" [class.active]="selectedTab === 1">Ajustes Locales</button>
-    <!-- <button (click)="selectTab(2)" [class.active]="selectedTab === 2">Países</button>
-    <button (click)="selectTab(3)" [class.active]="selectedTab === 3">Impuestos</button> -->
-    <button (click)="selectTab(4)" [class.active]="selectedTab === 4">Grupos</button>
-    <button (click)="selectTab(5)" [class.active]="selectedTab === 5">Tipos</button>
-    <button (click)="selectTab(6)" [class.active]="selectedTab === 6">Categorías</button>
-    <button (click)="selectTab(7)" [class.active]="selectedTab === 7">Forma de Pago</button>
-    <button (click)="selectTab(8)" [class.active]="selectedTab === 8">Medios de Pago</button>
+    <button *ngFor="let item of pestanas.applicationTabs" (click)="selectTab(item.idApplicationTab, item)"
+      [class.active]="selectedTab === item.idApplicationTab">{{item.nameApplicationTab}}</button>
   </div>
 
   <div class="container px-5">
     <div *ngIf="selectedTab === 1">
-
       <div class="row justify-content-center">
         <div class="row justify-content-between p-3">
           <h3 class="col-md-6"><i class="fa-solid fa-coins" id="icon_subtitle"></i> Gestión de Monedas</h3>
@@ -31,7 +23,8 @@
             <input id="search" type="search" [(ngModel)]="buscadorCurrency" class="form-control" placeholder="Buscar">
             <i class="fas fa-search position-absolute" id="icon_search"></i>
           </div>
-          <button (click)="newCurrency()" class="btn btn-outline-primary btn-ms btn-block col-md-2" id="create_boton">
+          <button *ngIf="permisionBoolean.INSERT" (click)="newCurrency()"
+            class="btn btn-outline-primary btn-ms btn-block col-md-2" id="create_boton">
             <i class="fa-solid fa-circle-plus"></i> Crear
           </button>
         </div>
@@ -55,9 +48,12 @@
                 </td>
                 <td> {{currency.code}} </td>
                 <td>
-                  <i (click)="editCurrency(currency)" class="fa-solid fa-pen-to-square" id="table_icon_edit"></i>
-                  <i (click)="deleteCurrency(currency.id)" class="fa-regular fa-trash-can" style="color: red;"></i>
-
+                  <i *ngIf="permisionBoolean.UPDATE" (click)="editCurrency(currency)" class="fa-solid fa-pen-to-square"
+                    id="table_icon_edit"></i>
+                  <i *ngIf="permisionBoolean.DELETE" (click)="deleteCurrency(currency.id)"
+                    class="fa-regular fa-trash-can" style="color: red;"></i>
+                  <p *ngIf="!permisionBoolean.UPDATE && !permisionBoolean.DELETE" style="color: red;">No tienes permisos
+                  </p>
                 </td>
               </tr>
             </tbody>
@@ -101,13 +97,6 @@
       <br>
 
 
-    <!-- </div>
-  </div>
-
-
-  <div class="container px-5">
-    <div *ngIf="selectedTab === 2"> -->
-
       <div class="row justify-content-center">
         <div class="row justify-content-between p-3">
           <h3 class="col-md-6"><i class="fa-solid fa-flag-usa" id="icon_subtitle"></i> Gestión de País</h3>
@@ -115,7 +104,8 @@
             <input id="search" type="search" [(ngModel)]="buscadorCountries" class="form-control" placeholder="Buscar">
             <i class="fas fa-search position-absolute" id="icon_search"></i>
           </div>
-          <button (click)="newCountry()" class="btn btn-outline-primary btn-ms btn-block col-md-2" id="create_boton">
+          <button *ngIf="permisionBoolean.INSERT" (click)="newCountry()"
+            class="btn btn-outline-primary btn-ms btn-block col-md-2" id="create_boton">
             <i class="fa-solid fa-circle-plus"></i> Crear
           </button>
         </div>
@@ -143,8 +133,13 @@
                 <td> {{country.language}} </td>
                 <td> {{country.nameCurrency}} - {{country.code}} </td>
                 <td>
-                  <i (click)="editCountry(country)" class="fa-solid fa-pen-to-square" id="table_icon_edit"></i>
-                  <i (click)="deleteCountry(country.id)" class="fa-regular fa-trash-can" style="color: red;"></i>
+                  <i *ngIf="permisionBoolean.UPDATE" (click)="editCountry(country)" class="fa-solid fa-pen-to-square"
+                    id="table_icon_edit"></i>
+                  <i *ngIf="permisionBoolean.DELETE" (click)="deleteCountry(country.id)" class="fa-regular fa-trash-can"
+                    style="color: red;"></i>
+                  <p *ngIf="!permisionBoolean.UPDATE && !permisionBoolean.DELETE" style="color: red;">No tienes permisos
+                  </p>
+
                 </td>
               </tr>
             </tbody>
@@ -180,7 +175,7 @@
         </pagination-controls>
       </div>
 
-      
+
       <br>
       <br>
       <hr>
@@ -188,11 +183,6 @@
       <br>
       <br>
 
-    <!-- </div>
-  </div>
-
-  <div class="container px-5">
-    <div *ngIf="selectedTab === 3"> -->
 
       <div class="row justify-content-center">
         <div class="row justify-content-between p-3">
@@ -201,7 +191,8 @@
             <input id="search" type="search" [(ngModel)]="buscadorTaxes" class="form-control" placeholder="Buscar">
             <i class="fas fa-search position-absolute" id="icon_search"></i>
           </div>
-          <button (click)="newTax()" class="btn btn-outline-primary btn-ms btn-block col-md-2" id="create_boton">
+          <button *ngIf="permisionBoolean.INSERT" (click)="newTax()"
+            class="btn btn-outline-primary btn-ms btn-block col-md-2" id="create_boton">
             <i class="fa-solid fa-circle-plus"></i> Crear
           </button>
         </div>
@@ -229,8 +220,13 @@
                 <td> {{tax.defaultRate}}%</td>
                 <td> {{tax.nameCountry}} </td>
                 <td>
-                  <i (click)="editTax(tax)" class="fa-solid fa-pen-to-square" id="table_icon_edit"></i>
-                  <i (click)="deleteTax(tax.id)" class="fa-regular fa-trash-can" style="color: red;"></i>
+                  <i *ngIf="permisionBoolean.UPDATE" (click)="editTax(tax)" class="fa-solid fa-pen-to-square"
+                    id="table_icon_edit"></i>
+                  <i *ngIf="permisionBoolean.DELETE" (click)="deleteTax(tax.id)" class="fa-regular fa-trash-can"
+                    style="color: red;"></i>
+                  <p *ngIf="!permisionBoolean.UPDATE && !permisionBoolean.DELETE" style="color: red;">No tienes permisos
+                  </p>
+
                 </td>
               </tr>
             </tbody>
@@ -270,7 +266,7 @@
   </div>
 
   <div class="container px-5">
-    <div *ngIf="selectedTab === 4">
+    <div *ngIf="selectedTab === 2">
 
       <div class="row justify-content-center">
         <div class="row justify-content-between p-3">
@@ -284,7 +280,8 @@
             <input id="search" type="search" [(ngModel)]="buscadorGroups" class="form-control" placeholder="Buscar">
             <i class="fas fa-search position-absolute" id="icon_search"></i>
           </div>
-          <button (click)="newGroup()" class="btn btn-outline-primary btn-ms btn-block col-md-2" id="create_boton">
+          <button *ngIf="permisionBoolean.INSERT" (click)="newGroup()"
+            class="btn btn-outline-primary btn-ms btn-block col-md-2" id="create_boton">
             <i class="fa-solid fa-circle-plus"></i> Crear
           </button>
         </div>
@@ -309,8 +306,13 @@
                 <td>{{ getCompanyName (group.idCompany)}}</td>
 
                 <td>
-                  <i (click)="editGroup(group)" class="fa-solid fa-pen-to-square" id="table_icon_edit"></i>
-                  <i (click)="deleteGroup(group.id)" class="fa-regular fa-trash-can" style="color: red;"></i>
+                  <i *ngIf="permisionBoolean.UPDATE" (click)="editGroup(group)" class="fa-solid fa-pen-to-square"
+                    id="table_icon_edit"></i>
+                  <i *ngIf="permisionBoolean.DELETE" (click)="deleteGroup(group.id)" class="fa-regular fa-trash-can"
+                    style="color: red;"></i>
+                  <p *ngIf="!permisionBoolean.UPDATE && !permisionBoolean.DELETE" style="color: red;">No tienes permisos
+                  </p>
+
                 </td>
               </tr>
             </tbody>
@@ -349,7 +351,7 @@
   </div>
 
   <div class="container px-5">
-    <div *ngIf="selectedTab === 5">
+    <div *ngIf="selectedTab === 3">
 
       <div class="row justify-content-center">
 
@@ -368,7 +370,8 @@
             <i class="fas fa-search position-absolute" id="icon_search"></i>
           </div>
 
-          <button (click)="newType()" class="btn btn-outline-primary btn-ms btn-block col-md-2" id="create_boton">
+          <button *ngIf="permisionBoolean.INSERT" (click)="newType()"
+            class="btn btn-outline-primary btn-ms btn-block col-md-2" id="create_boton">
             <i class="fa-solid fa-circle-plus"></i> Crear
           </button>
 
@@ -393,8 +396,12 @@
                 </td>
                 <td>{{ getCompanyName (type.idCompany)}}</td>
                 <td>
-                  <i (click)="editType(type)" class="fa-solid fa-pen-to-square" id="table_icon_edit"></i>
-                  <i (click)="deleteType(type.id)" class="fa-regular fa-trash-can" style="color: red;"></i>
+                  <i *ngIf="permisionBoolean.UPDATE" (click)="editType(type)" class="fa-solid fa-pen-to-square"
+                    id="table_icon_edit"></i>
+                  <i *ngIf="permisionBoolean.DELETE" (click)="deleteType(type.id)" class="fa-regular fa-trash-can"
+                    style="color: red;"></i>
+                    <p *ngIf="!permisionBoolean.UPDATE && !permisionBoolean.DELETE" style="color: red;">No tienes permisos</p>
+
                 </td>
               </tr>
             </tbody>
@@ -434,13 +441,13 @@
   </div>
 
   <div class="container px-5">
-    <div *ngIf="selectedTab === 6">
+    <div *ngIf="selectedTab ===4">
 
       <div class="row justify-content-center">
         <div class="row justify-content-between p-3">
           <h3 class="col-md-4"><i class="fa-solid fa-square-pen" id="icon_subtitle"></i> Gestión de Categorías
           </h3>
-          <div class="card_search col-md-3 position-relative">
+          <div *ngIf="rolesUser.id === 1" class="card_search col-md-3 position-relative">
             <ng-select [items]="companies" (change)="selectedCategories()" [(ngModel)]="valueCategoriesSelected"
               bindLabel="name" bindValue="id" placeholder="Compañias">
             </ng-select>
@@ -449,7 +456,8 @@
             <input id="search" type="search" [(ngModel)]="buscadorCategories" class="form-control" placeholder="Buscar">
             <i class="fas fa-search position-absolute" id="icon_search"></i>
           </div>
-          <button (click)="newCategory()" class="btn btn-outline-primary btn-ms btn-block col-md-2" id="create_boton">
+          <button *ngIf="permisionBoolean.INSERT" (click)="newCategory()"
+            class="btn btn-outline-primary btn-ms btn-block col-md-2" id="create_boton">
             <i class="fa-solid fa-circle-plus"></i> Crear
           </button>
         </div>
@@ -463,11 +471,11 @@
                 <th>CATEGORIA</th>
                 <th>CLASIFICACIÓN</th>
                 <th>TIPO</th>
-                <th>ESTADO</th>
+                <th *ngIf="permisionBoolean.STATUS">ESTADO</th>
                 <th>GRUPO</th>
                 <th>SECCIÓN</th>
                 <th>SALDO INICIAL</th>
-                <th>COMPAÑIA</th>
+                <th *ngIf="rolesUser.id === 1">COMPAÑIA</th>
                 <th>ACCIONES</th>
               </tr>
             </thead>
@@ -484,18 +492,23 @@
                 </td>
                 <td> {{ getClassificationName (category.idClassification)}} </td>
                 <td> {{getTypeName (category.idType)}} </td>
-                <td> <button class="button_estado" (click)="statesCategory(category.id)"
+                <td *ngIf="permisionBoolean.STATUS"> <button class="button_estado" (click)="statesCategory(category.id)"
                     [ngStyle]="{background: category.state == 1 ? 'chartreuse' : 'red' }"><i class="fa-solid fa-check"
                       style="color: white;"></i></button>
                 </td>
                 <td> {{getGroupName( category.idGroup)}} </td>
                 <td> {{getSeccionName(category.idSection)}} </td>
                 <td> {{category.initialBalance | currency:'USD':'symbol':'1.0-0'}} </td>
-                <td> {{getCompanyName(category.idCompany)}} </td>
+                <td *ngIf="rolesUser.id === 1"> {{getCompanyName(category.idCompany)}} </td>
 
                 <td>
-                  <i (click)="editCategory(category)" class="fa-solid fa-pen-to-square" id="table_icon_edit"></i>
-                  <i (click)="deleteCategory(category.id)" class="fa-regular fa-trash-can" style="color: red;"></i>
+                  <i *ngIf="permisionBoolean.UPDATE" (click)="editCategory(category)" class="fa-solid fa-pen-to-square"
+                    id="table_icon_edit"></i>
+                  <i *ngIf="permisionBoolean.DELETE" (click)="deleteCategory(category.id)"
+                    class="fa-regular fa-trash-can" style="color: red;"></i>
+                  <p *ngIf="!permisionBoolean.UPDATE && !permisionBoolean.DELETE" style="color: red;">No tienes permisos
+                  </p>
+
                 </td>
               </tr>
             </tbody>
@@ -536,7 +549,7 @@
   </div>
 
   <div class="container px-5">
-    <div *ngIf="selectedTab === 7">
+    <div *ngIf="selectedTab ===5">
 
       <div class="row justify-content-center">
         <div class="row justify-content-between p-3">
@@ -548,8 +561,8 @@
               placeholder="Buscar">
             <i class="fas fa-search position-absolute" id="icon_search"></i>
           </div>
-          <button (click)="newPaymentMethod()" class="btn btn-outline-primary btn-ms btn-block col-md-2"
-            id="create_boton">
+          <button *ngIf="permisionBoolean.INSERT" (click)="newPaymentMethod()"
+            class="btn btn-outline-primary btn-ms btn-block col-md-2" id="create_boton">
             <i class="fa-solid fa-circle-plus"></i> Crear
           </button>
         </div>
@@ -571,10 +584,13 @@
                   <p id="td_1">{{paymentMethod.name}}</p>
                 </td>
                 <td>
-                  <i (click)="editPaymentMethod(paymentMethod)" class="fa-solid fa-pen-to-square"
-                    id="table_icon_edit"></i>
-                  <i (click)="deletePaymentMethod(paymentMethod.id)" class="fa-regular fa-trash-can"
-                    style="color: red;"></i>
+                  <i *ngIf="permisionBoolean.UPDATE" (click)="editPaymentMethod(paymentMethod)"
+                    class="fa-solid fa-pen-to-square" id="table_icon_edit"></i>
+                  <i *ngIf="permisionBoolean.DELETE " (click)="deletePaymentMethod(paymentMethod.id)"
+                    class="fa-regular fa-trash-can" style="color: red;"></i>
+                  <p *ngIf="!permisionBoolean.UPDATE && !permisionBoolean.DELETE" style="color: red;">No tienes permisos
+                  </p>
+
                 </td>
               </tr>
             </tbody>
@@ -616,7 +632,7 @@
   </div>
 
   <div class="container px-5">
-    <div *ngIf="selectedTab === 8">
+    <div *ngIf="selectedTab === 6">
 
       <div class="row justify-content-center">
 
@@ -624,18 +640,20 @@
           <h3 class="col-md-4"><i class="fa-solid fa-square-pen" id="icon_subtitle"></i> Gestión medios de pago
           </h3>
 
-          <div class="card_search col-md-3 position-relative">
-            <ng-select [items]="companies" (change)="selectedTypesPayment()" [(ngModel)]="valueTypesPaymentsSelected" bindLabel="name"
-              bindValue="id" placeholder="Compañias">
+          <div *ngIf="rolesUser.id === 1" class="card_search col-md-3 position-relative">
+            <ng-select [items]="companies" (change)="selectedTypesPayment()" [(ngModel)]="valueTypesPaymentsSelected"
+              bindLabel="name" bindValue="id" placeholder="Compañias">
             </ng-select>
           </div>
 
           <div class="card_search col-md-3 position-relative">
-            <input id="search" type="search" [(ngModel)]="buscadorTypesPayments" class="form-control" placeholder="Buscar">
+            <input id="search" type="search" [(ngModel)]="buscadorTypesPayments" class="form-control"
+              placeholder="Buscar">
             <i class="fas fa-search position-absolute" id="icon_search"></i>
           </div>
 
-          <button (click)="newTypesPayment()" class="btn btn-outline-primary btn-ms btn-block col-md-2" id="create_boton">
+          <button *ngIf="permisionBoolean.INSERT" (click)="newTypesPayment()"
+            class="btn btn-outline-primary btn-ms btn-block col-md-2" id="create_boton">
             <i class="fa-solid fa-circle-plus"></i> Crear
           </button>
 
@@ -647,7 +665,7 @@
               <tr>
                 <th>ID</th>
                 <th>NOMBRE</th>
-                <th>COMPAÑIA</th>
+                <th *ngIf="rolesUser.id === 1">COMPAÑIA</th>
                 <th>ACCIONES</th>
               </tr>
             </thead>
@@ -658,10 +676,15 @@
                 <td>
                   <p id="td_1">{{type.name}}</p>
                 </td>
-                <td>{{ getCompanyName (type.idCompany)}}</td>
+                <td *ngIf="rolesUser.id === 1">{{ getCompanyName (type.idCompany)}}</td>
                 <td>
-                  <i (click)="editTypesPayment(type)" class="fa-solid fa-pen-to-square" id="table_icon_edit"></i>
-                  <i (click)="deleteTypesPayment(type.id)" class="fa-regular fa-trash-can" style="color: red;"></i>
+                  <i *ngIf="permisionBoolean.UPDATE" (click)="editTypesPayment(type)" class="fa-solid fa-pen-to-square"
+                    id="table_icon_edit"></i>
+                  <i *ngIf="permisionBoolean.DELETE" (click)="deleteTypesPayment(type.id)"
+                    class="fa-regular fa-trash-can" style="color: red;"></i>
+                  <p *ngIf="!permisionBoolean.UPDATE && !permisionBoolean.DELETE" style="color: red;">No tienes permisos
+                  </p>
+
                 </td>
               </tr>
             </tbody>
@@ -673,7 +696,8 @@
 
         <div class="select col-md-1">
           <select class="form-select co-md-1" (change)="numeroPaginasTypesPayment($event)">
-            <option *ngFor="let option of nPaginasTypesPayments" [value]="option" [selected]="option === totalPaginasTypesPayments">
+            <option *ngFor="let option of nPaginasTypesPayments" [value]="option"
+              [selected]="option === totalPaginasTypesPayments">
               {{ option }}
             </option>
           </select>
@@ -683,14 +707,15 @@
             style="color: gray; font-weight: 300;justify-content: center !important;"><strong>Mostrando </strong>
             <strong style="color: #0a3754;">{{
               (pageTypesPayments - 1) * totalPaginasTypesPayments+ 1 }} <strong style="color: gray;">-</strong> {{
-              (pageTypesPayments * totalPaginasTypesPayments < filterTypesPayments().length) ? (pageTypesPayments * totalPaginasTypesPayments) :
-                filterTypesPayments().length }} <strong style="color: gray;font-weight: 300;">
+              (pageTypesPayments * totalPaginasTypesPayments < filterTypesPayments().length) ? (pageTypesPayments *
+                totalPaginasTypesPayments) : filterTypesPayments().length }} <strong
+                style="color: gray;font-weight: 300;">
                 de</strong>
             {{ filterTypesPayments().length }}</strong></span>
         </div>
 
-        <pagination-controls class="col-md-5" style="padding-top: 13px; color: #0a3754;font-weight: 400;" id="itemTypesPayments"
-          (pageChange)="pageTypesPayments =$event" previousLabel="Anterior" nextLabel="Siguiente"
+        <pagination-controls class="col-md-5" style="padding-top: 13px; color: #0a3754;font-weight: 400;"
+          id="itemTypesPayments" (pageChange)="pageTypesPayments =$event" previousLabel="Anterior" nextLabel="Siguiente"
           screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
           screenReaderCurrentLabel="You're on page 5 de 10">
         </pagination-controls>

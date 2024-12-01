@@ -11,15 +11,13 @@
 
 <div class="container">
   <div class="tabs col-md-12 py-5">
-    <button (click)="selectTab(1)" [class.active]="selectedTab === 1">Modulos</button>
-    <button (click)="selectTab(2)" [class.active]="selectedTab === 2">Submodulos</button>
-    <button (click)="selectTab(3)" [class.active]="selectedTab === 3">Pestañas</button>
-    <button (click)="selectTab(4)" [class.active]="selectedTab === 4">Roles</button>
+    <button *ngFor="let item of pestanas.applicationTabs" (click)="selectTab(item.idApplicationTab, item)"
+      [class.active]="selectedTab === item.idApplicationTab">{{item.nameApplicationTab}}</button>
   </div>
 
   <div class="container px-5">
 
-    <div *ngIf="selectedTab === 1">
+    <div *ngIf="selectedTab === 7">
 
       <div class="row justify-content-center">
         <div class="row justify-content-between p-3">
@@ -29,7 +27,8 @@
             <input id="search" type="search" [(ngModel)]="buscadorModule" class="form-control" placeholder="Buscar">
             <i class="fas fa-search position-absolute" id="icon_search"></i>
           </div>
-          <button (click)="newModule()" class="btn btn-outline-primary btn-ms btn-block col-md-2" id="create_boton">
+          <button *ngIf="permisionBoolean.INSERT" (click)="newModule()"
+            class="btn btn-outline-primary btn-ms btn-block col-md-2" id="create_boton">
             <i class="fa-solid fa-circle-plus"></i> Crear
           </button>
         </div>
@@ -55,7 +54,10 @@
                 <td> {{module.path}} </td>
                 <td> <i [class]="'fas ' + module.icon"></i> </td>
                 <td>
-                  <i (click)="editModule(module)" class="fa-solid fa-pen-to-square" id="table_icon_edit"></i>
+                  <i *ngIf="permisionBoolean.UPDATE" (click)="editModule(module)" class="fa-solid fa-pen-to-square"
+                    id="table_icon_edit"></i>
+                  <p *ngIf="!permisionBoolean.UPDATE" style="color: red;">No tienes permisos</p>
+
                 </td>
               </tr>
             </tbody>
@@ -90,7 +92,7 @@
       </div>
     </div>
 
-    <div *ngIf="selectedTab === 2">
+    <div *ngIf="selectedTab === 8">
 
       <div class="row justify-content-center">
         <div class="row justify-content-between p-3">
@@ -100,7 +102,8 @@
             <input id="search" type="search" [(ngModel)]="buscadorSubModule" class="form-control" placeholder="Buscar">
             <i class="fas fa-search position-absolute" id="icon_search"></i>
           </div>
-          <button (click)="newSubModule()" class="btn btn-outline-primary btn-ms btn-block col-md-2" id="create_boton">
+          <button *ngIf="permisionBoolean.INSERT" (click)="newSubModule()"
+            class="btn btn-outline-primary btn-ms btn-block col-md-2" id="create_boton">
             <i class="fa-solid fa-circle-plus"></i> Crear
           </button>
         </div>
@@ -114,7 +117,7 @@
                 <th>URL</th>
                 <th>MODULO</th>
                 <th>ICONO</th>
-                <th>ESTADO</th>
+                <th *ngIf="permisionBoolean.STATUS">ESTADO</th>
                 <th>ACCIONES</th>
               </tr>
             </thead>
@@ -128,12 +131,15 @@
                 <td> {{subModule.path}} </td>
                 <td> {{getModulesId(subModule.idModule)}} </td>
                 <td> <i [class]="'fas ' + subModule.icon"></i> </td>
-                <td> <button class="button_estado" (click)="statesSubModule(subModule.id)"
+                <td *ngIf="permisionBoolean.STATUS"> <button class="button_estado"
+                    (click)="statesSubModule(subModule.id)"
                     [ngStyle]="{background: subModule.state == 1 ? 'chartreuse' : 'red' }"><i class="fa-solid fa-check"
                       style="color: white;"></i></button>
                 </td>
                 <td>
-                  <i (click)="editSubModule(subModule)" class="fa-solid fa-pen-to-square" id="table_icon_edit"></i>
+                  <i *ngIf="permisionBoolean.UPDATE" (click)="editSubModule(subModule)"
+                    class="fa-solid fa-pen-to-square" id="table_icon_edit"></i>
+                  <p *ngIf="!permisionBoolean.UPDATE" style="color: red;">No tienes permisos</p>
                 </td>
               </tr>
             </tbody>
@@ -171,7 +177,7 @@
 
     </div>
 
-    <div *ngIf="selectedTab === 3">
+    <div *ngIf="selectedTab === 9">
 
       <div class="row justify-content-center">
         <div class="row justify-content-between p-3">
@@ -182,8 +188,8 @@
               placeholder="Buscar">
             <i class="fas fa-search position-absolute" id="icon_search"></i>
           </div>
-          <button (click)="newApplicationTab()" class="btn btn-outline-primary btn-ms btn-block col-md-2"
-            id="create_boton">
+          <button *ngIf="permisionBoolean.INSERT" (click)="newApplicationTab()"
+            class="btn btn-outline-primary btn-ms btn-block col-md-2" id="create_boton">
             <i class="fa-solid fa-circle-plus"></i> Crear
           </button>
         </div>
@@ -197,7 +203,7 @@
                 <th>MODULO</th>
                 <th>SUBMODULO</th>
                 <th>ICONO</th>
-                <th>ESTADO</th>
+                <th *ngIf="permisionBoolean.STATUS">ESTADO</th>
                 <th>ACCIONES</th>
               </tr>
             </thead>
@@ -211,13 +217,15 @@
                 <td> {{getModulesId(applicationTab.idModule)}} </td>
                 <td> {{getSubModulesId(applicationTab.idSubModule)}} </td>
                 <td> <i [class]="'fas ' + applicationTab.icon"></i> </td>
-                <td> <button class="button_estado" (click)="statesApplicationTab(applicationTab.id)"
+                <td *ngIf="permisionBoolean.STATUS"> <button class="button_estado"
+                    (click)="statesApplicationTab(applicationTab.id)"
                     [ngStyle]="{background: applicationTab.state == 1 ? 'chartreuse' : 'red' }"><i
                       class="fa-solid fa-check" style="color: white;"></i></button>
                 </td>
                 <td>
-                  <i (click)="editApplicationTab(applicationTab)" class="fa-solid fa-pen-to-square"
-                    id="table_icon_edit"></i>
+                  <i *ngIf="permisionBoolean.UPDATE" (click)="editApplicationTab(applicationTab)"
+                    class="fa-solid fa-pen-to-square" id="table_icon_edit"></i>
+                  <p *ngIf="!permisionBoolean.UPDATE" style="color: red;">No tienes permisos</p>
                 </td>
               </tr>
             </tbody>
@@ -256,7 +264,7 @@
 
     </div>
 
-    <div *ngIf="selectedTab === 4">
+    <div *ngIf="selectedTab === 10">
 
       <div class="row justify-content-center">
         <div class="row justify-content-between p-3">
@@ -266,7 +274,8 @@
             <input id="search" type="search" [(ngModel)]="buscadorRole" class="form-control" placeholder="Buscar">
             <i class="fas fa-search position-absolute" id="icon_search"></i>
           </div>
-          <button (click)="newRole()" class="btn btn-outline-primary btn-ms btn-block col-md-2" id="create_boton">
+          <button *ngIf="permisionBoolean.INSERT" (click)="newRole()"
+            class="btn btn-outline-primary btn-ms btn-block col-md-2" id="create_boton">
             <i class="fa-solid fa-circle-plus"></i> Crear
           </button>
         </div>
@@ -277,7 +286,7 @@
               <tr>
                 <th>ID</th>
                 <th>NOMBRE</th>
-                <th>ESTADO</th>
+                <th *ngIf="permisionBoolean.STATUS" >ESTADO</th>
                 <th>ACCIONES</th>
               </tr>
             </thead>
@@ -288,15 +297,15 @@
                 <td>
                   <p id="td_1">{{role.name}}</p>
                 </td>
-                <td> <button class="button_estado" (click)="statesRole(role.id)"
+                <td *ngIf="permisionBoolean.STATUS"> <button class="button_estado" (click)="statesRole(role.id)"
                     [ngStyle]="{background: role.state == 1 ? 'chartreuse' : 'red' }"><i class="fa-solid fa-check"
                       style="color: white;"></i></button>
                 </td>
                 <td>
-                  <i (click)="editRole(role)" class="fa-solid fa-pen-to-square" id="table_icon_edit"></i>
-                  <i (click)="editMenuPermissions(role)" class="fa-solid fa-address-book"
-
-                  style="color: gray; margin-right: 1rem;"></i>
+                  <i *ngIf="permisionBoolean.UPDATE" (click)="editRole(role)" class="fa-solid fa-pen-to-square" id="table_icon_edit"></i>
+                  <i *ngIf="permisionBoolean.UPDATE && rolesUser.id === 1" (click)="editMenuPermissions(role)" class="fa-solid fa-address-book"
+                    style="color: gray; margin-right: 1rem;"></i>
+                  <p *ngIf="!permisionBoolean.UPDATE" style="color: red;">No tienes permisos</p>
                 </td>
               </tr>
             </tbody>
@@ -331,8 +340,6 @@
       </div>
 
     </div>
-
-
 
 
 
