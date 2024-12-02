@@ -16,24 +16,23 @@
     <div class="card_titulo mt-5">
       <p class="titulo text-center"><strong><i class="fa-solid fa-layer-group"></i> Navegación</strong></p>
     </div>
-
     <div class="row justify-content-center" *ngFor="let menu of menuSidebar">
-      <span (click)="toggleDropdown()" class="btn btn-outline-primary">
+      <span (click)="toggleDropdown(menu.idModule)" class="btn btn-outline-primary">
         <i [ngClass]="['fa-solid', menu.iconModule]"></i> {{menu.nameModule}}
-        <i class="fas col-2" [ngClass]="isDropdownOpen ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+        <i class="fas col-2" [ngClass]="menu.isOpen ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
       </span>
-      <div *ngIf="isDropdownOpen" class="mt-2 d-flex flex-column justify-content-center">
+      <div *ngIf="menu.isOpen" class="mt-2 d-flex flex-column justify-content-center">
         <div *ngFor="let sub of menu.subModules">
           <div class="row shadow justify-content-center" id="micro">
-            <span><a class="dropdown-item" routerLink="{{menu.pathModule}}/{{sub.pathSubModule}}"><i [ngClass]="['fa-solid', sub.iconSubModule]"
-                  id="icon_micro"></i>
-              {{sub.nameSubModule}} </a></span>
-
+            <span><a class="dropdown-item" routerLink="{{menu.pathModule}}/{{sub.pathSubModule}}">
+              <i [ngClass]="['fa-solid', sub.iconSubModule]" id="icon_micro"></i>
+              {{sub.nameSubModule}}
+            </a></span>
           </div>
-
         </div>
       </div>
     </div>
+
 
   </nav>
 

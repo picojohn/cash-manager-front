@@ -12,6 +12,7 @@
 // }
 
 export interface IMenuSidebar {
+  isOpen: boolean
   iconModule: string;
   idModule: number;
   nameModule: string

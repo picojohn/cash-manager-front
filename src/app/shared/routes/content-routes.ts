@@ -11,7 +11,12 @@ export const content: Routes = [
   {
     path: 'configuration',
     loadChildren: () => import('../../modules/configuration/configuration.module').then(m => m.ConfigurationModule),
-  //  canActivate: [AdminGuard]
+    //  canActivate: [AdminGuard]
+  },
+  {
+    path: 'income',
+    loadChildren: () => import('../../modules/incomeModule/incomeModule.module').then(m => m.IncomeModuleModule),
+    //  canActivate: [AdminGuard]
   },
 
 

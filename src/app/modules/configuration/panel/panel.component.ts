@@ -22,7 +22,7 @@ import { PermissionService } from 'src/app/shared/services/permission.service';
 })
 export class PanelComponent implements OnInit {
 
-  public selectedTab: number = 4;
+  public selectedTab: number;
   private bsModalRef: BsModalRef;
 
   //  pestaña de modulos

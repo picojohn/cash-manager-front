@@ -14,26 +14,9 @@ export class SidebarComponent implements OnInit {
   public menuSidebar: Array<IMenuSidebar> = []
   private bsModalRef!: BsModalRef;
 
-  constructor(
-    private modalService: BsModalService,
-  ) { }
+  public isMenuOpen = true;
+  public isDropdownOpen = false;
 
-  ngOnInit(): void {
-    this.datosUsuario = JSON.parse(localStorage.getItem('datosUsuario'))
-    this.menuSidebar = JSON.parse(localStorage.getItem('menu'))
-  }
-
-  isMenuOpen = true;
-  isDropdownOpen = false;
-
-  toggleMenu() {
-    this.isMenuOpen = !this.isMenuOpen;
-    console.info('Menu estado: ', this.isMenuOpen);
-  }
-
-  toggleDropdown() {
-    this.isDropdownOpen = !this.isDropdownOpen;
-  }
 
   notifications = [
     { icon: 'fas fa-info-circle', message: 'Tienes un nuevo mensaje.' },
@@ -42,10 +25,53 @@ export class SidebarComponent implements OnInit {
     { icon: 'fas fa-users', message: 'Nuevo usuario se ha registrado.' }
   ];
 
+  constructor(
+    private modalService: BsModalService,
+  ) { }
+
+  /**
+   * metodo de inicio de angular
+   */
+  ngOnInit(): void {
+    this.datosUsuario = JSON.parse(localStorage.getItem('datosUsuario'))
+    this.menuSidebar = JSON.parse(localStorage.getItem('menu'))
+    this.menuSidebar = this.menuSidebar.map(menu => ({
+      ...menu,
+      isOpen: false
+    }));
+  }
+
+  /**
+   * metodo de toogle del menu
+   */
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
+    console.info('Menu estado: ', this.isMenuOpen);
+  }
+
+  /**
+   * metodo para el toogle de los modulos
+   * @param idModule
+   */
+  toggleDropdown(idModule: number) {
+    this.menuSidebar = this.menuSidebar.map(menu => ({
+      ...menu,
+      isOpen: menu.idModule === idModule ? !menu.isOpen : false // Cierra los demás menús
+    }));
+  }
+
+  /**
+   * metodo para cargar la barra en el mobil
+   * @returns
+   */
   isMobile(): boolean {
     return window.innerWidth < 768;
   }
 
+  /**
+   * metodo para cambiar el pass del usuario
+   * @param id
+   */
   changePassword(id: number) {
     this.bsModalRef = this.modalService.show(ChangePasswordComponent, {
       backdrop: 'static',
