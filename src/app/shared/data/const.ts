@@ -37,6 +37,59 @@ export const constSeccionDate = [
   { id: 2, name: 'Egresos' },
 ]
 
+export const constEmpresasClientes = [
+  { id: 1, name: 'Empresa del cliente 1' },
+  { id: 2, name: 'Empresa del cliente 2' },
+]
+
+export const constClienteCliente = [
+  { id: 1, name: 'cliente del cliente 1' },
+  { id: 2, name: 'cliente del cliente 2' },
+  { id: 3, name: 'Cliente del cliente 3' },
+  { id: 4, name: 'cliente del cliente 4' },
+]
+
+export const constUnidadNegocio = [
+  { id: 1, name: 'Uniad de negocio 1' },
+  { id: 2, name: 'Unidad de negocio 2' },
+]
+
+export const constProyecto = [
+  { id: 1, name: 'Proyecto 1' },
+  { id: 2, name: 'Proyecto 2' },
+]
+
+export const constConditions = [
+  { id: 1, name: 'Contado' },
+  { id: 2, name: 'NET15' },
+  { id: 3, name: 'NET30' },
+  { id: 4, name: 'NET60' },
+]
+
+export const constMonths = [
+  { id: 1, name: 'Enero' },
+  { id: 2, name: 'Febrero' },
+  { id: 3, name: 'Marzo' },
+  { id: 4, name: 'Abril' },
+  { id: 5, name: 'Mayo' },
+  { id: 6, name: 'Junio' },
+  { id: 7, name: 'Julio' },
+  { id: 8, name: 'Agosto' },
+  { id: 9, name: 'Septiembre' },
+  { id: 10, name: 'Octubre' },
+  { id: 11, name: 'Noviembre' },
+  { id: 12, name: 'Diciembre' },
+]
+
+
+export const constProductService = [
+  { id: 1, name: 'Producto' },
+  { id: 2, name: 'Servicio' },
+]
+
+
+
+
 
 
 

@@ -1,0 +1,47 @@
+.input-group ng-select {
+  margin-right: 5px; /* Separación entre los selectores */
+}
+
+
+/* Eliminar bordes de ng-select */
+.ng-select {
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+.ng-select .ng-select-container {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.ng-select .ng-clear-wrapper {
+  display: none; /* Opcional: Oculta el ícono de borrar si no lo necesitas */
+}
+
+
+/*** nuevos estilos, probar funcionalisa */
+
+.modal {
+  overflow: visible !important;
+}
+
+.modal-body {
+  position: relative;
+  overflow: visible !important;
+}
+
+/** si quiero tamaño fijos en la tabla
+.table-fixed {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.table-fixed th,
+.table-fixed td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+  */
+

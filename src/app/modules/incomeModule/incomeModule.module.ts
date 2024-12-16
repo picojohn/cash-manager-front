@@ -7,6 +7,9 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { IncomeModuleComponent } from './incomeModule.component';
 import { IncomeComponent } from './income/income.component';
+import { EditInvoiceComponent } from './income/components/edit-invoice/edit-invoice.component';
+import { IncomeService } from './income/services/invcome.service';
+import { AddProductInvoiceComponent } from './income/components/add-product-invoice/add-product-invoice.component';
 
 
 
@@ -14,7 +17,9 @@ import { IncomeComponent } from './income/income.component';
 @NgModule({
   declarations: [
     IncomeModuleComponent,
-    IncomeComponent
+    IncomeComponent,
+    EditInvoiceComponent,
+    AddProductInvoiceComponent,
 
 
 
@@ -29,7 +34,7 @@ import { IncomeComponent } from './income/income.component';
     ReactiveFormsModule,
   ],
   providers: [
-
+    IncomeService,
 
   ]
 

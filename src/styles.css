@@ -333,3 +333,10 @@ option:hover {
 
 /* Fin Select */
 
+
+.custom-modal-lg {
+  max-width: 90%; /* Ajusta el porcentaje según el tamaño deseado */
+  width: auto;
+}
+
+

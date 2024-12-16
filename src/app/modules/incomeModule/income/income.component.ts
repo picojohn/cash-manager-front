@@ -7,6 +7,7 @@ import { firstValueFrom } from 'rxjs';
 import { IPermisionValue, IPermissionAction, ITabsPermision } from 'src/app/shared/interface/permission.interface';
 import { PermissionService } from 'src/app/shared/services/permission.service';
 import { IRole } from '../../configuration/panel/interface/panel.interface';
+import { EditInvoiceComponent } from './components/edit-invoice/edit-invoice.component';
 
 @Component({
   selector: 'app-income',
@@ -77,11 +78,14 @@ export class IncomeComponent implements OnInit {
 
   // para la pestaña de facturacion / Billing
   newBilling() {
-    // this.bsModalRef = this.modalService.show(EditModuleComponent, { backdrop: 'static', class: 'modal-lg p-5', });
-    // this.bsModalRef.content.title = 'Crear Modulo';
-    // this.bsModalRef.onHidden?.subscribe((_) => {
-    //   this.loadData();
-    // });
+    this.bsModalRef = this.modalService.show(EditInvoiceComponent, {
+      backdrop: 'static',
+      class: 'custom-modal-lg p-5',
+  });
+      this.bsModalRef.content.title = 'Crear factura';
+    this.bsModalRef.onHidden?.subscribe((_) => {
+      this.loadData();
+    });
   }
 
   editBilling(billing) {

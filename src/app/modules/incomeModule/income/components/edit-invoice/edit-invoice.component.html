@@ -1,0 +1,233 @@
+<div class="card d-flex p-3">
+  <div class="row justify-content-center">
+    <div class="row justify-content-center text-center">
+      <h3 class="p-3 col-md-12"><i class="fa-solid fa-coins" id="icon_subtitle"></i>
+        {{title}}</h3>
+    </div>
+  </div>
+  <div *ngIf="cargarFormularioBooleam">
+    <form [formGroup]="formInvoice">
+
+
+      <div class="row justify-content-center px-5">
+
+        <div class="card_form col-md-4 mb-3">
+          <div class="form-group">
+            <label> Empresa </label>
+            <ng-select [items]="companiesClient" bindLabel="name" bindValue="id" formControlName="idCompanyClient"
+              placeholder="Ingresa la compañia">
+            </ng-select>
+            <!-- <div *ngIf="formInvoice.controls.name.touched && formInvoice.controls.name.errors?.required"
+                  class="text text-danger">
+                  * El nombre del grupo es requerido
+                </div> -->
+          </div>
+        </div>
+
+        <div class="card_form col-md-4 mb-3">
+          <div class="form-group">
+            <label> Unidad de negocio </label>
+            <ng-select [items]="unitsBusiness" bindLabel="name" bindValue="id" formControlName="idBusinessUnit"
+              placeholder="Ingresa la unidad">
+            </ng-select> <!-- <div *ngIf="formInvoice.controls.name.touched && formInvoice.controls.name.errors?.required"
+                  class="text text-danger">
+                  * El nombre del grupo es requerido
+                </div> -->
+          </div>
+        </div>
+
+        <div class="card_form col-md-4 mb-3">
+          <div class="form-group">
+            <label> Proyecto </label>
+            <ng-select [items]="proyects" bindLabel="name" bindValue="id" formControlName="idProyect"
+              placeholder="Ingresa el proyecto">
+            </ng-select>
+            <!-- <div *ngIf="formInvoice.controls.name.touched && formInvoice.controls.name.errors?.required"
+                  class="text text-danger">
+                  * El nombre del grupo es requerido
+                </div> -->
+          </div>
+        </div>
+
+        <div class="card_form col-md-4 mb-3">
+          <div class="form-group">
+            <label> Fecha Factura </label>
+            <input type="date" class="form-control" formControlName="invoiceDate">
+            <!-- <div *ngIf="formInvoice.controls.name.touched && formInvoice.controls.name.errors?.required"
+                  class="text text-danger">
+                  * El nombre del grupo es requerido
+                </div> -->
+          </div>
+        </div>
+
+        <div class="card_form col-md-4 mb-3">
+          <div class="form-group">
+            <label> Condiciones </label>
+            <ng-select [items]="conditions" bindLabel="name" bindValue="id" formControlName="idCondition"
+              placeholder="Ingresa la condicion">
+            </ng-select>
+            <!-- <div *ngIf="formInvoice.controls.name.touched && formInvoice.controls.name.errors?.required"
+                  class="text text-danger">
+                  * El nombre del grupo es requerido
+                </div> -->
+          </div>
+        </div>
+
+        <div class="card_form col-md-4 mb-3">
+          <div class="form-group">
+            <label> Fecha Vencimiento </label>
+            <input type="date" class="form-control" formControlName="expirationDate">
+            <!-- <div *ngIf="formInvoice.controls.name.touched && formInvoice.controls.name.errors?.required"
+                  class="text text-danger">
+                  * El nombre del grupo es requerido
+                </div> -->
+          </div>
+        </div>
+
+
+        <div class="card_form col-md-3 mb-3">
+          <div class="form-group">
+            <label> No Factura </label>
+            <input type="text" class="form-control" placeholder="Ingrese el numero de la factura"
+              formControlName="invoiceNumber">
+            <!-- <div *ngIf="formCategory.controls.code.touched && formCategory.controls.code.errors?.required"
+              class="text text-danger">
+              El Código es requerido
+            </div> -->
+          </div>
+        </div>
+
+        <div class="card_form col-md-3 mb-3">
+          <div class="form-group">
+            <label> Cliente </label>
+            <ng-select [items]="client" bindLabel="name" bindValue="id" formControlName="idClient"
+              placeholder="Ingresa el cliente">
+            </ng-select>
+            <!-- <div *ngIf="formInvoice.controls.name.touched && formInvoice.controls.name.errors?.required"
+                  class="text text-danger">
+                  * El nombre del grupo es requerido
+                </div> -->
+          </div>
+        </div>
+
+        <div class="card_form col-md-3 mb-3">
+          <div class="form-group">
+            <label> Moneda </label>
+            <ng-select [items]="currencies" bindLabel="name" bindValue="id" formControlName="idCurrency"
+              placeholder="Ingresa la moneda">
+            </ng-select>
+            <!-- <div *ngIf="formInvoice.controls.name.touched && formInvoice.controls.name.errors?.required"
+                  class="text text-danger">
+                  * El nombre del grupo es requerido
+                </div> -->
+          </div>
+        </div>
+
+        <div class="card_form col-md-3 mb-3">
+          <div class="form-group">
+            <label>Mes y Año trabajado</label>
+            <div class="input-group">
+              <ng-select [items]="months" bindLabel="name" bindValue="id" formControlName="monthWorked"
+                placeholder="Mes" class="form-control">
+              </ng-select>
+              <ng-select [items]="years" bindLabel="name" bindValue="id" formControlName="yearWorked" placeholder="Año"
+                class="form-control">
+              </ng-select>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="modal-body">
+          <div class="table-responsive">
+            <table class="table table-striped table-fixed">
+              <thead>
+                <tr>
+                  <th style="width: 20%;">Producto/Servicio</th>
+                  <th style="width: 20%;">Descripción</th>
+                  <th style="width: 5%;">Cantidad</th>
+                  <th style="width: 15%;">Valor Unitario</th>
+                  <th style="width: 15%;">Tasa de Impuesto</th>
+                  <th style="width: 10%;">Impuesto</th>
+                  <th style="width: 10%;">Categoría</th>
+                  <th style="width: 5%;"></th>
+                </tr>
+              </thead>
+              <tbody class="cont_body" formArrayName="productsInvoice">
+                <tr *ngFor="let lineSystem of productsInvoice.controls; let i = index" [formGroupName]="i">
+                  <td>
+                    <!-- <ng-select [items]="products" bindLabel="name" bindValue="id" [addTag]="true"
+                      placeholder="Selecciona o agrega un producto" [appendTo]="'.modal-body'" (add)="onAdd($event)">
+                    </ng-select> -->
+                    <ng-select [appendTo]="'.modal-body'" [items]="products" bindLabel="name" bindValue="id"
+                      placeholder="Selecciona o agrega un producto"
+                      [addTag]="addTagPromise.bind(this, { index: i, dataAdicional: 'mi nimbre'})">
+                    </ng-select>
+
+
+
+
+
+
+
+
+                  </td>
+                  <td>
+                    <input type="text" class="form-control" placeholder="Ingrese la descripción"
+                      formControlName="description">
+                  </td>
+                  <td>
+                    <input type="number" class="form-control" placeholder="Cantidad" formControlName="amount">
+                  </td>
+                  <td>
+                    <input type="number" class="form-control" placeholder="Valor unitario" formControlName="unitValue">
+                  </td>
+                  <td>
+                    <ng-select [items]="taxes" bindLabel="name" bindValue="id" formControlName="idTax"
+                      placeholder="Selecciona la tasa de impuesto" [appendTo]="'.modal-body'">
+                    </ng-select>
+                  </td>
+                  <td> <input type="number" class="form-control" placeholder="Valor unitario"
+                      formControlName="valueTax">
+                  </td>
+                  <td>
+                    <ng-select [items]="categories" bindLabel="category" bindValue="id" formControlName="idCategory"
+                      placeholder="Selecciona la tasa de impuesto" [appendTo]="'.modal-body'">
+                    </ng-select>
+                  </td>
+                  <td>
+                    <i class="fa-regular fa-trash-can" style="color: red;"></i>
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+            <div class="card_form col-md-4 mb-3">
+              <button class="btn btn-outline-primary btn-ms btn-block col-md-5" (click)="addproductsInvoice()"><i
+                  class="fa-solid fa-circle-plus"></i> Agregar Producto</button>
+
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+
+
+
+
+
+      <div class="row justify-content-between px-5 py-5 mt-5">
+        <button (click)="saveData()" class="btn btn-outline-primary btn-ms btn-block col-md-5">
+          <i class="fa-solid fa-floppy-disk"></i><strong> Guardar</strong>
+        </button>
+        <button (click)="bsModalRef.hide()" class="btn btn-outline-secondary btn-ms btn-block col-md-5">
+          <i class="fa-solid fa-ban" id="icon_cancel"></i><strong> Cerrar</strong>
+        </button>
+      </div>
+
+
+    </form>
+    <p>{{formInvoice.value | json}}</p>
+  </div>
+</div>
