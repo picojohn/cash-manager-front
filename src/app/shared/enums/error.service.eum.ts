@@ -14,5 +14,6 @@ export enum ETitleMessages {
   TYPESPAYMENTS = `Medio de pago`,
   APPLICATIONTAB = `Pestañas`,
   ROLES = `Roles y permisos`,
+  PRODUCTS = `Productos`
 
 }

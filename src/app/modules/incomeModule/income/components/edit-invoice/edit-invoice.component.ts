@@ -85,14 +85,6 @@ export class EditInvoiceComponent {
       this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
     })
 
-    firstValueFrom(this.incomeService.getProducts()).then(productsItem => {
-      console.log(productsItem);
-      this.products = productsItem;
-    }, err => {
-      const errorObject = this.errorService.showNotification(err);
-      this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
-    })
-
     firstValueFrom(this.incomeService.getTaxes()).then(taxwsItem => {
       console.log(taxwsItem);
       this.taxes = taxwsItem;
@@ -109,7 +101,19 @@ export class EditInvoiceComponent {
       this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
     })
 
+    this.loadProducts()
 
+  }
+
+
+  loadProducts(){
+    firstValueFrom(this.incomeService.getProducts()).then(productsItem => {
+      console.log(productsItem);
+      this.products = productsItem;
+    }, err => {
+      const errorObject = this.errorService.showNotification(err);
+      this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
+    })
   }
 
 
@@ -161,9 +165,32 @@ export class EditInvoiceComponent {
   }
 
   addTagPromise = (additionalData: { index?: number, dataAdicional: string }, name: string): Promise<any> => {
+
     console.log(name, 'name Etiqueta personalizada recibida');
     console.log(additionalData, 'aditional data Etiqueta personalizada recibida');
-    this.bsModalRefModal = this.modalService.show(AddProductInvoiceComponent, { backdrop: 'static', class: 'modal-lg p-5' });
+    const index = additionalData.index
+    this.bsModalRefModal = this.modalService.show(AddProductInvoiceComponent, { backdrop: 'static', class: 'modal-lg p-1' });
+    this.bsModalRefModal.content.title = 'Crear Producto';
+    this.bsModalRefModal.content.name = name;
+    this.bsModalRefModal.onHidden?.subscribe((_) => {
+
+
+      // this.loadData();
+    });
+    this.bsModalRefModal.content.onClose.subscribe((result) => {
+      console.log(result.data , 'data para pasar');
+
+      if (result) {
+        // subItem.patchValue({ muestra: result.data });
+        // this.products.push(result.data)
+        const idProduct = result.data.id
+        console.log(idProduct, 'id prodcuto nuevo');
+        this.productsInvoice.get('idProduct')['controls'][index].patchValue(idProduct);  // no lo agrega
+
+
+        this.loadProducts()
+      }
+    });
     return Promise.resolve(null);
 };
   // addTagPromise(name: any, params: { index: number, dataAdicional: string }) {
@@ -171,63 +198,6 @@ export class EditInvoiceComponent {
   //   console.log('Índice:', params.index);
   //   console.log('Datos adicionales:', params.dataAdicional);
   // }
-
-
-  openModal(name: string) {
-    console.log('Abriendo modal para:', name);
-  }
-
-
-
-
-
-  addCustomTag(newProductName) {
-    console.log('Etiqueta personalizada agregada:', newProductName);
-
-    this.bsModalRefModal = this.modalService.show(AddProductInvoiceComponent, { backdrop: 'static', class: 'modal-lg p-5', });
-
-
-    // return { id: null, name: newProductName }; // También agrega el producto al select
-  }
-
-
-
-
-
-
-  onSelectOpen() {
-    console.log('on select open');
-
-    // Cargar todos los productos cuando se abre el select
-    // this.loadProducts();
-  }
-
-  onProductSelect() {
-    console.log('on product selec');
-
-    // Lógica adicional si es necesario cuando se selecciona un producto
-  }
-
-
-
-  openNewProductModal(productName?: string) {
-    console.log('abril nuevo moda');
-
-    // Prellenar nombre si viene de búsqueda
-    // if (productName) {
-    //   this.newProduct.name = productName;
-    // }
-
-    // this.modalRef = this.modalService.show(this.newProductModal);
-  }
-
-
-
-  // Método para agregar tag/producto
-  addProductTag = (term: string) => {
-    this.openNewProductModal(term);
-    return null;
-  }
 
 
 

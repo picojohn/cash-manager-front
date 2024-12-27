@@ -5,16 +5,16 @@
         {{title}}</h2>
     </div>
   </div>
-  <!-- <div *ngIf="cargarFormularioBooleam">
-    <form [formGroup]="formTax">
+  <div *ngIf="cargarFormularioBooleam">
+    <form [formGroup]="formProduct">
 
       <div class="row justify-content-center px-5">
 
         <div class="card_form col-md-6 mb-3">
           <div class="form-group">
             <label> Nombre </label>
-            <input type="text" class="form-control" formControlName="name" placeholder="Ingrese el nombre del impuesto">
-            <div *ngIf="formTax.controls.name.touched && formTax.controls.name.errors?.required"
+            <input type="text" class="form-control" formControlName="name" placeholder="Ingrese el nombre del producto">
+            <div *ngIf="formProduct.controls.name.touched && formProduct.controls.name.errors?.required"
               class="text text-danger">
               El nombre es requerido
             </div>
@@ -23,34 +23,60 @@
 
         <div class="card_form col-md-6 mb-3">
           <div class="form-group">
-            <label> Descripcion </label>
-            <input type="text" class="form-control" formControlName="description" placeholder="Ingrese la descripcion">
-            <div *ngIf="formTax.controls.description.touched && formTax.controls.description.errors?.required"
-              class="text text-danger">
-              La descripcion es requerida
-            </div>
-          </div>
-        </div>
-
-        <div class="card_form col-md-6">
-          <div class="form-group">
-            <label> Tasas de Impuestos </label>
-            <input type="number" class="form-control" formControlName="defaultRate" placeholder="Ingrese la tasa de impuesto">
-            <div *ngIf="formTax.controls.defaultRate.touched && formTax.controls.defaultRate.errors?.required"
-              class="text text-danger">
-              La Tasas de Impuestos es requerida
-            </div>
-          </div>
-        </div>
-
-        <div class="card_form col-md-6">
-          <div class="form-group">
-            <label> País </label>
-            <ng-select [items]="countries" bindLabel="name" bindValue="id" formControlName="idCountry">
+            <label> Impuesto </label>
+            <ng-select [items]="taxes" bindLabel="name" bindValue="id" formControlName="idTax" [multiple]="true" placeholder="Selecciona los impuestos" >
             </ng-select>
-            <div *ngIf="formTax.controls.idCountry.touched && formTax.controls.idCountry.errors?.required"
+            <div *ngIf="formProduct.controls.idTax.touched && formProduct.controls.idTax.errors?.required"
               class="text text-danger">
-              El País es requerido
+              El impuesto es requerido
+            </div>
+          </div>
+        </div>
+
+        <div class="card_form col-md-6 mb-3">
+          <div class="form-group">
+            <label> Tipo </label>
+            <ng-select [items]="types" bindLabel="name" bindValue="id" formControlName="idType" placeholder="Selecciona el tipo" >
+            </ng-select>
+            <div *ngIf="formProduct.controls.idType.touched && formProduct.controls.idType.errors?.required"
+              class="text text-danger">
+              El tipo es requerido
+            </div>
+          </div>
+        </div>
+
+        <div class="card_form col-md-6 mb-3">
+          <div class="form-group">
+            <label> Categoria </label>
+            <ng-select [items]="categories" bindLabel="category" bindValue="id" formControlName="idCategory" placeholder="Selecciona la categoria">
+            </ng-select>
+            <div *ngIf="formProduct.controls.idCategory.touched && formProduct.controls.idCategory.errors?.required"
+              class="text text-danger">
+              La categoria es requerida
+            </div>
+          </div>
+        </div>
+
+        <div class="card_form col-md-6 mb-3">
+          <div class="form-group">
+            <label> Tipo de producto </label>
+            <ng-select [items]="productType" bindLabel="name" bindValue="id" formControlName="idProductType" placeholder="Selecciona el tipo de producto" >
+            </ng-select>
+            <div *ngIf="formProduct.controls.idProductType.touched && formProduct.controls.idProductType.errors?.required"
+              class="text text-danger">
+              El tipo de producto es requerido
+            </div>
+          </div>
+        </div>
+
+
+        <div class="card_form col-md-6 mb-3">
+          <div class="form-group">
+            <label> Precio </label>
+            <input type="number" class="form-control" formControlName="price" placeholder="Ingrese el precio">
+            <div *ngIf="formProduct.controls.price.touched && formProduct.controls.price.errors?.required"
+              class="text text-danger">
+              El precio es requerido
             </div>
           </div>
         </div>
@@ -58,16 +84,16 @@
 
         <div class="card_select p-3 col-md-10">
         </div>
-        <div class="row justify-content-between p-3 col-md-10">
-          <button (click)="saveData()" class="btn btn-outline-primary btn-ms btn-block col-md-5">
-            <i class="fa-solid fa-floppy-disk" style="color: #0a3754"></i><strong> Guardar</strong>
-          </button>
-          <button (click)="bsModalRef.hide()" class="btn btn-outline-secondary btn-ms btn-block col-md-5">
-            <i class="fa-solid fa-ban" id="icon_cancel"></i><strong> Cerrar</strong>
-          </button>
-        </div>
       </div>
-
+      <!-- <p>{{formProduct.value | json}}</p> -->
     </form>
-  </div> -->
+  </div>
+  <div class="row justify-content-between p-3 col-md-10">
+    <button (click)="saveData()" class="btn btn-outline-primary btn-ms btn-block col-md-5">
+      <i class="fa-solid fa-floppy-disk" style="color: #0a3754"></i><strong> Guardar</strong>
+    </button>
+    <button (click)="bsModalRef.hide()" class="btn btn-outline-secondary btn-ms btn-block col-md-5">
+      <i class="fa-solid fa-ban" id="icon_cancel"></i><strong> Cerrar</strong>
+    </button>
+  </div>
 </div>
