@@ -7,7 +7,7 @@ import { firstValueFrom, Subject } from 'rxjs';
 import { ETitleMessages } from 'src/app/shared/enums/error.service.eum';
 import { IDatosUsuario } from 'src/app/authentication/interface/authentication';
 import { ICategory, ICurrency, IName, ITax } from 'src/app/modules/configuration/application/interface/application.interface';
-import { constClienteCliente, constConditions, constEmpresasClientes, constMonths, constProductService, constProyecto, constUnidadNegocio } from 'src/app/shared/data/const';
+import { constClienteCliente, constConditions, constEmpresasClientes, constMonths, constProductService, constProyecto, constUnidadNegocio, constYears } from 'src/app/shared/data/const';
 import { IncomeService } from '../../services/invcome.service';
 import { IInvoice } from '../../interface/income.interface';
 import { AddProductInvoiceComponent } from '../add-product-invoice/add-product-invoice.component';
@@ -41,7 +41,9 @@ export class EditInvoiceComponent {
   public taxes: Array<ITax> = []
   public categories: Array<ICategory> = []
 
-  public years: number[] = [];
+  public years: number[] = constYears
+
+  public idCountry = 1 //////////////// temporal mientras se defino como se saca el dato del pais
 
 
 
@@ -71,11 +73,11 @@ export class EditInvoiceComponent {
 
   loadData() {
 
-    const currentYear = new Date().getFullYear();
-    for (let i = currentYear - 30; i <= currentYear + 10; i++) {
-      this.years.push(i);
-    }
-    console.log(this.years);
+    // const currentYear = new Date().getFullYear();
+    // for (let i = currentYear - 30; i <= currentYear + 10; i++) {
+    //   this.years.push(i);
+    // }
+    // console.log(this.years);
 
     firstValueFrom(this.incomeService.getCurrencys()).then(currencysItem => {
       console.log(currencysItem);
@@ -101,12 +103,12 @@ export class EditInvoiceComponent {
       this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
     })
 
-    this.loadProducts()
+    this.loadProductsBack()
 
   }
 
 
-  loadProducts(){
+  loadProductsBack() {
     firstValueFrom(this.incomeService.getProducts()).then(productsItem => {
       console.log(productsItem);
       this.products = productsItem;
@@ -139,6 +141,7 @@ export class EditInvoiceComponent {
       taxesInvoice: new FormControl(this.invoice ? this.invoice.taxesInvoice : null, [Validators.required]),
       totalInvoice: new FormControl(this.invoice ? this.invoice.totalInvoice : null, [Validators.required]),
       comments: new FormControl(this.invoice ? this.invoice.comments : null, [Validators.required]),
+      state: new FormControl(this.invoice ? Number(this.invoice.state) : 0, [Validators.required]),
       productsInvoice: new FormArray([]),
     })
   }
@@ -151,60 +154,140 @@ export class EditInvoiceComponent {
 
   addproductsInvoice() {
     let productsInvoice = this._fb.group({
+      id:[null],
       idProduct: [null, [Validators.required]],
       description: [null, [Validators.required]],
       amount: [null, [Validators.required]],
       unitValue: [null, [Validators.required]],
       idTax: [null, [Validators.required]],
       valueTax: [null, [Validators.required]],
+      totalValue: [null, [Validators.required]],
       idCategory: [null, [Validators.required]],
-
-
     });
     this.productsInvoice.push(productsInvoice);
   }
 
   addTagPromise = (additionalData: { index?: number, dataAdicional: string }, name: string): Promise<any> => {
-
     console.log(name, 'name Etiqueta personalizada recibida');
     console.log(additionalData, 'aditional data Etiqueta personalizada recibida');
     const index = additionalData.index
     this.bsModalRefModal = this.modalService.show(AddProductInvoiceComponent, { backdrop: 'static', class: 'modal-lg p-1' });
     this.bsModalRefModal.content.title = 'Crear Producto';
     this.bsModalRefModal.content.name = name;
-    this.bsModalRefModal.onHidden?.subscribe((_) => {
-
-
-      // this.loadData();
-    });
     this.bsModalRefModal.content.onClose.subscribe((result) => {
-      console.log(result.data , 'data para pasar');
-
+      console.log(result.data, 'data para pasar');
       if (result) {
-        // subItem.patchValue({ muestra: result.data });
-        // this.products.push(result.data)
         const idProduct = result.data.id
         console.log(idProduct, 'id prodcuto nuevo');
-        this.productsInvoice.get('idProduct')['controls'][index].patchValue(idProduct);  // no lo agrega
-
-
-        this.loadProducts()
+        this.loadProductsBack()
+        const productoFactura = this.formInvoice.get('productsInvoice')['controls'][index]
+        productoFactura.patchValue({ idProduct });
       }
     });
     return Promise.resolve(null);
-};
-  // addTagPromise(name: any, params: { index: number, dataAdicional: string }) {
-  //   console.log('Etiqueta agregada:', name);
-  //   console.log('Índice:', params.index);
-  //   console.log('Datos adicionales:', params.dataAdicional);
-  // }
+  };
 
 
 
+  loadProductInvoice(index: number, option: number) {
+    const productsArray = this.formInvoice.value.productsInvoice
+    const productoFactura = this.formInvoice.get('productsInvoice')['controls'][index]
+    const idProduct = productoFactura.get('idProduct').value
+
+    if (option == 1) {
+      let existingProduct = productsArray.filter(point => point.idProduct == idProduct);
+      if (existingProduct.length > 1) {
+        productoFactura.patchValue({ idProduct: null });
+        productoFactura.patchValue({ unitValue: null });
+        productoFactura.patchValue({ idTax: null });
+        productoFactura.patchValue({ idCategory: null });
+        productoFactura.patchValue({ valueTax: null });
+        productoFactura.patchValue({ totalValue: null });
+        return this.toast.info('El producto ya esa seleccionada', ETitleMessages.INVOICE)
+      }
+    }
+
+    if (idProduct != null) {
+      const productoSeleccioando = this.products.find(item => item.id == idProduct)
+      const idTax = option == 1 ? JSON.parse(productoSeleccioando.idTax) : productoFactura.get('idTax').value
+      const unitValue = option == 1 ? productoSeleccioando.price : productoFactura.get('unitValue').value
+      productoFactura.patchValue({ unitValue });
+      productoFactura.patchValue({ idTax });
+      productoFactura.patchValue({ idCategory: productoSeleccioando.idCategory });
+      const valorImpuestos = this.taxes.filter(item => idTax.includes(item.id))
+      const cantidad = productoFactura.get('amount').value
+      let impuesto = 0
+      if (cantidad > 0 && cantidad != null) {
+        for (let i = 0; i < valorImpuestos.length; i++) {
+          const element = valorImpuestos[i];
+          impuesto += (unitValue * element.defaultRate) / 100
+        }
+        productoFactura.patchValue({ valueTax: (impuesto * cantidad) });
+        productoFactura.patchValue({ totalValue: ((impuesto * cantidad) + (cantidad * unitValue)) });
+      }
+    } else {
+      productoFactura.patchValue({ unitValue: null });
+      productoFactura.patchValue({ idTax: null });
+      productoFactura.patchValue({ idCategory: null });
+      productoFactura.patchValue({ valueTax: null });
+      productoFactura.patchValue({ totalValue: null });
+
+    }
+    this.calculateInvoiceTotals();
+
+  }
+
+
+  seletedTaxes(index) {
+    const productoFactura = this.formInvoice.get('productsInvoice')['controls'][index]
+    const idProduct = productoFactura.get('idProduct').value
+    const cantidad = productoFactura.get('amount').value
+    if (idProduct != null && cantidad != null) {
+      const idTax = productoFactura.get('idTax').value
+      const valorImpuestos = this.taxes.filter(item => idTax.includes(item.id))
+      const unitValue = productoFactura.get('unitValue').value
+      let impuesto = 0
+      for (let i = 0; i < valorImpuestos.length; i++) {
+        const element = valorImpuestos[i];
+        impuesto += (unitValue * element.defaultRate) / 100
+      }
+      productoFactura.patchValue({ valueTax: (impuesto * cantidad) });
+      productoFactura.patchValue({ totalValue: ((impuesto * cantidad) + (cantidad * unitValue)) });
+
+    }
+    this.calculateInvoiceTotals();
+  }
 
 
 
+  deleteProductInvoice(index) {
+    (this.formInvoice.get('productsInvoice') as FormArray).removeAt(index);
+    this.calculateInvoiceTotals();
 
+  }
+
+
+  calculateInvoiceTotals(): void {
+    const productsInvoice = this.formInvoice.get('productsInvoice') as FormArray;
+
+    let subTotalInvoice = 0;
+    let taxesInvoice = 0;
+
+    productsInvoice.controls.forEach(product => {
+      const amount = product.get('amount').value || 0;
+      const unitValue = product.get('unitValue').value || 0;
+      const valueTax = product.get('valueTax').value || 0;
+
+      subTotalInvoice += amount * unitValue;
+      taxesInvoice += valueTax;
+    });
+
+    this.formInvoice.patchValue({
+      subTotalInvoice: subTotalInvoice,
+      taxesInvoice: taxesInvoice,
+      totalInvoice: subTotalInvoice + taxesInvoice,
+    });
+  }
 
 
 
@@ -217,15 +300,15 @@ export class EditInvoiceComponent {
    */
   saveData() {
     this.formInvoice.markAllAsTouched();
-    // if (this.formGroup.invalid) return this.toast.info('Debes llenar todos los datos requeridos del formulario', ETitleMessages.GROUPS)
-    // const rawValue: IGroup = this.formGroup.value;
-    // firstValueFrom(this.group ? this.applicationService.editGroup(rawValue) : this.applicationService.newGroup(rawValue)).then(_ => {
-    //   this.toast.success(`Grupo ${this.group ? 'modificado' : 'creado'} correctamente`, ETitleMessages.GROUPS)
-    //   this.bsModalRef.hide()
-    // }, err => {
-    //   const errorObject = this.errorService.showNotification(err);
-    //   this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
-    // })
+    if (this.formInvoice.invalid || this.productsInvoice.length < 1)  return this.toast.info('Debes llenar todos los datos requeridos del formulario', ETitleMessages.INVOICE)
+    const rawValue: IInvoice = this.formInvoice.value;
+    firstValueFrom(this.invoice ? this.incomeService.editInvoice(rawValue) : this.incomeService.newInvoice(rawValue)).then(_ => {
+      this.toast.success(`Factura ${this.invoice ? 'modificada' : 'creada'} correctamente`, ETitleMessages.INVOICE)
+      // this.bsModalRef.hide()
+    }, err => {
+      const errorObject = this.errorService.showNotification(err);
+      this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
+    })
 
   }
 

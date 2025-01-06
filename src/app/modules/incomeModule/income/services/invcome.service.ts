@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, catchError, map, throwError } from 'rxjs';
 import { ICategory, ICurrency, ITax, IType } from 'src/app/modules/configuration/application/interface/application.interface';
 import { environment } from 'src/environments/environment';
+import { IInvoice } from '../interface/income.interface';
 
 
 
@@ -64,35 +65,42 @@ export class IncomeService {
   }
 
 
-// productos
+  // productos
   getProducts(): Observable<Array<any>> {
     return this.http.get<Array<any>>(`${this.url}/products`)
   }
 
   newProduct(product: any): Observable<any> {
-      return this.http.post<any>(`${this.url}/products`, product)
-    }
+    return this.http.post<any>(`${this.url}/products`, product)
+  }
 
 
+  //// metodos de kas facturas
+/**
+ * metodo para traer todas las faacturas 
+ * @returns Array<IInvoice>
+ */
+  getInvoices(): Observable<Array<IInvoice>> {
+    return this.http.get<Array<IInvoice>>(`${this.url}/invoices`)
+  }
 
+  /**
+   * metodo del servicio para crear una factura
+   * @param invoice
+   * @returns IInvoice
+   */
+  newInvoice(invoice: IInvoice): Observable<IInvoice> {
+    return this.http.post<IInvoice>(`${this.url}/invoices`, invoice)
+  }
 
-  // /**
-  //  * metodo del servicio para crear una moneda
-  //  * @param currency
-  //  * @returns ICurrency
-  //  */
-  // newCurrency(currency: ICurrency): Observable<ICurrency> {
-  //   return this.http.post<ICurrency>(`${this.url}/currencys`, currency)
-  // }
-
-  // /**
-  //  * metodo del servicio para editar una moneda
-  //  * @param currency
-  //  * @returns
-  //  */
-  // editCurrency(currency: ICurrency): Observable<ICurrency> {
-  //   return this.http.patch<ICurrency>(`${this.url}/currencys`, currency)
-  // }
+  /**
+   * metodo del servicio para editar una moneda
+   * @param invoice
+   * @returns IInvoice
+   */
+  editInvoice(invoice: IInvoice): Observable<IInvoice> {
+    return this.http.patch<IInvoice>(`${this.url}/invoices`, invoice)
+  }
 
   // /**
   //  * metodo del servicio para eliminar una moneda por id

@@ -8,6 +8,10 @@ import { IPermisionValue, IPermissionAction, ITabsPermision } from 'src/app/shar
 import { PermissionService } from 'src/app/shared/services/permission.service';
 import { IRole } from '../../configuration/panel/interface/panel.interface';
 import { EditInvoiceComponent } from './components/edit-invoice/edit-invoice.component';
+import { IInvoice } from './interface/income.interface';
+import { IncomeService } from './services/invcome.service';
+import { IName } from '../../configuration/application/interface/application.interface';
+import { constClienteCliente, constConditions } from 'src/app/shared/data/const';
 
 @Component({
   selector: 'app-income',
@@ -16,22 +20,25 @@ import { EditInvoiceComponent } from './components/edit-invoice/edit-invoice.com
 })
 export class IncomeComponent implements OnInit {
 
-  public selectedTab: number ;
+  public selectedTab: number;
   private bsModalRef: BsModalRef;
 
-   //permisos
-   public permission: IPermissionAction;
-   public permisionBoolean: IPermisionValue;
-   public rolesUser: IRole;
-   public pestanas: IPermissionAction;
-   public selectedTabItem: ITabsPermision
+  //permisos
+  public permission: IPermissionAction;
+  public permisionBoolean: IPermisionValue;
+  public rolesUser: IRole;
+  public pestanas: IPermissionAction;
+  public selectedTabItem: ITabsPermision
 
   //  pestaña de facturacion / billing
-  public billings: Array<any> = [];
+  public billings: Array<IInvoice> = [];
   public nPaginasBilling = [5, 10, 20, 50, 100];
   public pageBilling: number = 1;
   public totalPaginasBilling = 5;
   public _buscadorBilling: string = '';
+
+  public clients: Array<IName> = constClienteCliente;
+  public conditions: Array<IName> = constConditions;
 
 
 
@@ -41,7 +48,7 @@ export class IncomeComponent implements OnInit {
     private modalService: BsModalService,
     public toast: ToastrService,
     private errorService: ErrorService,
-    // private panelService: PanelService,
+    private incomeService: IncomeService,
     private sweetAlertService: SweetAlertService,
     private permissionService: PermissionService,
   ) {
@@ -66,14 +73,14 @@ export class IncomeComponent implements OnInit {
    * carga inicial de datos
    */
   loadData() {
-    // firstValueFrom(this.panelService.getAllModules()).then(modulesBack => {
-    //   this.modules = modulesBack;
-    // }, err => {
-    //   const errorObject = this.errorService.showNotification(err);
-    //   this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
-    // });
+    firstValueFrom(this.incomeService.getInvoices()).then(invoiceBack => {
+      this.billings = invoiceBack;
+    }, err => {
+      const errorObject = this.errorService.showNotification(err);
+      this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
+    });
 
- }
+  }
 
 
   // para la pestaña de facturacion / Billing
@@ -81,8 +88,8 @@ export class IncomeComponent implements OnInit {
     this.bsModalRef = this.modalService.show(EditInvoiceComponent, {
       backdrop: 'static',
       class: 'custom-modal-lg p-5',
-  });
-      this.bsModalRef.content.title = 'Crear factura';
+    });
+    this.bsModalRef.content.title = 'Crear factura';
     this.bsModalRef.onHidden?.subscribe((_) => {
       this.loadData();
     });
@@ -120,12 +127,20 @@ export class IncomeComponent implements OnInit {
       return this.billings;
     }
     return this.billings.filter((billing) =>
-      billing.name.toLowerCase().includes(this.buscadorBilling.toLowerCase())
+      billing.comments.toLowerCase().includes(this.buscadorBilling.toLowerCase())
     );
   }
 
 
+getClientById(id: number){
+  const client = this.clients.find(i => i.id == id)
+  return client ? client.name : '- 0 -'
+}
 
+getConditionsById(id: number){
+  const conditions = this.conditions.find(i => i.id == id)
+  return conditions ? conditions.name : '- 0 -'
+}
 
 
 
