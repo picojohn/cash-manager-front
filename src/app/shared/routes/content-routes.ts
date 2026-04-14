@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from 'src/app/modules/home/home.component';
-// import { HomeComponent } from '../../modules/home/home.component';
-//import { AdminGuard } from 'src/app/authentication/guard/admin.guard';
+
 export const content: Routes = [
   {
     path: '',
@@ -11,15 +10,7 @@ export const content: Routes = [
   {
     path: 'configuration',
     loadChildren: () => import('../../modules/configuration/configuration.module').then(m => m.ConfigurationModule),
-    //  canActivate: [AdminGuard]
   },
-  {
-    path: 'income',
-    loadChildren: () => import('../../modules/incomeModule/incomeModule.module').then(m => m.IncomeModuleModule),
-    //  canActivate: [AdminGuard]
-  },
-
-
   {
     path: '',
     redirectTo: '/gestiones/home',
@@ -31,4 +22,3 @@ export const content: Routes = [
     pathMatch: 'full'
   }
 ];
-
