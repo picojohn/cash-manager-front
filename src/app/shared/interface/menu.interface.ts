@@ -1,24 +1,12 @@
-
-// export interface Menu {
-//     path?: string;
-//     title?: string;
-//     icon?: string;
-//     type?: string;
-//     badgeType?: string;
-//     badgeValue?: string;
-//     active?: boolean;
-//     bookmark?: boolean;
-//     children?: Menu[];
-// }
-
 export interface IMenuSidebar {
-  isOpen: boolean
+  isOpen: boolean;
   iconModule: string;
   idModule: number;
-  nameModule: string
-  pathModule: string
-  subModules: Array<ISubMenuSidebar>
+  nameModule: string;
+  pathModule: string;
+  children: Array<ISubMenuSidebar>;
 }
+
 export interface ISubMenuSidebar {
   iconSubModule: string;
   idSubModule: number;

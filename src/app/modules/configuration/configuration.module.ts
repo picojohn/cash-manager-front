@@ -10,10 +10,8 @@ import { PanelComponent } from './panel/panel.component';
 import { PanelService } from './panel/services/panel.service';
 import { EditModuleComponent } from './panel/components/edit-module/edit-module.component';
 import { EditSubModuleComponent } from './panel/components/edit-subModule/edit-subModule.component';
-import { EditApplicationTabComponent } from './panel/components/edit-applicationTab/edit-applicationTab.component';
 import { EditRoleComponent } from './panel/components/edit-role/edit-role.component';
 import { EditMenuPermissionsComponent } from './panel/components/edit-menu-permissions/edit-menu-permissions.component';
-
 
 
 @NgModule({
@@ -22,7 +20,6 @@ import { EditMenuPermissionsComponent } from './panel/components/edit-menu-permi
     PanelComponent,
     EditModuleComponent,
     EditSubModuleComponent,
-    EditApplicationTabComponent,
     EditRoleComponent,
     EditMenuPermissionsComponent,
   ],
@@ -38,6 +35,5 @@ import { EditMenuPermissionsComponent } from './panel/components/edit-menu-permi
   providers: [
     PanelService
   ]
-
 })
 export class ConfigurationModule { }

@@ -1,9 +1,7 @@
-<div class="container mt-5  p-3">
+<div class="container mt-5 p-3">
   <div class="row justify-content-center">
     <div class="text-center">
-
       <h2 class="p-3 col-md-12"><i class="fa-solid fa-chalkboard-user" style="font-size: 25px; color:#0039a5;"></i>
-
         {{ title }}</h2>
     </div>
   </div>
@@ -13,11 +11,11 @@
       <div class="row justify-content-center p-3">
         <div class="form-group text-center col-md-6 mb-3">
           <label for="idRol">
-
-            <p><i class="fa-solid fa-user-shield" style="font-size: 25px; color:#0039a5;"></i><span style="color: gray">
-                Rol:</span> <strong style="color: #0039a5;"> {{role?.name}}</strong></p>
+            <p><i class="fa-solid fa-user-shield" style="font-size: 25px; color:#0039a5;"></i>
+              <span style="color: gray"> Rol:</span>
+              <strong style="color: #0039a5;"> {{role?.name}}</strong>
+            </p>
           </label>
-
         </div>
       </div>
 
@@ -26,105 +24,67 @@
           Funciones Autorizadas</h2>
       </div>
 
-      <!-- <div class="titulo col-md-12 mb-3">
-        <h6 style="color: gray;"><i class="fa-solid fa-circle-info" style="color: #0039a5;"></i> Te
-          permite seleccionar los módulos a los que puede acceder cada rol y las
-          funciones que puede realizar en cada uno.
-        </h6>
-      </div> -->
-
-
-      <div formArrayName="options" class="row justify-content-between p-3">
-        <div *ngFor="let itemModule of formMenuPermisos.get('options')['controls']; let i = index" [formGroupName]="i">
+      <div formArrayName="opciones" class="row justify-content-between p-3">
+        <div *ngFor="let itemModule of formMenuPermisos.get('opciones')['controls']; let i = index" [formGroupName]="i">
           <div class="card_check shadow col-md-12 mb-3">
             <div class="card_modulo p-2 text-center">
               <div class="form-check col-md">
-                <label class="form-check-label" for="remember">
+                <label class="form-check-label">
                   <strong style="color: gray;">
-                    <h3> <i [ngClass]="['fa-solid', itemModule.value?.iconModule ]" style="color: blue;"></i>
-                      Modulo: {{ itemModule.value.nameModule }} </h3>
+                    <h3><i [ngClass]="['fa-solid', itemModule.value?.iconModule]" style="color: blue;"></i>
+                      Modulo: {{ itemModule.value.nameModule }}</h3>
                   </strong>
                 </label>
               </div>
             </div>
 
-            <!-- Submódulos -->
             <hr />
-            <div formArrayName="subModules">
-              <div *ngFor="let itemSubmodule of itemModule.get('subModules')['controls']; let j = index"
+            <div formArrayName="subModules" class="row">
+              <div class="col-md-4"
+                *ngFor="let itemSubmodule of itemModule.get('subModules')['controls']; let j = index"
                 [formGroupName]="j">
-                <div class="card_modulo p-2 text-center">
+                <div class="card_modulo p-2">
                   <div class="form-check col-md">
-                    <label class="form-check-label" for="remember">
+                    <input class="form-check-input" type="checkbox" formControlName="mostrarAdicionales">
+                    <label class="form-check-label">
                       <strong style="color: gray;">
-                        <h4> <i [ngClass]="['fa-solid', itemSubmodule.value?.iconSubModule ]" style="color: aqua;"></i>
-                          SubModulo: {{ itemSubmodule.value.nameSubModule }} </h4>
+                        <i style="color: #16a500;" [ngClass]="['fa-solid', itemSubmodule.value?.iconSubModule]"></i>
+                        {{ itemSubmodule.value.nameSubModule }}
                       </strong>
                     </label>
-                  </div>
-                </div>
-                <div class="row" formArrayName="applicationTabs">
-                  <div class="col-md-4"
-                    *ngFor="let itemApplicationTab of itemSubmodule.get('applicationTabs')['controls']; let l = index"
-                    [formGroupName]="l">
-                    <div class="card_modulo p-2">
-                      <div class="form-check col-md">
-                        <input aria-describedby="remember" class="form-check-input" type="checkbox" id="checkbox"
-                          formControlName="mostrarAdicionales">
-                        <label class="form-check-label" for="remember">
-                          <strong style="color: gray;">
-                            <i style="color: #16a500;" [ngClass]="['fa-solid', itemApplicationTab.value?.icon ]"></i>
-                            {{ itemApplicationTab.value.nameApplicationTab }}
-                          </strong>
-                        </label>
 
-                        <div *ngIf="itemApplicationTab.value.mostrarAdicionales">
-                          <div formArrayName="actions" class="row justify-content-center">
-                            <div class="card_check col-md-12"
-                              *ngFor="let checkboxAdicional of itemApplicationTab.get('actions').controls; let j = index"
-                              [formGroupName]="j">
-                              <div class="form-check col-md">
-                                <input class="form-check-input" type="checkbox" id="checkbox" formControlName="status">
-                                <div class="col-3">
-                                  <label for="remember" class="form-check-label">
-                                    <p>{{ checkboxAdicional.value.name }}</p>
-                                  </label>
-                                </div>
-                              </div>
-                            </div>
+                    <div *ngIf="itemSubmodule.value.mostrarAdicionales">
+                      <div formArrayName="actions" class="row justify-content-center">
+                        <div class="card_check col-md-12"
+                          *ngFor="let action of itemSubmodule.get('actions').controls; let k = index"
+                          [formGroupName]="k">
+                          <div class="form-check col-md">
+                            <input class="form-check-input" type="checkbox" formControlName="status">
+                            <label class="form-check-label">
+                              <p>{{ action.value.name }}</p>
+                            </label>
                           </div>
                         </div>
-
                       </div>
                     </div>
                   </div>
                 </div>
-
-
               </div>
             </div>
+
           </div>
         </div>
       </div>
 
-
-
-
-      <!-- <p>{{formMenuPermisos.value | json}}</p> -->
-
       <div class="row justify-content-between p-3 col-md-12">
         <button (click)="guardarDatos()" [disabled]="guardarSolicitudBoleano"
           class="btn btn-outline-primary btn-ms btn-block col-md-5">
-          <i class="fa-solid fa-floppy-disk" style="color: #0039a5"></i><strong>
-            Guardar</strong>
+          <i class="fa-solid fa-floppy-disk" style="color: #0039a5"></i><strong> Guardar</strong>
         </button>
         <button (click)="bsModalRef.hide()" class="btn btn-outline-secondary btn-ms btn-block col-md-5">
-          <i class="fa-solid fa-ban" style="color: red"></i><strong>
-            Cerrar</strong>
+          <i class="fa-solid fa-ban" style="color: red"></i><strong> Cerrar</strong>
         </button>
       </div>
     </form>
   </div>
-
-
 </div>

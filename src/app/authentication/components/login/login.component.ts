@@ -16,14 +16,9 @@ import { IDatosUsuario } from '../../interface/authentication';
 })
 export class LoginComponent implements OnInit {
 
-
-  /** Login form */
   public loginForm: FormGroup;
-  /** Bandera de se indoca cuando se esta iniciando sesion */
   loadingSession = false;
-  /**Mensajes de formulario */
   textIniSesssion = 'Iniciar sesión';
-
 
   constructor(
     public toast: ToastrService,
@@ -32,17 +27,11 @@ export class LoginComponent implements OnInit {
     private errorService: ErrorService
   ) { }
 
-  /** Ciclo de vida ngOnInit */
   async ngOnInit() {
     localStorage.clear()
     this.buildForm();
-
   }
 
-  /**
-   * Metodo que contruye los formularios
-   * @returns void
-   */
   private buildForm(): void {
     this.loginForm = new FormGroup(({
       password: new FormControl(null, [Validators.required]),
@@ -53,10 +42,6 @@ export class LoginComponent implements OnInit {
     }));
   }
 
-  /**
-  * Metodo que hace login al servicio backend
-  * @returns void
-  */
   login(): void {
     this.loginForm.markAllAsTouched()
     if (this.loginForm.invalid) {
@@ -73,10 +58,8 @@ export class LoginComponent implements OnInit {
           const datosUsuario: IDatosUsuario = {
             id: decodedJSON['userLogin']['id'],
             name: decodedJSON['userLogin']['name'],
-            lastName: decodedJSON['userLogin']['lastName'],
-            userName: decodedJSON['userLogin']['userName'],
             email: decodedJSON['userLogin']['email'],
-            mobile: decodedJSON['userLogin']['mobile'],
+            phone: decodedJSON['userLogin']['phone'],
             idCompany: decodedJSON['userLogin']['idCompany'],
           }
           localStorage.setItem('datosUsuario', JSON.stringify(datosUsuario));
@@ -84,14 +67,13 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('token', itemLogin.token);
           localStorage.setItem('menu', JSON.stringify(itemLogin.menu));
 
+          // Menú de 2 niveles: Module > children (SubModules)
           itemLogin.menu.forEach(module => {
-            module.subModules.forEach(subModule => {
-              permission.push(subModule);
-              subModule.applicationTabs.forEach(applicationTab => {
-                const parsedActions = JSON.parse(atob(applicationTab.actions));
-                applicationTab.permission = parsedActions.permision;
-                delete applicationTab.actions
-              });
+            module.children.forEach(child => {
+              const parsedActions = JSON.parse(atob(child.actions));
+              child.permission = parsedActions.permision;
+              delete child.actions;
+              permission.push(child);
             });
           });
 
@@ -109,9 +91,6 @@ export class LoginComponent implements OnInit {
         this.textIniSesssion = 'Iniciar sesión -';
       })
     }
-
-
-
   }
 
 }

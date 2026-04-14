@@ -1,18 +1,9 @@
 export interface IPermissionAction {
-  applicationTabs: Array<ITabsPermision>;
   iconSubModule: string;
   idSubModule: number;
   nameSubModule: string;
   pathSubModule: string;
-  // permision: Array<IActionPermision>;
-  // window: string;
-}
-
-export interface ITabsPermision {
-  iconApplicationTab: string;
-  idApplicationTab: number;
-  nameApplicationTab: string
-  permission: Array<IActionPermision>
+  permission: Array<IActionPermision>;
 }
 
 export interface IActionPermision {
@@ -28,5 +19,3 @@ export interface IPermisionValue {
   STATUS: boolean;
   INSERT: boolean;
 }
-
-

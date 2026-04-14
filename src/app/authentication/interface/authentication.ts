@@ -1,41 +1,29 @@
 export interface IMenu {
-  id: number;
   idModule: number;
-  name: string;
-  path: string;
-  status: number;
-  icon: string;
-  actions: string;
+  nameModule: string;
+  pathModule: string;
+  iconModule: string;
   children: Array<IMenuChildren>
 }
 
 export interface IMenuChildren {
-  id: number;
-  idModule: number;
-  name: string;
-  path: string;
-  status: number;
-  icon: string;
+  idSubModule: number;
+  nameSubModule: string;
+  pathSubModule: string;
+  iconSubModule: string;
   actions: string;
 }
 
 export interface ILoginInfo {
-  userName?: string;
-  password?: string;
   email?: string;
-  id?: number;
-  personId?: number;
+  password?: string;
   newPassword?: string;
 }
 
 export interface IDatosUsuario {
-  id: number
+  id: number;
   name: string;
-  lastName: string;
-  userName: string;
-  mobile: number;
   email: string;
-  idCompany: number
+  phone: string;
+  idCompany: number;
 }
-
-

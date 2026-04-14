@@ -22,7 +22,7 @@
         <i class="fas col-2" [ngClass]="menu.isOpen ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
       </span>
       <div *ngIf="menu.isOpen" class="mt-2 d-flex flex-column justify-content-center">
-        <div *ngFor="let sub of menu.subModules">
+        <div *ngFor="let sub of menu.children">
           <div class="row shadow justify-content-center" id="micro">
             <span><a class="dropdown-item" routerLink="{{menu.pathModule}}/{{sub.pathSubModule}}">
               <i [ngClass]="['fa-solid', sub.iconSubModule]" id="icon_micro"></i>
@@ -61,7 +61,7 @@
           <div class="profile1 d-flex align-items-center">
             <img src="/assets/img/perfil.png" onError="this.src='/assets/img/perfil.png'" alt="Perfil" />
             <div class="row text-center" id="dropdown_user">
-              <strong>{{datosUsuario.name}} {{datosUsuario.lastName}}</strong>
+              <strong>{{datosUsuario.name}}</strong>
               <span>Menu Principal</span>
             </div>
             <div class="micro-menu" id="micro">
