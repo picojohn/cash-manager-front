@@ -660,7 +660,7 @@ export class ApplicationComponent implements OnInit {
 
   // Categories
 /**
- * metodo que abre el modal para crear una categoria
+ * metodo que abre el modal para crear una categoría
  */
   newCategory() {
     this.bsModalRef = this.modalService.show(EditCategoryComponent, { backdrop: 'static', class: 'modal-lg p-5', });
@@ -671,7 +671,7 @@ export class ApplicationComponent implements OnInit {
   }
 
   /**
-   * metodo que abre el mndal para editar una categoria
+   * metodo que abre el mndal para editar una categoría
    * @param category
    */
   editCategory(category: ICategory) {
@@ -684,7 +684,7 @@ export class ApplicationComponent implements OnInit {
   }
 
   /**
-   * metodo para eliminar una categoria por id
+   * metodo para eliminar una categoría por id
    * @param id
    */
   async deleteCategory(id: number) {
@@ -700,7 +700,7 @@ export class ApplicationComponent implements OnInit {
   }
 
   /**
-   * metodo para cambiar el estado de una categoria
+   * metodo para cambiar el estado de una categoría
    * @param id
    */
   async statesCategory(id): Promise<void> {
@@ -728,7 +728,7 @@ export class ApplicationComponent implements OnInit {
   }
 
   /**
-   * metodo para filtrar las empresas de la categoria si no se es administrador
+   * metodo para filtrar las empresas de la categoría si no se es administrador
    */
   selectedCategories() {
     if (this.valueCategoriesSelected !== null) {
@@ -770,7 +770,7 @@ export class ApplicationComponent implements OnInit {
   }
 
 /**
- * metodo para el numero de paginas para las categorias
+ * metodo para el numero de paginas para las categorías
  * @param $event
  */
   numeroPaginasCategories($event: any) {
@@ -780,7 +780,7 @@ export class ApplicationComponent implements OnInit {
   }
 
   /**
-   * metodo set del buscador de categorias
+   * metodo set del buscador de categorías
    */
   set buscadorCategories(value: string) {
     this._buscadorCategories = value;
@@ -788,14 +788,14 @@ export class ApplicationComponent implements OnInit {
   }
 
   /**
-   * metodo get del buscador de categorias
+   * metodo get del buscador de categorías
    */
   get buscadorCategories(): string {
     return this._buscadorCategories;
   }
 
   /**
-   * metodo del filtro para las categorias que muestra en el modal
+   * metodo del filtro para las categorías que muestra en el modal
    * @returns categories
    */
   filterCategories() {
