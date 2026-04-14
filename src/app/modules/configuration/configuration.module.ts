@@ -12,6 +12,10 @@ import { EditModuleComponent } from './panel/components/edit-module/edit-module.
 import { EditSubModuleComponent } from './panel/components/edit-subModule/edit-subModule.component';
 import { EditRoleComponent } from './panel/components/edit-role/edit-role.component';
 import { EditMenuPermissionsComponent } from './panel/components/edit-menu-permissions/edit-menu-permissions.component';
+import { UsersComponent } from './users/users.component';
+import { EditUserComponent } from './users/components/edit-user/edit-user.component';
+import { CompaniesComponent } from './companies/companies.component';
+import { EditCompanyComponent } from './companies/components/edit-company/edit-company.component';
 
 
 @NgModule({
@@ -22,6 +26,10 @@ import { EditMenuPermissionsComponent } from './panel/components/edit-menu-permi
     EditSubModuleComponent,
     EditRoleComponent,
     EditMenuPermissionsComponent,
+    UsersComponent,
+    EditUserComponent,
+    CompaniesComponent,
+    EditCompanyComponent,
   ],
   imports: [
     CommonModule,

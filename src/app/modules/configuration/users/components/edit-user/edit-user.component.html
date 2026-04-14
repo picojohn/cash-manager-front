@@ -1,0 +1,55 @@
+<div class="container mt-3 p-3">
+  <div class="text-center">
+    <h2 class="p-3"><i class="fa-solid fa-user" style="color:#0039a5;"></i> {{ title }}</h2>
+  </div>
+  <form [formGroup]="formUser">
+    <div class="row justify-content-center p-3">
+      <div class="form-group col-md-6 mb-3">
+        <label for="name">Nombre</label>
+        <input type="text" class="form-control" formControlName="name" placeholder="Nombre completo">
+        <div *ngIf="formUser.get('name').invalid && formUser.get('name').touched" class="text-danger">
+          El nombre es obligatorio
+        </div>
+      </div>
+      <div class="form-group col-md-6 mb-3">
+        <label for="email">Email</label>
+        <input type="email" class="form-control" formControlName="email" placeholder="correo@ejemplo.com">
+        <div *ngIf="formUser.get('email').invalid && formUser.get('email').touched" class="text-danger">
+          Email válido es obligatorio
+        </div>
+      </div>
+      <div class="form-group col-md-6 mb-3">
+        <label for="phone">Teléfono</label>
+        <input type="text" class="form-control" formControlName="phone" placeholder="Teléfono">
+      </div>
+      <div class="form-group col-md-6 mb-3">
+        <label for="address">Dirección</label>
+        <input type="text" class="form-control" formControlName="address" placeholder="Dirección">
+      </div>
+      <div class="form-group col-md-6 mb-3">
+        <label for="idRole">Rol</label>
+        <ng-select [items]="roles" bindLabel="name" bindValue="id" formControlName="idRole" placeholder="Seleccionar Rol">
+        </ng-select>
+        <div *ngIf="formUser.get('idRole').invalid && formUser.get('idRole').touched" class="text-danger">
+          El rol es obligatorio
+        </div>
+      </div>
+      <div class="form-group col-md-6 mb-3">
+        <label for="idCompany">Empresa</label>
+        <ng-select [items]="companies" bindLabel="name" bindValue="id" formControlName="idCompany" placeholder="Seleccionar Empresa">
+        </ng-select>
+        <div *ngIf="formUser.get('idCompany').invalid && formUser.get('idCompany').touched" class="text-danger">
+          La empresa es obligatoria
+        </div>
+      </div>
+    </div>
+    <div class="row justify-content-center p-3">
+      <button (click)="save()" class="btn btn-outline-primary col-md-4 me-2">
+        <i class="fa-solid fa-floppy-disk"></i> Guardar
+      </button>
+      <button (click)="bsModalRef.hide()" class="btn btn-outline-secondary col-md-4">
+        <i class="fa-solid fa-ban" style="color: red"></i> Cerrar
+      </button>
+    </div>
+  </form>
+</div>

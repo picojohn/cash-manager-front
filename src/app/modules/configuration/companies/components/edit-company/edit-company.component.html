@@ -1,0 +1,24 @@
+<div class="container mt-3 p-3">
+  <div class="text-center">
+    <h2 class="p-3"><i class="fa-solid fa-building" style="color:#0039a5;"></i> {{ title }}</h2>
+  </div>
+  <form [formGroup]="formCompany">
+    <div class="row justify-content-center p-3">
+      <div class="form-group col-md-8 mb-3">
+        <label for="name">Nombre</label>
+        <input type="text" class="form-control" formControlName="name" placeholder="Nombre de la empresa">
+        <div *ngIf="formCompany.get('name').invalid && formCompany.get('name').touched" class="text-danger">
+          El nombre es obligatorio
+        </div>
+      </div>
+    </div>
+    <div class="row justify-content-center p-3">
+      <button (click)="save()" class="btn btn-outline-primary col-md-4 me-2">
+        <i class="fa-solid fa-floppy-disk"></i> Guardar
+      </button>
+      <button (click)="bsModalRef.hide()" class="btn btn-outline-secondary col-md-4">
+        <i class="fa-solid fa-ban" style="color: red"></i> Cerrar
+      </button>
+    </div>
+  </form>
+</div>

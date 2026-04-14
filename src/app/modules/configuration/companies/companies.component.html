@@ -1,0 +1,62 @@
+<div class="card_titulo px-5 mt-5">
+  <div class="titulo col-10">
+    <h2>Empresas</h2>
+    <p>Crea y gestiona las empresas del sistema.</p>
+  </div>
+</div>
+
+<div class="container px-5">
+  <div class="row justify-content-center">
+    <div class="row justify-content-between p-3">
+      <h3 class="col-md-6"><i class="fa-solid fa-building" id="icon_subtitle"></i> Gestión de Empresas</h3>
+      <div class="card_search col-md-3 position-relative">
+        <input type="search" [(ngModel)]="buscador" class="form-control" placeholder="Buscar">
+        <i class="fas fa-search position-absolute" id="icon_search"></i>
+      </div>
+      <button *ngIf="permisionBoolean.INSERT" (click)="newCompany()"
+        class="btn btn-outline-primary btn-ms btn-block col-md-2" id="create_boton">
+        <i class="fa-solid fa-circle-plus"></i> Crear
+      </button>
+    </div>
+
+    <div class="scroll col-md-12">
+      <table class="table table-responsive">
+        <thead class="cont_head">
+          <tr>
+            <th>ID</th>
+            <th>NOMBRE</th>
+            <th *ngIf="permisionBoolean.STATUS">ESTADO</th>
+            <th>ACCIONES</th>
+          </tr>
+        </thead>
+        <tbody class="cont_body">
+          <tr *ngFor="let company of filterData() | paginate: {itemsPerPage: totalPaginas, currentPage: page, id: 'itemCompanies'}">
+            <td>{{company.id}}</td>
+            <td><p id="td_1">{{company.name}}</p></td>
+            <td *ngIf="permisionBoolean.STATUS">
+              <button class="button_estado" (click)="statesCompany(company.id)"
+                [ngStyle]="{background: company.status == 1 ? 'chartreuse' : 'red'}">
+                <i class="fa-solid fa-check" style="color: white;"></i>
+              </button>
+            </td>
+            <td>
+              <i *ngIf="permisionBoolean.UPDATE" (click)="editCompany(company)" class="fa-solid fa-pen-to-square" id="table_icon_edit"></i>
+              <p *ngIf="!permisionBoolean.UPDATE" style="color: red;">No tienes permisos</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="row justify-content-between text-center p-3">
+    <div class="select col-md-1">
+      <select class="form-select" (change)="numeroPaginas($event)">
+        <option *ngFor="let option of nPaginas" [value]="option" [selected]="option === totalPaginas">{{ option }}</option>
+      </select>
+    </div>
+    <pagination-controls class="col-md-5" style="padding-top: 13px; color: #0a3754; font-weight: 400;"
+      id="itemCompanies" (pageChange)="page=$event" previousLabel="Anterior" nextLabel="Siguiente">
+    </pagination-controls>
+  </div>
+</div>
