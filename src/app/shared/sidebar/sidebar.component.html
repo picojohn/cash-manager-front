@@ -34,28 +34,17 @@
           [title]="menuOrientation === 'compact' ? menu.nameModule : ''">
           <div class="nav-module-left">
             <i [class]="menu.iconModule" class="nav-icon"></i>
-            <span *ngIf="menuOrientation !== 'compact'">{{menu.nameModule}}</span>
+            <span class="nav-module-text">{{menu.nameModule}}</span>
           </div>
-          <i *ngIf="menuOrientation !== 'compact'" class="fa-solid fa-chevron-down nav-arrow" [class.rotated]="menu.isOpen"></i>
+          <i class="fa-solid fa-chevron-down nav-arrow" [class.rotated]="menu.isOpen"></i>
         </button>
 
-        <div class="nav-children" *ngIf="menu.isOpen && menuOrientation !== 'compact'">
+        <div class="nav-children" *ngIf="menu.isOpen">
           <a *ngFor="let sub of menu.children"
             class="nav-child"
             routerLink="{{menu.pathModule}}/{{sub.pathSubModule}}"
             routerLinkActive="nav-child-active">
             <span class="nav-dot"></span>
-            {{sub.nameSubModule}}
-          </a>
-        </div>
-
-        <!-- Compact: tooltip/dropdown con children -->
-        <div class="compact-dropdown" *ngIf="menu.isOpen && menuOrientation === 'compact'">
-          <div class="compact-dropdown-title">{{menu.nameModule}}</div>
-          <a *ngFor="let sub of menu.children"
-            class="compact-dropdown-item"
-            routerLink="{{menu.pathModule}}/{{sub.pathSubModule}}"
-            routerLinkActive="nav-child-active">
             {{sub.nameSubModule}}
           </a>
         </div>

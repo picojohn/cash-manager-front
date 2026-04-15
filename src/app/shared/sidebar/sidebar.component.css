@@ -314,18 +314,45 @@
 /* ===== COMPACT SIDEBAR ===== */
 .sidebar-compact {
   width: 70px;
+  transition: width 0.25s ease;
+  overflow: hidden;
+}
+
+.sidebar-compact:hover {
+  width: 260px;
+  box-shadow: 4px 0 16px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar-compact .sidebar-logo {
   padding: 12px 8px;
+  display: flex;
+  justify-content: center;
 }
 
 .sidebar-compact .logo-compact {
   width: 40px !important;
+  transition: width 0.25s ease;
+}
+
+.sidebar-compact:hover .logo-compact {
+  width: 160px !important;
+}
+
+.sidebar-compact .nav-label {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.sidebar-compact:hover .nav-label {
+  opacity: 1;
 }
 
 .sidebar-compact .nav-menu {
   padding: 0 6px;
+}
+
+.sidebar-compact:hover .nav-menu {
+  padding: 0 12px;
 }
 
 .sidebar-compact .nav-module {
@@ -333,50 +360,32 @@
   padding: 12px 0;
 }
 
+.sidebar-compact:hover .nav-module {
+  justify-content: space-between;
+  padding: 10px 14px;
+}
+
+.sidebar-compact .nav-module-text,
+.sidebar-compact .nav-arrow {
+  display: none;
+}
+
+.sidebar-compact:hover .nav-module-text,
+.sidebar-compact:hover .nav-arrow {
+  display: inline;
+}
+
 .sidebar-compact .nav-icon {
   font-size: 18px;
   width: auto;
 }
 
-.sidebar-compact .nav-group {
-  position: relative;
+.sidebar-compact .nav-children {
+  display: none;
 }
 
-.compact-dropdown {
-  position: absolute;
-  left: 70px;
-  top: 0;
-  background: var(--bg-surface, #fff);
-  border: 1px solid var(--border-color, #e8ecf1);
-  border-radius: 8px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  min-width: 180px;
-  z-index: 1100;
-  padding: 8px 0;
-}
-
-.compact-dropdown-title {
-  padding: 8px 14px;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--text-muted, #94a3b8);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  border-bottom: 1px solid var(--border-color, #e8ecf1);
-}
-
-.compact-dropdown-item {
+.sidebar-compact:hover .nav-children {
   display: block;
-  padding: 8px 14px;
-  font-size: 13px;
-  color: var(--text-secondary, #64748b);
-  text-decoration: none;
-  transition: all 0.15s;
-}
-
-.compact-dropdown-item:hover {
-  background: var(--primary-light, #eef2ff);
-  color: var(--primary, #4f46e5);
 }
 
 .compact-expanded {
