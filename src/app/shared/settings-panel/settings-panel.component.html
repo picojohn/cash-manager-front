@@ -1,13 +1,8 @@
-<!-- Floating button -->
-<button class="settings-fab" (click)="toggle()" [class.hidden]="isOpen">
-  <i class="fa-solid fa-gear fa-spin"></i>
-</button>
-
 <!-- Backdrop -->
 <div class="settings-backdrop" *ngIf="isOpen" (click)="toggle()"></div>
 
 <!-- Panel -->
-<div class="settings-drawer" [class.open]="isOpen">
+<div class="settings-drawer" [ngClass]="[drawerPosition, isOpen ? 'open' : '']">
   <div class="settings-header">
     <h5>Settings</h5>
     <button class="settings-close" (click)="toggle()">

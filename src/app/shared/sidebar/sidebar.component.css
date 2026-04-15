@@ -311,6 +311,81 @@
   color: #64748b;
 }
 
+/* ===== DARK MODE ===== */
+:host-context(.dark-mode) .sidebar {
+  background: var(--bg-sidebar);
+  border-color: var(--border-color);
+}
+
+:host-context(.dark-mode) .sidebar-logo {
+  border-color: var(--border-color);
+}
+
+:host-context(.dark-mode) .nav-label span {
+  color: var(--text-muted);
+}
+
+:host-context(.dark-mode) .nav-module {
+  color: var(--text-secondary);
+}
+
+:host-context(.dark-mode) .nav-module:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+}
+
+:host-context(.dark-mode) .nav-module.active {
+  background: var(--primary-light);
+}
+
+:host-context(.dark-mode) .nav-child {
+  color: var(--text-muted);
+}
+
+:host-context(.dark-mode) .nav-child:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+}
+
+:host-context(.dark-mode) .topbar {
+  background: var(--bg-surface);
+  border-color: var(--border-color);
+}
+
+:host-context(.dark-mode) .btn-toggle {
+  border-color: var(--border-color);
+  color: var(--text-secondary);
+}
+
+:host-context(.dark-mode) .btn-toggle:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+:host-context(.dark-mode) .topbar-user-info strong {
+  color: var(--text-primary);
+}
+
+:host-context(.dark-mode) .topbar-user:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* ===== RTL SUPPORT ===== */
+:host-context([dir="rtl"]) .sidebar {
+  right: 0;
+  left: auto;
+  border-right: none;
+  border-left: 1px solid var(--border-color, #e8ecf1);
+}
+
+:host-context([dir="rtl"]) .sidebar.sidebar-collapsed {
+  transform: translateX(100%);
+}
+
+:host-context([dir="rtl"]) .main-content.expanded {
+  margin-left: 0;
+  margin-right: 260px;
+}
+
 /* ===== MOBILE ===== */
 @media (max-width: 768px) {
   .sidebar {

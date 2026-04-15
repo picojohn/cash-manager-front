@@ -11,6 +11,7 @@ export class SettingsPanelComponent implements OnInit, OnDestroy {
 
   isOpen = false;
   config: ThemeConfig;
+  drawerPosition: 'pos-right' | 'pos-left' = 'pos-right';
   private sub: Subscription;
 
   colorOptions = [
@@ -27,7 +28,10 @@ export class SettingsPanelComponent implements OnInit, OnDestroy {
   constructor(private themeService: ThemeService) {}
 
   ngOnInit() {
-    this.sub = this.themeService.config$.subscribe(c => this.config = c);
+    this.sub = this.themeService.config$.subscribe(c => {
+      this.config = c;
+      this.drawerPosition = c.layoutDirection === 'rtl' ? 'pos-left' : 'pos-right';
+    });
   }
 
   ngOnDestroy() {

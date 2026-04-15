@@ -5,6 +5,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { ErrorService } from 'src/app/shared/services/error.service';
 import { PanelService } from '../../../panel/services/panel.service';
+import { UserStateService } from 'src/app/shared/services/user-state.service';
 
 @Component({
   selector: 'app-edit-company',
@@ -22,6 +23,7 @@ export class EditCompanyComponent implements OnInit {
     public toast: ToastrService,
     private errorService: ErrorService,
     private panelService: PanelService,
+    private userStateService: UserStateService,
   ) { }
 
   ngOnInit(): void {
@@ -49,6 +51,12 @@ export class EditCompanyComponent implements OnInit {
         ? this.panelService.editCompany(this.formCompany.value)
         : this.panelService.newCompany(this.formCompany.value)
     ).then(_ => {
+      // Si editó la empresa del usuario actual, actualizar el header
+      const currentUser = this.userStateService.usuarioActual;
+      const formData = this.formCompany.value;
+      if (this.company && currentUser && currentUser.idCompany === formData.id) {
+        this.userStateService.updateUsuario({ companyName: formData.name });
+      }
       this.bsModalRef.hide();
       this.toast.success(`Empresa ${this.company ? 'modificada' : 'creada'} correctamente`);
     }, err => {
