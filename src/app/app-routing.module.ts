@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './authentication/components/login/login.component';
 import { SidebarComponent } from './shared/sidebar/sidebar.component';
 import { content } from './shared/routes/content-routes';
+import { AuthenticationGuard } from './authentication/authentication.guard';
 
 const routes: Routes = [
   {
@@ -14,8 +15,7 @@ const routes: Routes = [
     path: 'gestiones',
     component: SidebarComponent,
     children: content,
-   // canActivate: [AuthenticationGuard],
-
+    canActivate: [AuthenticationGuard],
   },
   {
     path: 'authentication',

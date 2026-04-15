@@ -1,27 +1,146 @@
-# MenuBoostrap
+# Cash Manager - Frontend
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.16.
+Aplicación web construida con **Angular 18 + Bootstrap** para el sistema de gestión Cash Manager.
 
-## Development server
+## Stack Tecnológico
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- **Angular** 18.x
+- **Bootstrap** 5 + ngx-bootstrap
+- **ng-select** (Dropdowns)
+- **ngx-toastr** (Notificaciones)
+- **ngx-pagination** (Paginación)
+- **SweetAlert2** (Diálogos de confirmación)
+- **jwt-decode** (Decodificación de tokens)
 
-## Code scaffolding
+## Funcionalidades
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### Sistema de autenticación
+- Login con email/password
+- JWT token almacenado en localStorage
+- Guard de rutas protegidas
+- Cambio de contraseña
 
-## Build
+### Sistema de roles y permisos
+- Menú dinámico basado en rol del usuario (Module > SubModule)
+- Permisos por submódulo: INSERT, UPDATE, DELETE, STATUS
+- Permisos codificados en base64
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+### Vistas CRUD
+- **Panel**: Gestión de Módulos, SubMódulos y Roles (con asignación de permisos)
+- **Usuarios**: CRUD con asignación de rol y empresa
+- **Empresas**: CRUD con cambio de estado
 
-## Running unit tests
+### Sistema de temas (personalizable por usuario)
+- **Modo**: Light / Dark
+- **Colores**: 8 colores primarios (indigo, blue, pink, red, orange, green, teal, cyan)
+- **Orientación del menú**: Vertical, Horizontal, Compacto
+- **Dirección**: LTR / RTL
+- Se guarda por usuario en la base de datos
+- Acceso desde el dropdown del usuario > "Personalizar Tema"
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### Sidebar (3 modos)
+- **Vertical**: Sidebar lateral clásico con módulos desplegables
+- **Horizontal**: Navbar superior con dropdowns
+- **Compacto**: Solo iconos, se expande suavemente con hover
 
-## Running end-to-end tests
+## Configuración
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+### Environment
 
-## Further help
+Archivo `src/environments/environment.ts`:
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+```typescript
+export const environment = {
+  production: false,
+  // Local
+  // endpoint: 'http://localhost:54750',
+  // Remoto
+  endpoint: 'https://cash-manager-back.onrender.com',
+};
+```
+
+## Instalación
+
+```bash
+npm install
+```
+
+## Ejecución
+
+```bash
+# Desarrollo (puerto 4760)
+npm start
+
+# Build producción
+npm run build
+```
+
+## Deploy en Firebase
+
+```bash
+# 1. Asegurar que environment apunta a Render
+# 2. Build de producción
+npm run build
+
+# 3. Login en Firebase (solo la primera vez)
+firebase login
+
+# 4. Deploy
+firebase deploy --only hosting
+```
+
+- **Proyecto Firebase**: `cash-manager-b2416`
+- **URL**: `https://cash-manager-b2416.web.app`
+
+## Estructura del proyecto
+
+```
+src/app/
+├── app.module.ts
+├── app-routing.module.ts
+├── authentication/                    # Login, recuperar contraseña
+│   ├── components/login/
+│   ├── interface/
+│   └── service/
+├── modules/
+│   ├── home/                          # Dashboard principal
+│   └── configuration/                 # Módulo de configuración
+│       ├── panel/                     # Gestión módulos, submódulos, roles
+│       │   ├── components/
+│       │   │   ├── edit-module/
+│       │   │   ├── edit-subModule/
+│       │   │   ├── edit-role/
+│       │   │   └── edit-menu-permissions/
+│       │   └── services/panel.service.ts
+│       ├── users/                     # Gestión de usuarios
+│       │   └── components/edit-user/
+│       └── companies/                 # Gestión de empresas
+│           └── components/edit-company/
+└── shared/
+    ├── sidebar/                       # Sidebar con 3 modos
+    ├── settings-panel/                # Panel de personalización de tema
+    ├── services/
+    │   ├── theme.service.ts           # Servicio de temas
+    │   ├── user-state.service.ts      # Estado reactivo del usuario
+    │   ├── permission.service.ts      # Permisos por vista
+    │   ├── error.service.ts           # Manejo de errores
+    │   └── sweetAlert.service.ts      # Diálogos de confirmación
+    ├── interface/
+    │   ├── menu.interface.ts
+    │   └── permission.interface.ts
+    ├── data/const.ts                  # Iconos FontAwesome, constantes
+    └── routes/content-routes.ts       # Rutas del contenido principal
+```
+
+## Conexiones
+
+| Servicio | URL | Uso |
+|----------|-----|-----|
+| Backend (Render) | `https://cash-manager-back.onrender.com` | API REST |
+| Frontend (Firebase) | `https://cash-manager-b2416.web.app` | Aplicación web |
+| Base de datos (TiDB) | `gateway01.us-east-1.prod.aws.tidbcloud.com:4000` | MySQL compatible |
+
+## Credenciales de prueba
+
+- **Email**: `picojohn@hotmail.com`
+- **Password**: `Admin123`
