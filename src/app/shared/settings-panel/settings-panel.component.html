@@ -1,0 +1,71 @@
+<!-- Floating button -->
+<button class="settings-fab" (click)="toggle()" [class.hidden]="isOpen">
+  <i class="fa-solid fa-gear fa-spin"></i>
+</button>
+
+<!-- Backdrop -->
+<div class="settings-backdrop" *ngIf="isOpen" (click)="toggle()"></div>
+
+<!-- Panel -->
+<div class="settings-drawer" [class.open]="isOpen">
+  <div class="settings-header">
+    <h5>Settings</h5>
+    <button class="settings-close" (click)="toggle()">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+
+  <div class="settings-body">
+
+    <!-- Theme Mode -->
+    <div class="settings-section">
+      <h6>Theme Mode</h6>
+      <p>Choose Light or Dark Mode</p>
+      <div class="settings-options">
+        <button class="option-btn" [class.selected]="config.mode === 'light'" (click)="setMode('light')">
+          <i class="fa-solid fa-sun" style="color: #f59e0b;"></i>
+        </button>
+        <button class="option-btn" [class.selected]="config.mode === 'dark'" (click)="setMode('dark')">
+          <i class="fa-solid fa-moon" style="color: #1e293b;"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Primary Color -->
+    <div class="settings-section">
+      <h6>Custom Theme</h6>
+      <p>Choose your Primary color</p>
+      <div class="color-options">
+        <button *ngFor="let c of colorOptions"
+          class="color-swatch"
+          [style.background]="c.color"
+          [class.selected]="config.primaryColor === c.key"
+          (click)="setColor(c.key)">
+          <i *ngIf="config.primaryColor === c.key" class="fa-solid fa-check" style="color: white; font-size: 12px;"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Theme Layout -->
+    <div class="settings-section">
+      <h6>Theme Layout</h6>
+      <p>LTR / RTL</p>
+      <div class="settings-options">
+        <button class="option-btn" [class.selected]="config.layoutDirection === 'ltr'" (click)="setDirection('ltr')">
+          LTR
+        </button>
+        <button class="option-btn" [class.selected]="config.layoutDirection === 'rtl'" (click)="setDirection('rtl')">
+          RTL
+        </button>
+      </div>
+    </div>
+
+    <!-- Reset -->
+    <div class="settings-section">
+      <button class="reset-btn" (click)="resetLayout()">
+        <i class="fa-solid fa-rotate-left"></i> Reset Layout
+      </button>
+    </div>
+
+  </div>
+</div>

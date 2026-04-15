@@ -1,60 +1,131 @@
-@media only screen and (max-width: 480px) {
-    img {
-        width: 100%;
-    }
+h2 {
+  color: #2c3e50;
+  font-weight: 700;
 }
 
-i:hover{
-    color: white !important;
+/* Module card */
+.module-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
 }
 
-i{
-
-    font-size: 15px;
+.module-header {
+  background: #f5f7fa;
+  color: #2c3e50;
+  padding: 14px 20px;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid #e0e0e0;
 }
 
-h2{
-    color: gray;
+.module-header i {
+  margin-right: 8px;
+  font-size: 18px;
 }
 
-p{
-    color: gray;
-    font-weight: 600;
+/* SubModule cards */
+.submodule-card {
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 14px;
+  transition: all 0.2s ease;
+  background: #fafafa;
+  height: 100%;
 }
 
-select {
-    color: #33ccff !important;
-    border: none;
-    font-weight: 600;
+.submodule-card:hover {
+  border-color: #33ccff;
+  box-shadow: 0 2px 8px rgba(51, 204, 255, 0.15);
 }
 
-.card_titulo{
-    padding-left: 7rem;
-    padding-top: 2rem;
+.submodule-active {
+  border-color: #33ccff;
+  background: #f0fbff;
 }
 
-.btn-outline-primary{
-    --bs-btn-hover-bg: #33ccff;
-    border-color: #33ccff;
+.submodule-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
 }
 
-.button_estado{
-    border: 0;
-    background-color: chartreuse;
-    border-radius: 10px;
+.submodule-header strong {
+  color: #2c3e50;
+  font-size: 14px;
 }
 
-.icono i{
-    font-size: 4rem;
-    color:#0039a5;
+.submodule-icon {
+  color: #16a500 !important;
+  font-size: 14px !important;
 }
 
-#checkbox {
+.submodule-header .form-check-input {
+  margin-top: 0;
+}
+
+/* Action items */
+.submodule-actions {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #e8e8e8;
+}
+
+.action-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.action-item .form-check-input {
+  margin-top: 0;
+}
+
+.action-label {
+  font-size: 13px;
+  color: #555;
+  font-weight: 500;
+  margin: 0;
+}
+
+/* Checkbox styling */
+.form-check-input {
   border-color: #0039a5;
-
+  cursor: pointer;
 }
 
- input:checked {
+.form-check-input:checked {
   background-color: #33ccff;
+  border-color: #33ccff;
 }
 
+/* Buttons */
+.btn-primary {
+  background-color: #33ccff;
+  border-color: #33ccff;
+  color: #fff;
+  font-weight: 600;
+  padding: 10px 30px;
+  border-radius: 8px;
+}
+
+.btn-primary:hover {
+  background-color: #1ab8e8;
+  border-color: #1ab8e8;
+}
+
+.btn-outline-secondary {
+  font-weight: 600;
+  padding: 10px 30px;
+  border-radius: 8px;
+}
+
+@media only screen and (max-width: 480px) {
+  .col-md-4 {
+    margin-bottom: 12px;
+  }
+}

@@ -5,6 +5,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { ErrorService } from 'src/app/shared/services/error.service';
 import { PanelService } from '../../../panel/services/panel.service';
+import { UserStateService } from 'src/app/shared/services/user-state.service';
 
 @Component({
   selector: 'app-edit-user',
@@ -17,16 +18,21 @@ export class EditUserComponent implements OnInit {
   public roles: Array<any> = [];
   public companies: Array<any> = [];
   public formUser: FormGroup;
+  public cargarFormulario: boolean = false;
 
   constructor(
     public bsModalRef: BsModalRef,
     public toast: ToastrService,
     private errorService: ErrorService,
     private panelService: PanelService,
+    private userStateService: UserStateService,
   ) { }
 
   ngOnInit(): void {
-    this.buildForm();
+    setTimeout(() => {
+      this.buildForm();
+      this.cargarFormulario = true;
+    }, 100);
   }
 
   buildForm() {
@@ -52,6 +58,17 @@ export class EditUserComponent implements OnInit {
         ? this.panelService.editUser(this.formUser.value)
         : this.panelService.newUser(this.formUser.value)
     ).then(_ => {
+      // Si editó el usuario actual, actualizar el header
+      const currentUser = this.userStateService.usuarioActual;
+      const formData = this.formUser.value;
+      if (currentUser && currentUser.id === formData.id) {
+        this.userStateService.updateUsuario({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          idCompany: formData.idCompany,
+        });
+      }
       this.bsModalRef.hide();
       this.toast.success(`Usuario ${this.user ? 'modificado' : 'creado'} correctamente`);
     }, err => {

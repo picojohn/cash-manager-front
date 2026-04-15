@@ -35,12 +35,12 @@
         <div class="card_form col-md-6">
           <div class="form-group">
             <label>Icono</label>
-            <ng-select formControlName="icon" [items]="freeIcons" bindValue="value" placeholder="Seleccione un ícono">
+            <ng-select formControlName="icon" [items]="freeIcons" placeholder="Seleccione un ícono">
               <ng-template ng-option-tmp let-item="item">
-                <i [class]="'fas ' + item"></i>
+                <i [class]="item"></i> {{ item }}
               </ng-template>
               <ng-template ng-label-tmp let-item="item">
-                <i [class]="'fas ' + item"></i>
+                <i [class]="item"></i> {{ item }}
               </ng-template>
             </ng-select>
             <div *ngIf="formSubModule.controls.icon.touched && formSubModule.controls.icon.errors?.required"

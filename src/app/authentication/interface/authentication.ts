@@ -26,4 +26,5 @@ export interface IDatosUsuario {
   email: string;
   phone: string;
   idCompany: number;
+  companyName: string;
 }

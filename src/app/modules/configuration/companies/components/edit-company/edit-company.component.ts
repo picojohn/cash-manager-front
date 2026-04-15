@@ -15,6 +15,7 @@ export class EditCompanyComponent implements OnInit {
   public title: string;
   public company: any;
   public formCompany: FormGroup;
+  public cargarFormulario: boolean = false;
 
   constructor(
     public bsModalRef: BsModalRef,
@@ -24,7 +25,10 @@ export class EditCompanyComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.buildForm();
+    setTimeout(() => {
+      this.buildForm();
+      this.cargarFormulario = true;
+    }, 100);
   }
 
   buildForm() {

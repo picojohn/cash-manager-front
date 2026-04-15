@@ -1,3 +1,36 @@
+/* ===== THEME CSS VARIABLES ===== */
+:root {
+  --primary: #4f46e5;
+  --primary-light: #eef2ff;
+  --primary-hover: #4338ca;
+  --bg-body: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-sidebar: #ffffff;
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
+  --border-color: #e8ecf1;
+  --table-header-bg: var(--primary);
+  --table-hover-border: var(--primary);
+}
+
+.dark-mode {
+  --bg-body: #0f172a;
+  --bg-surface: #1e293b;
+  --bg-sidebar: #1e293b;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border-color: #334155;
+  --table-header-bg: #334155;
+}
+
+body {
+  background-color: var(--bg-body) !important;
+  color: var(--text-primary) !important;
+  transition: background-color 0.3s, color 0.3s;
+}
+
 /* Boton */
 .btn-outline-primary {
   --bs-btn-color: #0a3754 !important;

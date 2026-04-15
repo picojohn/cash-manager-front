@@ -8,6 +8,7 @@ import { ErrorService } from '../../../shared/services/error.service';
 import jwt_decode from 'jwt-decode';
 import { ETitleMessages } from 'src/app/shared/enums/error.service.eum';
 import { IDatosUsuario } from '../../interface/authentication';
+import { ThemeService } from 'src/app/shared/services/theme.service';
 
 @Component({
   selector: 'app-login',
@@ -24,7 +25,8 @@ export class LoginComponent implements OnInit {
     public toast: ToastrService,
     public authenticationService: AuthenticationService,
     private router: Router,
-    private errorService: ErrorService
+    private errorService: ErrorService,
+    private themeService: ThemeService,
   ) { }
 
   async ngOnInit() {
@@ -61,6 +63,7 @@ export class LoginComponent implements OnInit {
             email: decodedJSON['userLogin']['email'],
             phone: decodedJSON['userLogin']['phone'],
             idCompany: decodedJSON['userLogin']['idCompany'],
+            companyName: decodedJSON['userLogin']['companyName'],
           }
           localStorage.setItem('datosUsuario', JSON.stringify(datosUsuario));
           localStorage.setItem('role', JSON.stringify(decodedJSON['userLogin']['role']));
@@ -79,6 +82,8 @@ export class LoginComponent implements OnInit {
 
           let permisos = JSON.stringify(permission)
           localStorage.setItem('permission', permisos);
+          // Cargar preferencias de tema del usuario
+          this.themeService.initFromLogin(decodedJSON['userLogin']['themePreferences']);
           this.router.navigate(['gestiones'])
         } else {
           this.toast.error('Usuario o contraseña errada', ETitleMessages.LOGIN);

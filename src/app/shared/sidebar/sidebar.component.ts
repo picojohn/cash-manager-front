@@ -1,19 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { IDatosUsuario } from 'src/app/authentication/interface/authentication';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { IMenuSidebar } from '../interface/menu.interface';
+import { UserStateService } from '../services/user-state.service';
+import { SettingsPanelComponent } from '../settings-panel/settings-panel.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css']
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent implements OnInit, OnDestroy {
   public datosUsuario: IDatosUsuario;
   public menuSidebar: Array<IMenuSidebar> = []
   private bsModalRef!: BsModalRef;
+  private userSub: Subscription;
 
+  @ViewChild('settingsPanel') settingsPanel: SettingsPanelComponent;
   public isMenuOpen = true;
   public isDropdownOpen = false;
 
@@ -27,18 +32,22 @@ export class SidebarComponent implements OnInit {
 
   constructor(
     private modalService: BsModalService,
+    private userStateService: UserStateService,
   ) { }
 
-  /**
-   * metodo de inicio de angular
-   */
   ngOnInit(): void {
-    this.datosUsuario = JSON.parse(localStorage.getItem('datosUsuario'))
+    this.userSub = this.userStateService.usuario$.subscribe(datos => {
+      this.datosUsuario = datos;
+    });
     this.menuSidebar = JSON.parse(localStorage.getItem('menu'))
     this.menuSidebar = this.menuSidebar.map(menu => ({
       ...menu,
       isOpen: false
     }));
+  }
+
+  ngOnDestroy(): void {
+    if (this.userSub) this.userSub.unsubscribe();
   }
 
   /**
@@ -72,6 +81,10 @@ export class SidebarComponent implements OnInit {
    * metodo para cambiar el pass del usuario
    * @param id
    */
+  openSettings() {
+    this.settingsPanel.toggle();
+  }
+
   changePassword(id: number) {
     this.bsModalRef = this.modalService.show(ChangePasswordComponent, {
       backdrop: 'static',

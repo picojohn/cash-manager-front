@@ -1,91 +1,92 @@
-<div class="card">
-  <nav class="sidebar flex-column p-3 bg-light shadow text-white"
-    [ngClass]="{'sidebar-open': isMenuOpen, 'collapsed': !isMenuOpen}">
-    <div class="justify-content-center align-items-center text-center p-2">
-      <div class="row justify-content-center col-md-2">
-        <button class="btn btn-outline-primary btn-ms btn-block col-md-1" id="boton_menu" (click)="toggleMenu()"
-          *ngIf="isMobile()">
-          <i class="fas" [ngClass]="isMenuOpen ? 'fa-solid fa-bars' : 'fa-regular fa-chart-bar'"></i>
-        </button>
-      </div>
-      <div class="card_img col-md-12 mb-3 py-3">
-        <img src="/assets/img/logocash.jpg">
-      </div>
+<div class="layout">
+  <nav class="sidebar" [ngClass]="{'sidebar-open': isMenuOpen, 'sidebar-collapsed': !isMenuOpen}">
+
+    <!-- Mobile toggle -->
+    <div class="sidebar-mobile-toggle" *ngIf="isMobile()">
+      <button class="btn-toggle" (click)="toggleMenu()">
+        <i class="fa-solid" [ngClass]="isMenuOpen ? 'fa-xmark' : 'fa-bars'"></i>
+      </button>
     </div>
 
-    <div class="card_titulo mt-5">
-      <p class="titulo text-center"><strong><i class="fa-solid fa-layer-group"></i> Navegación</strong></p>
+    <!-- Logo -->
+    <div class="sidebar-logo">
+      <img src="/assets/img/logocash.jpg" alt="Logo">
     </div>
-    <div class="row justify-content-center" *ngFor="let menu of menuSidebar">
-      <span (click)="toggleDropdown(menu.idModule)" class="btn btn-outline-primary">
-        <i [ngClass]="['fa-solid', menu.iconModule]"></i> {{menu.nameModule}}
-        <i class="fas col-2" [ngClass]="menu.isOpen ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
-      </span>
-      <div *ngIf="menu.isOpen" class="mt-2 d-flex flex-column justify-content-center">
-        <div *ngFor="let sub of menu.children">
-          <div class="row shadow justify-content-center" id="micro">
-            <span><a class="dropdown-item" routerLink="{{menu.pathModule}}/{{sub.pathSubModule}}">
-              <i [ngClass]="['fa-solid', sub.iconSubModule]" id="icon_micro"></i>
-              {{sub.nameSubModule}}
-            </a></span>
+
+    <!-- Navigation label -->
+    <div class="nav-label">
+      <span>NAVEGACIÓN</span>
+    </div>
+
+    <!-- Menu items -->
+    <div class="nav-menu">
+      <div *ngFor="let menu of menuSidebar" class="nav-group">
+        <button class="nav-module"
+          [class.active]="menu.isOpen"
+          (click)="toggleDropdown(menu.idModule)">
+          <div class="nav-module-left">
+            <i [class]="menu.iconModule" class="nav-icon"></i>
+            <span>{{menu.nameModule}}</span>
           </div>
+          <i class="fa-solid fa-chevron-down nav-arrow" [class.rotated]="menu.isOpen"></i>
+        </button>
+
+        <div class="nav-children" *ngIf="menu.isOpen">
+          <a *ngFor="let sub of menu.children"
+            class="nav-child"
+            routerLink="{{menu.pathModule}}/{{sub.pathSubModule}}"
+            routerLinkActive="nav-child-active">
+            <span class="nav-dot"></span>
+            {{sub.nameSubModule}}
+          </a>
         </div>
       </div>
     </div>
-
 
   </nav>
 
-  <div class="flex-grow-1" [ngClass]="{'expanded': isMenuOpen, 'collapsed': !isMenuOpen}">
-    <header class="row bg-light shadow text-secondary px-3 align-items-center">
-      <div class="card_botton col-2">
-        <button class="btn btn-outline-primary btn-ms btn-block col-md-1" id="boton_menu" (click)="toggleMenu()">
-          <i class="fas" [ngClass]="isMenuOpen ? 'fa-solid fa-bars' : 'fa-regular fa-chart-bar'"></i>
+  <!-- Main content -->
+  <div class="main-content" [ngClass]="{'expanded': isMenuOpen, 'full-width': !isMenuOpen}">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="btn-toggle" (click)="toggleMenu()">
+          <i class="fa-solid" [ngClass]="isMenuOpen ? 'fa-bars' : 'fa-bars'"></i>
         </button>
       </div>
-      <div class="row justify-content-end col-10">
-        <div class="card_user justify-content-end d-flex col-10">
-          <div class="card_noti col-2 py-5">
-            <i class="fa-solid fa-bell justify-content-center d-flex" type="button" id="dropdownMenuButton"
-              data-bs-toggle="dropdown" aria-expanded="false"></i>
-            <div class="micro-menu" id="micro">
-              <ul class="dropdown-menu shadow" id="ul_noti" aria-labelledby="dropdownMenuButton">
-                <li *ngFor="let notification of notifications">
-                  <a class="dropdown-item" href="#">
-                    <i class="{{ notification.icon }}"></i>&nbsp;&nbsp;{{ notification.message }}
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="profile1 d-flex align-items-center">
-            <img src="/assets/img/perfil.png" onError="this.src='/assets/img/perfil.png'" alt="Perfil" />
-            <div class="row text-center" id="dropdown_user">
-              <strong>{{datosUsuario.name}}</strong>
-              <span>Menu Principal</span>
-            </div>
-            <div class="micro-menu" id="micro">
-              <ul class="dropdown-menu shadow col-md-12" id="ul">
-                <li><a class="dropdown-item" href="#"><i class="fa-solid fa-user col-md-2" id="icon_micro"></i>
-                    Mi Perfil</a></li>
-                <li><a class="dropdown-item"><i class="fa-solid fa-key col-md-2" id="icon_micro"></i>
-                    Cambiar Contraseña</a></li>
-                <li><a class="dropdown-item" href="#"><i class="fa-solid fa-right-from-bracket col-md-2"
-                      id="icon_micro"></i>
-                    Cerrar Sesión</a></li>
-              </ul>
-              <i class="fa-solid fa-caret-down ms-auto col-md-1" data-bs-toggle="dropdown" aria-expanded="false"></i>
-            </div>
-          </div>
+      <div class="topbar-right">
+        <!-- Notifications -->
+        <div class="topbar-noti">
+          <i class="fa-solid fa-bell" type="button" data-bs-toggle="dropdown" aria-expanded="false"></i>
+          <ul class="dropdown-menu dropdown-menu-end shadow">
+            <li *ngFor="let notification of notifications">
+              <a class="dropdown-item" href="#">
+                <i class="{{ notification.icon }}"></i>&nbsp;&nbsp;{{ notification.message }}
+              </a>
+            </li>
+          </ul>
         </div>
+
+        <!-- User profile -->
+        <div class="topbar-user" data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="/assets/img/perfil.png" alt="Perfil" />
+          <div class="topbar-user-info">
+            <strong>{{datosUsuario?.name}}</strong>
+            <span>{{datosUsuario?.companyName || 'Sin empresa'}}</span>
+          </div>
+          <i class="fa-solid fa-caret-down"></i>
+        </div>
+        <ul class="dropdown-menu dropdown-menu-end shadow">
+          <li><a class="dropdown-item" href="#"><i class="fa-solid fa-user"></i> Mi Perfil</a></li>
+          <li><a class="dropdown-item" (click)="changePassword(datosUsuario?.id)"><i class="fa-solid fa-key"></i> Cambiar Contraseña</a></li>
+          <li><a class="dropdown-item" (click)="openSettings()"><i class="fa-solid fa-palette"></i> Personalizar Tema</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" routerLink="/login"><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</a></li>
+        </ul>
       </div>
     </header>
-    <!--
-    <main class="container p-3">
-      <h3><i class="fa-solid fa-chart-pie col-1 py-2" style="font-size: 25px; color:#0a3754; width: 25px;"></i>
-        Bienvenido al Panel de Administración</h3>
-      <p>Aquí puedes gestionar tu aplicación de manera efectiva.</p>
-    </main> -->
+
     <router-outlet></router-outlet>
   </div>
+
+  <app-settings-panel #settingsPanel></app-settings-panel>
 </div>

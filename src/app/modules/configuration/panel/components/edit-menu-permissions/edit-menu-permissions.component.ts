@@ -55,7 +55,11 @@ export class EditMenuPermissionsComponent implements OnInit {
                 o => o.idModule === mod.id && o.idSubModule === sm.id
               );
               if (match) {
-                existingActions = JSON.parse(atob(match.actions)).permision;
+                const actionNames = { INSERT: 'Crear', UPDATE: 'Editar', STATUS: 'Estado', DELETE: 'Borrar' };
+                existingActions = JSON.parse(atob(match.actions)).permision.map(a => ({
+                  ...a,
+                  name: actionNames[a.action] || a.action
+                }));
                 mostrar = true;
               }
             }

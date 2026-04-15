@@ -2,6 +2,7 @@
   <div class="text-center">
     <h2 class="p-3"><i class="fa-solid fa-user" style="color:#0039a5;"></i> {{ title }}</h2>
   </div>
+  <div *ngIf="cargarFormulario">
   <form [formGroup]="formUser">
     <div class="row justify-content-center p-3">
       <div class="form-group col-md-6 mb-3">
@@ -52,4 +53,5 @@
       </button>
     </div>
   </form>
+  </div>
 </div>
