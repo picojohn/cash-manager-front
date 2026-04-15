@@ -8,6 +8,7 @@ export interface ThemeConfig {
   primaryColor: string;
   sidebarCaption: boolean;
   layoutDirection: 'ltr' | 'rtl';
+  menuOrientation: 'vertical' | 'horizontal' | 'compact';
 }
 
 const THEME_COLORS = {
@@ -26,6 +27,7 @@ const DEFAULT_THEME: ThemeConfig = {
   primaryColor: 'indigo',
   sidebarCaption: true,
   layoutDirection: 'ltr',
+  menuOrientation: 'vertical',
 };
 
 @Injectable({

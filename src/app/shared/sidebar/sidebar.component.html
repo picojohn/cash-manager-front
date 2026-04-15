@@ -1,5 +1,12 @@
-<div class="layout">
-  <nav class="sidebar" [ngClass]="{'sidebar-open': isMenuOpen, 'sidebar-collapsed': !isMenuOpen}">
+<div class="layout" [class.layout-horizontal]="menuOrientation === 'horizontal'">
+
+  <!-- ===== SIDEBAR VERTICAL / COMPACT ===== -->
+  <nav class="sidebar" *ngIf="menuOrientation !== 'horizontal'"
+    [ngClass]="{
+      'sidebar-open': isMenuOpen,
+      'sidebar-collapsed': !isMenuOpen,
+      'sidebar-compact': menuOrientation === 'compact'
+    }">
 
     <!-- Mobile toggle -->
     <div class="sidebar-mobile-toggle" *ngIf="isMobile()">
@@ -10,28 +17,29 @@
 
     <!-- Logo -->
     <div class="sidebar-logo">
-      <img src="/assets/img/logocash.jpg" alt="Logo">
+      <img *ngIf="menuOrientation !== 'compact'" src="/assets/img/logocash.jpg" alt="Logo">
+      <img *ngIf="menuOrientation === 'compact'" src="/assets/img/logocash.jpg" alt="Logo" class="logo-compact">
     </div>
 
     <!-- Navigation label -->
-    <div class="nav-label">
+    <div class="nav-label" *ngIf="menuOrientation !== 'compact'">
       <span>NAVEGACIÓN</span>
     </div>
 
     <!-- Menu items -->
     <div class="nav-menu">
       <div *ngFor="let menu of menuSidebar" class="nav-group">
-        <button class="nav-module"
-          [class.active]="menu.isOpen"
-          (click)="toggleDropdown(menu.idModule)">
+        <button class="nav-module" [class.active]="menu.isOpen"
+          (click)="toggleDropdown(menu.idModule)"
+          [title]="menuOrientation === 'compact' ? menu.nameModule : ''">
           <div class="nav-module-left">
             <i [class]="menu.iconModule" class="nav-icon"></i>
-            <span>{{menu.nameModule}}</span>
+            <span *ngIf="menuOrientation !== 'compact'">{{menu.nameModule}}</span>
           </div>
-          <i class="fa-solid fa-chevron-down nav-arrow" [class.rotated]="menu.isOpen"></i>
+          <i *ngIf="menuOrientation !== 'compact'" class="fa-solid fa-chevron-down nav-arrow" [class.rotated]="menu.isOpen"></i>
         </button>
 
-        <div class="nav-children" *ngIf="menu.isOpen">
+        <div class="nav-children" *ngIf="menu.isOpen && menuOrientation !== 'compact'">
           <a *ngFor="let sub of menu.children"
             class="nav-child"
             routerLink="{{menu.pathModule}}/{{sub.pathSubModule}}"
@@ -40,21 +48,89 @@
             {{sub.nameSubModule}}
           </a>
         </div>
+
+        <!-- Compact: tooltip/dropdown con children -->
+        <div class="compact-dropdown" *ngIf="menu.isOpen && menuOrientation === 'compact'">
+          <div class="compact-dropdown-title">{{menu.nameModule}}</div>
+          <a *ngFor="let sub of menu.children"
+            class="compact-dropdown-item"
+            routerLink="{{menu.pathModule}}/{{sub.pathSubModule}}"
+            routerLinkActive="nav-child-active">
+            {{sub.nameSubModule}}
+          </a>
+        </div>
       </div>
     </div>
-
   </nav>
 
-  <!-- Main content -->
-  <div class="main-content" [ngClass]="{'expanded': isMenuOpen, 'full-width': !isMenuOpen}">
-    <header class="topbar">
+  <!-- ===== HORIZONTAL NAVBAR ===== -->
+  <nav class="horizontal-nav" *ngIf="menuOrientation === 'horizontal'">
+    <div class="horizontal-logo">
+      <img src="/assets/img/logocash.jpg" alt="Logo">
+    </div>
+    <div class="horizontal-menu">
+      <div *ngFor="let menu of menuSidebar" class="horizontal-group">
+        <button class="horizontal-module" (click)="toggleDropdown(menu.idModule)" [class.active]="menu.isOpen">
+          <i [class]="menu.iconModule"></i>
+          <span>{{menu.nameModule}}</span>
+          <i class="fa-solid fa-chevron-down nav-arrow" [class.rotated]="menu.isOpen"></i>
+        </button>
+        <div class="horizontal-dropdown" *ngIf="menu.isOpen">
+          <a *ngFor="let sub of menu.children"
+            class="horizontal-dropdown-item"
+            routerLink="{{menu.pathModule}}/{{sub.pathSubModule}}"
+            routerLinkActive="nav-child-active">
+            <span class="nav-dot"></span>
+            {{sub.nameSubModule}}
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="horizontal-right">
+      <div class="topbar-noti">
+        <i class="fa-solid fa-bell" type="button" data-bs-toggle="dropdown" aria-expanded="false"></i>
+        <ul class="dropdown-menu dropdown-menu-end shadow">
+          <li *ngFor="let notification of notifications">
+            <a class="dropdown-item" href="#">
+              <i class="{{ notification.icon }}"></i>&nbsp;&nbsp;{{ notification.message }}
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="topbar-user" data-bs-toggle="dropdown" aria-expanded="false">
+        <img src="/assets/img/perfil.png" alt="Perfil" />
+        <div class="topbar-user-info">
+          <strong>{{datosUsuario?.name}}</strong>
+          <span>{{datosUsuario?.companyName || 'Sin empresa'}}</span>
+        </div>
+        <i class="fa-solid fa-caret-down"></i>
+      </div>
+      <ul class="dropdown-menu dropdown-menu-end shadow">
+        <li><a class="dropdown-item" href="#"><i class="fa-solid fa-user"></i> Mi Perfil</a></li>
+        <li><a class="dropdown-item" (click)="changePassword(datosUsuario?.id)"><i class="fa-solid fa-key"></i> Cambiar Contraseña</a></li>
+        <li><a class="dropdown-item" (click)="openSettings()"><i class="fa-solid fa-palette"></i> Personalizar Tema</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" routerLink="/login"><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <div class="main-content"
+    [ngClass]="{
+      'expanded': isMenuOpen && menuOrientation === 'vertical',
+      'full-width': !isMenuOpen || menuOrientation === 'horizontal',
+      'compact-expanded': menuOrientation === 'compact'
+    }">
+
+    <!-- Topbar (solo vertical y compact) -->
+    <header class="topbar" *ngIf="menuOrientation !== 'horizontal'">
       <div class="topbar-left">
         <button class="btn-toggle" (click)="toggleMenu()">
-          <i class="fa-solid" [ngClass]="isMenuOpen ? 'fa-bars' : 'fa-bars'"></i>
+          <i class="fa-solid fa-bars"></i>
         </button>
       </div>
       <div class="topbar-right">
-        <!-- Notifications -->
         <div class="topbar-noti">
           <i class="fa-solid fa-bell" type="button" data-bs-toggle="dropdown" aria-expanded="false"></i>
           <ul class="dropdown-menu dropdown-menu-end shadow">
@@ -65,8 +141,6 @@
             </li>
           </ul>
         </div>
-
-        <!-- User profile -->
         <div class="topbar-user" data-bs-toggle="dropdown" aria-expanded="false">
           <img src="/assets/img/perfil.png" alt="Perfil" />
           <div class="topbar-user-info">

@@ -41,6 +41,35 @@
       </div>
     </div>
 
+    <!-- Menu Orientation -->
+    <div class="settings-section">
+      <h6>Orientación del menú</h6>
+      <p>Seleccione vertical, horizontal o compacto</p>
+      <div class="orientation-options">
+        <button class="orient-btn" [class.selected]="config.menuOrientation === 'vertical'" (click)="setOrientation('vertical')">
+          <div class="orient-preview">
+            <div class="orient-sidebar-v"></div>
+            <div class="orient-content-v"></div>
+          </div>
+          <span>Vertical</span>
+        </button>
+        <button class="orient-btn" [class.selected]="config.menuOrientation === 'horizontal'" (click)="setOrientation('horizontal')">
+          <div class="orient-preview">
+            <div class="orient-topbar-h"></div>
+            <div class="orient-content-h"></div>
+          </div>
+          <span>Horizontal</span>
+        </button>
+        <button class="orient-btn" [class.selected]="config.menuOrientation === 'compact'" (click)="setOrientation('compact')">
+          <div class="orient-preview">
+            <div class="orient-sidebar-c"></div>
+            <div class="orient-content-c"></div>
+          </div>
+          <span>Compacto</span>
+        </button>
+      </div>
+    </div>
+
     <!-- Theme Layout -->
     <div class="settings-section">
       <h6>Theme Layout</h6>

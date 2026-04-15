@@ -5,6 +5,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { IMenuSidebar } from '../interface/menu.interface';
 import { UserStateService } from '../services/user-state.service';
 import { SettingsPanelComponent } from '../settings-panel/settings-panel.component';
+import { ThemeService } from '../services/theme.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -21,6 +22,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
   @ViewChild('settingsPanel') settingsPanel: SettingsPanelComponent;
   public isMenuOpen = true;
   public isDropdownOpen = false;
+  public menuOrientation: string = 'vertical';
+  private themeSub: Subscription;
 
 
   notifications = [
@@ -33,11 +36,15 @@ export class SidebarComponent implements OnInit, OnDestroy {
   constructor(
     private modalService: BsModalService,
     private userStateService: UserStateService,
+    private themeService: ThemeService,
   ) { }
 
   ngOnInit(): void {
     this.userSub = this.userStateService.usuario$.subscribe(datos => {
       this.datosUsuario = datos;
+    });
+    this.themeSub = this.themeService.config$.subscribe(config => {
+      this.menuOrientation = config.menuOrientation;
     });
     this.menuSidebar = JSON.parse(localStorage.getItem('menu'))
     this.menuSidebar = this.menuSidebar.map(menu => ({
@@ -48,6 +55,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     if (this.userSub) this.userSub.unsubscribe();
+    if (this.themeSub) this.themeSub.unsubscribe();
   }
 
   /**

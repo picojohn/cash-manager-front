@@ -54,6 +54,10 @@ export class SettingsPanelComponent implements OnInit, OnDestroy {
     this.themeService.setTheme({ sidebarCaption: !this.config.sidebarCaption });
   }
 
+  setOrientation(orientation: 'vertical' | 'horizontal' | 'compact') {
+    this.themeService.setTheme({ menuOrientation: orientation });
+  }
+
   setDirection(dir: 'ltr' | 'rtl') {
     this.themeService.setTheme({ layoutDirection: dir });
   }
