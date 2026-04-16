@@ -17,13 +17,13 @@
 
     <!-- Logo -->
     <div class="sidebar-logo">
-      <img *ngIf="menuOrientation !== 'compact'" src="/assets/img/logocash.jpg" alt="Logo">
-      <img *ngIf="menuOrientation === 'compact'" src="/assets/img/logocash.jpg" alt="Logo" class="logo-compact">
+      <img *ngIf="menuOrientation !== 'compact'" src="/assets/img/logocash.png" alt="Logo">
+      <img *ngIf="menuOrientation === 'compact'" src="/assets/img/logocash.png" alt="Logo" class="logo-compact">
     </div>
 
     <!-- Navigation label -->
     <div class="nav-label" *ngIf="menuOrientation !== 'compact'">
-      <span>NAVEGACIÓN</span>
+      <span>{{ 'GENERAL.NAVIGATION' | translate }}</span>
     </div>
 
     <!-- Menu items -->
@@ -55,7 +55,7 @@
   <!-- ===== HORIZONTAL NAVBAR ===== -->
   <nav class="horizontal-nav" *ngIf="menuOrientation === 'horizontal'">
     <div class="horizontal-logo">
-      <img src="/assets/img/logocash.jpg" alt="Logo">
+      <img src="/assets/img/logocash.png" alt="Logo">
     </div>
     <div class="horizontal-menu">
       <div *ngFor="let menu of menuSidebar" class="horizontal-group">
@@ -76,6 +76,20 @@
       </div>
     </div>
     <div class="horizontal-right">
+      <!-- Language Switcher -->
+      <div class="topbar-lang">
+        <i class="fa-solid fa-globe" (click)="toggleLangDropdown($event)"></i>
+        <div class="lang-dropdown" *ngIf="langDropdownOpen">
+          <button class="lang-option" [class.lang-active]="currentLang === 'es'" (click)="switchLang('es')">
+            <img src="/assets/img/flag-es.svg" class="lang-flag-img" alt="ES">
+            <span>Español</span>
+          </button>
+          <button class="lang-option" [class.lang-active]="currentLang === 'en'" (click)="switchLang('en')">
+            <img src="/assets/img/flag-us.svg" class="lang-flag-img" alt="EN">
+            <span>English</span>
+          </button>
+        </div>
+      </div>
       <div class="topbar-noti">
         <i class="fa-solid fa-bell" type="button" data-bs-toggle="dropdown" aria-expanded="false"></i>
         <ul class="dropdown-menu dropdown-menu-end shadow">
@@ -90,16 +104,16 @@
         <img src="/assets/img/perfil.png" alt="Perfil" />
         <div class="topbar-user-info">
           <strong>{{datosUsuario?.name}}</strong>
-          <span>{{datosUsuario?.companyName || 'Sin empresa'}}</span>
+          <span>{{datosUsuario?.companyName || ('SIDEBAR.NO_COMPANY' | translate)}}</span>
         </div>
         <i class="fa-solid fa-caret-down"></i>
       </div>
       <ul class="dropdown-menu dropdown-menu-end shadow">
-        <li><a class="dropdown-item" href="#"><i class="fa-solid fa-user"></i> Mi Perfil</a></li>
-        <li><a class="dropdown-item" (click)="changePassword(datosUsuario?.id)"><i class="fa-solid fa-key"></i> Cambiar Contraseña</a></li>
-        <li><a class="dropdown-item" (click)="openSettings()"><i class="fa-solid fa-palette"></i> Personalizar Tema</a></li>
+        <li><a class="dropdown-item" (click)="openProfile()"><i class="fa-solid fa-user"></i> {{ 'SIDEBAR.MY_PROFILE' | translate }}</a></li>
+        <li><a class="dropdown-item" (click)="changePassword(datosUsuario?.id)"><i class="fa-solid fa-key"></i> {{ 'SIDEBAR.CHANGE_PASSWORD' | translate }}</a></li>
+        <li><a class="dropdown-item" (click)="openSettings()"><i class="fa-solid fa-palette"></i> {{ 'SIDEBAR.CUSTOMIZE_THEME' | translate }}</a></li>
         <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item" routerLink="/authentication/login"><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</a></li>
+        <li><a class="dropdown-item" routerLink="/authentication/login"><i class="fa-solid fa-right-from-bracket"></i> {{ 'SIDEBAR.LOGOUT' | translate }}</a></li>
       </ul>
     </div>
   </nav>
@@ -120,6 +134,20 @@
         </button>
       </div>
       <div class="topbar-right">
+        <!-- Language Switcher -->
+        <div class="topbar-lang">
+          <i class="fa-solid fa-globe" (click)="toggleLangDropdown($event)"></i>
+          <div class="lang-dropdown" *ngIf="langDropdownOpen">
+            <button class="lang-option" [class.lang-active]="currentLang === 'es'" (click)="switchLang('es')">
+              <img src="/assets/img/flag-es.svg" class="lang-flag-img" alt="ES">
+              <span>Español</span>
+            </button>
+            <button class="lang-option" [class.lang-active]="currentLang === 'en'" (click)="switchLang('en')">
+              <img src="/assets/img/flag-us.svg" class="lang-flag-img" alt="EN">
+              <span>English</span>
+            </button>
+          </div>
+        </div>
         <div class="topbar-noti">
           <i class="fa-solid fa-bell" type="button" data-bs-toggle="dropdown" aria-expanded="false"></i>
           <ul class="dropdown-menu dropdown-menu-end shadow">
@@ -134,16 +162,16 @@
           <img src="/assets/img/perfil.png" alt="Perfil" />
           <div class="topbar-user-info">
             <strong>{{datosUsuario?.name}}</strong>
-            <span>{{datosUsuario?.companyName || 'Sin empresa'}}</span>
+            <span>{{datosUsuario?.companyName || ('SIDEBAR.NO_COMPANY' | translate)}}</span>
           </div>
           <i class="fa-solid fa-caret-down"></i>
         </div>
         <ul class="dropdown-menu dropdown-menu-end shadow">
-          <li><a class="dropdown-item" href="#"><i class="fa-solid fa-user"></i> Mi Perfil</a></li>
-          <li><a class="dropdown-item" (click)="changePassword(datosUsuario?.id)"><i class="fa-solid fa-key"></i> Cambiar Contraseña</a></li>
-          <li><a class="dropdown-item" (click)="openSettings()"><i class="fa-solid fa-palette"></i> Personalizar Tema</a></li>
+          <li><a class="dropdown-item" (click)="openProfile()"><i class="fa-solid fa-user"></i> {{ 'SIDEBAR.MY_PROFILE' | translate }}</a></li>
+          <li><a class="dropdown-item" (click)="changePassword(datosUsuario?.id)"><i class="fa-solid fa-key"></i> {{ 'SIDEBAR.CHANGE_PASSWORD' | translate }}</a></li>
+          <li><a class="dropdown-item" (click)="openSettings()"><i class="fa-solid fa-palette"></i> {{ 'SIDEBAR.CUSTOMIZE_THEME' | translate }}</a></li>
           <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" routerLink="/authentication/login"><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</a></li>
+          <li><a class="dropdown-item" routerLink="/authentication/login"><i class="fa-solid fa-right-from-bracket"></i> {{ 'SIDEBAR.LOGOUT' | translate }}</a></li>
         </ul>
       </div>
     </header>

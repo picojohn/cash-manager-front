@@ -1,0 +1,279 @@
+{
+  "GENERAL": {
+    "SAVE": "Guardar",
+    "CLOSE": "Cerrar",
+    "CANCEL": "Cancelar",
+    "CREATE": "Crear",
+    "EDIT": "Editar",
+    "DELETE": "Borrar",
+    "SEARCH": "Buscar....",
+    "ACTIONS": "Acciones",
+    "STATUS": "Estado",
+    "ACTIVE": "Activo",
+    "INACTIVE": "Inactivo",
+    "NAME": "Nombre",
+    "EMAIL": "Email",
+    "PHONE": "Teléfono",
+    "ADDRESS": "Dirección",
+    "PASSWORD": "Contraseña",
+    "PREVIOUS": "Anterior",
+    "NEXT": "Siguiente",
+    "SHOWING": "Mostrando",
+    "OF": "de",
+    "YES": "Sí",
+    "CHANGE": "Cambiar",
+    "BACK": "Volver",
+    "REQUIRED_FIELDS": "Todos los campos son obligatorios",
+    "NAVIGATION": "NAVEGACIÓN"
+  },
+
+  "AUTH": {
+    "LOGIN": {
+      "TITLE": "Iniciar sesión",
+      "INFO_MESSAGE": "¡Favor ingresar la información requerida!",
+      "EMAIL_LABEL": "Correo",
+      "EMAIL_PLACEHOLDER": "email address",
+      "EMAIL_REQUIRED": "El correo es requerido",
+      "EMAIL_INVALID": "El correo es invalido",
+      "PASSWORD_LABEL": "Contraseña",
+      "PASSWORD_PLACEHOLDER": "Password",
+      "PASSWORD_REQUIRED": "La contraseña es requerida",
+      "SUBMIT": "Iniciar sesión",
+      "LOGGING_IN": "Iniciando sesión...",
+      "FORGOT_PASSWORD": "Has olvidado tu contraseña?",
+      "WRONG_CREDENTIALS": "Usuario o contraseña errada"
+    },
+    "RECOVER_PASSWORD": {
+      "TITLE": "Recuperación de Contraseña",
+      "DESCRIPTION": "Por este medio podrás solicitar un código de verificación mediante el correo electrónico, con el cual accederás a la opción de nueva contraseña.",
+      "ENTER_EMAIL": "Ingresa el Correo electrónico.",
+      "EMAIL_LABEL": "Correo",
+      "EMAIL_PLACEHOLDER": "Example@gmail.com",
+      "REQUEST_CODE": "Solicitar Código",
+      "ENTER_CODE_DESCRIPTION": "Ingresa a tu Correo electrónico y digita el código recibido.",
+      "CODE_LABEL": "Código",
+      "CODE_PLACEHOLDER": "Ingresa codigo",
+      "VERIFY_CODE": "Verificar Código",
+      "NEW_PASSWORD_DESCRIPTION": "Ingresa la nueva contraseña y confírmala.",
+      "NEW_PASSWORD_LABEL": "Nueva Contraseña",
+      "NEW_PASSWORD_PLACEHOLDER": "Mínimo 8 Caracteres",
+      "PASSWORD_REQUIREMENTS": "La nueva contraseña debe contener al menos una mayuscula una minuscula un numero y minimo 6 caracteres",
+      "CONFIRM_PASSWORD_LABEL": "Confirmar Contraseña",
+      "PASSWORDS_NOT_MATCH": "Las contraseñas no son iguales",
+      "RESET_PASSWORD": "Restablecer Contraseña"
+    }
+  },
+
+  "HOME": {
+    "WELCOME": "Bienvenido, ",
+    "DESCRIPTION": "En este espacio, encontrarás las principales herramientas para tu crecimiento dentro de la Compañía."
+  },
+
+  "SIDEBAR": {
+    "MY_PROFILE": "Mi Perfil",
+    "CHANGE_PASSWORD": "Cambiar Contraseña",
+    "CUSTOMIZE_THEME": "Personalizar Tema",
+    "LOGOUT": "Cerrar Sesión",
+    "NO_COMPANY": "Sin empresa"
+  },
+
+  "CHANGE_PASSWORD": {
+    "CURRENT_PASSWORD_LABEL": "Contraseña Actual",
+    "CURRENT_PASSWORD_PLACEHOLDER": "Contraseña Actual",
+    "CURRENT_PASSWORD_REQUIRED": "La contraseña es requerida",
+    "NEW_PASSWORD_LABEL": "Contraseña Nueva",
+    "NEW_PASSWORD_PLACEHOLDER": "Nueva Contraseña",
+    "NEW_PASSWORD_REQUIRED": "La nueva contraseña es requerida",
+    "PASSWORD_REQUIREMENTS": "La nueva contraseña debe contener al menos una mayuscula una minuscula un numero y minimo 6 caracteres",
+    "CONFIRM_PASSWORD_LABEL": "Confirmar Contraseña",
+    "CONFIRM_PASSWORD_PLACEHOLDER": "Repetir contraseña",
+    "CONFIRM_PASSWORD_REQUIRED": "La repetir contraseña es requerida"
+  },
+
+  "USERS": {
+    "TITLE": "Usuarios",
+    "ADD_USER": "Agregar usuario",
+    "CREATE_USER": "Crear Usuario",
+    "EDIT_USER": "Editar Usuario",
+    "NAME_PLACEHOLDER": "Nombre completo",
+    "NAME_REQUIRED": "El nombre es obligatorio",
+    "EMAIL_PLACEHOLDER": "correo@ejemplo.com",
+    "EMAIL_REQUIRED": "Email válido es obligatorio",
+    "PHONE_PLACEHOLDER": "Teléfono",
+    "ADDRESS_PLACEHOLDER": "Dirección",
+    "ROLE_LABEL": "Rol",
+    "ROLE_PLACEHOLDER": "Seleccionar Rol",
+    "ROLE_REQUIRED": "El rol es obligatorio",
+    "COMPANY_LABEL": "Empresa",
+    "COMPANY_PLACEHOLDER": "Seleccionar Empresa",
+    "COMPANY_REQUIRED": "La empresa es obligatoria",
+    "USER_UPDATED": "Usuario modificado correctamente",
+    "USER_CREATED": "Usuario creado correctamente",
+    "STATUS_CHANGED": "Estado cambiado correctamente",
+    "TABLE": {
+      "NUMBER": "#",
+      "NAME": "Nombre",
+      "EMAIL": "Email",
+      "PHONE": "Teléfono",
+      "ROLE": "Rol",
+      "COMPANY": "Empresa",
+      "STATUS": "Estado",
+      "ACTIONS": "Acciones"
+    }
+  },
+
+  "COMPANIES": {
+    "TITLE": "Empresas",
+    "ADD_COMPANY": "Agregar empresa",
+    "CREATE_COMPANY": "Crear Empresa",
+    "EDIT_COMPANY": "Editar Empresa",
+    "NAME_PLACEHOLDER": "Nombre de la empresa",
+    "NAME_REQUIRED": "El nombre es obligatorio",
+    "COMPANY_UPDATED": "Empresa modificada correctamente",
+    "COMPANY_CREATED": "Empresa creada correctamente",
+    "STATUS_CHANGED": "Estado cambiado correctamente",
+    "TABLE": {
+      "NUMBER": "#",
+      "NAME": "Nombre",
+      "STATUS": "Estado",
+      "ACTIONS": "Acciones"
+    }
+  },
+
+  "PANEL": {
+    "TABS": {
+      "MODULES": "Módulos",
+      "SUBMODULES": "SubMódulos",
+      "ROLES": "Roles"
+    },
+    "MODULES": {
+      "TITLE": "Gestión de Módulos",
+      "CREATE_MODULE": "Crear Modulo",
+      "EDIT_MODULE": "Editar Modulo",
+      "NAME_PLACEHOLDER": "Ingrese el nombre del modulo",
+      "NAME_REQUIRED": "El nombre es requerido",
+      "URL_LABEL": "Url",
+      "URL_PLACEHOLDER": "Ingrese la url",
+      "URL_REQUIRED": "La url es requerida",
+      "ICON_LABEL": "Icono",
+      "ICON_PLACEHOLDER": "Seleccione un ícono",
+      "ICON_REQUIRED": "El icono es requerido",
+      "MODULE_UPDATED": "Modulos modificado correctamente",
+      "MODULE_CREATED": "Modulos creado correctamente",
+      "FORM_REQUIRED": "Debes llenar todos los datos requiridos del formulario",
+      "TABLE": {
+        "NUMBER": "#",
+        "NAME": "Nombre",
+        "PATH": "Path",
+        "ICON": "Icono",
+        "ACTIONS": "Acciones"
+      }
+    },
+    "SUBMODULES": {
+      "TITLE": "Gestión de SubMódulos",
+      "CREATE_SUBMODULE": "Crear SubModulo",
+      "EDIT_SUBMODULE": "Editar SubModulo",
+      "NAME_PLACEHOLDER": "Ingrese el nombre del modulo",
+      "NAME_REQUIRED": "El nombre es requerido",
+      "URL_LABEL": "Url",
+      "URL_PLACEHOLDER": "Ingrese la url",
+      "URL_REQUIRED": "La url es requerida",
+      "ICON_LABEL": "Icono",
+      "ICON_PLACEHOLDER": "Seleccione un ícono",
+      "ICON_REQUIRED": "El icono es requerido",
+      "MODULE_LABEL": "Módulos",
+      "MODULE_REQUIRED": "El modulo es requerido",
+      "SUBMODULE_UPDATED": "SubModulo modificado correctamente",
+      "SUBMODULE_CREATED": "SubModulo creado correctamente",
+      "FORM_REQUIRED": "Debes llenar todos los datos requiridos del formulario",
+      "TABLE": {
+        "NUMBER": "#",
+        "NAME": "Nombre",
+        "PATH": "Path",
+        "MODULE": "Módulo",
+        "STATUS": "Estado",
+        "ACTIONS": "Acciones"
+      }
+    },
+    "ROLES": {
+      "TITLE": "Gestión de Roles",
+      "CREATE_ROLE": "Crear Rol",
+      "EDIT_ROLE": "Editar Rol",
+      "NAME_PLACEHOLDER": "Ingrese el nombre del impuesto",
+      "NAME_REQUIRED": "El nombre es requerido",
+      "ROLE_UPDATED": "Rol modificado correctamente",
+      "ROLE_CREATED": "Rol creado correctamente",
+      "FORM_REQUIRED": "Debes llenar todos los datos requiridos del formulario",
+      "STATUS_CHANGED": "Estado cambiado correctamente",
+      "TABLE": {
+        "NUMBER": "#",
+        "NAME": "Nombre",
+        "STATUS": "Estado",
+        "ACTIONS": "Acciones"
+      }
+    },
+    "PERMISSIONS": {
+      "EDIT_MENU_PERMISSIONS": "Editar Menú Permisos",
+      "ROLE_LABEL": "Rol:",
+      "ACTION_CREATE": "Crear",
+      "ACTION_EDIT": "Editar",
+      "ACTION_STATUS": "Estado",
+      "ACTION_DELETE": "Borrar",
+      "SELECT_PERMISSION": "Debes seleccionar al menos un permiso",
+      "PERMISSIONS_UPDATED": "Permisos modificados correctamente",
+      "PERMISSIONS_CREATED": "Permisos creados correctamente"
+    }
+  },
+
+  "SETTINGS": {
+    "TITLE": "Settings",
+    "THEME_MODE": "Theme Mode",
+    "THEME_MODE_DESC": "Choose Light or Dark Mode",
+    "CUSTOM_THEME": "Custom Theme",
+    "CUSTOM_THEME_DESC": "Choose your Primary color",
+    "MENU_ORIENTATION": "Orientación del menú",
+    "MENU_ORIENTATION_DESC": "Seleccione vertical, horizontal o compacto",
+    "VERTICAL": "Vertical",
+    "HORIZONTAL": "Horizontal",
+    "COMPACT": "Compacto",
+    "THEME_LAYOUT": "Theme Layout",
+    "RESET_LAYOUT": "Reset Layout"
+  },
+
+  "SWEET_ALERT": {
+    "ARE_YOU_SURE": "¿Estas Seguro?",
+    "CANNOT_REVERT": "¡No podrás revertir esto!",
+    "YES_DELETE": "¡Sí, bórralo!",
+    "CHANGE_STATUS_TITLE": "¿Estás seguro?",
+    "CHANGE_STATUS_TEXT": "¡Vas a cambiar el estado!",
+    "CHANGE_INVOICE_STATUS": "¡Vas a cambiar el estado de la factura",
+    "CHANGE_PHOTO": "¿Estas Seguro que deseas cambiar la foto?"
+  },
+
+  "TITLES": {
+    "AUTHENTICATION": "Autenticación",
+    "UNKNOWN_ERROR": "Error desconocido",
+    "LOGIN": "Login",
+    "CURRENCIES": "Monedas",
+    "COUNTRIES": "Países",
+    "TAXES": "Impuestos",
+    "MODULES": "Modulos",
+    "SUBMODULES": "SubModulos",
+    "GROUPS": "Grupos",
+    "TYPES": "Tipos",
+    "CATEGORIES": "Categorías",
+    "PAYMENT_METHODS": "Formas de Pago",
+    "PAYMENT_MEANS": "Medio de pago",
+    "TABS": "Pestañas",
+    "ROLES_PERMISSIONS": "Roles y permisos",
+    "PRODUCTS": "Productos",
+    "INVOICE": "Factura"
+  },
+
+  "NOTIFICATIONS": {
+    "NEW_MESSAGE": "Tienes un nuevo mensaje.",
+    "TASK_COMPLETED": "Tu tarea ha sido completada.",
+    "ACCOUNT_PROBLEM": "Hay un problema con tu cuenta.",
+    "NEW_USER_REGISTERED": "Nuevo usuario se ha registrado."
+  }
+}

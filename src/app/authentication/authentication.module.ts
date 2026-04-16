@@ -9,6 +9,7 @@ import { AuthenticationComponent } from './authentication.component';
 import { SharedModule } from '../shared/shared.module';
 import { LoginComponent } from './components/login/login.component';
 import { RecoverPasswordComponent } from './components/recover-password/recover-password.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -20,6 +21,7 @@ import { RecoverPasswordComponent } from './components/recover-password/recover-
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
+    TranslateModule,
   ],
 
   declarations: [

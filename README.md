@@ -140,7 +140,4 @@ src/app/
 | Frontend (Firebase) | `https://cash-manager-b2416.web.app` | Aplicación web |
 | Base de datos (TiDB) | `gateway01.us-east-1.prod.aws.tidbcloud.com:4000` | MySQL compatible |
 
-## Credenciales de prueba
 
-- **Email**: `picojohn@hotmail.com`
-- **Password**: `Admin123`

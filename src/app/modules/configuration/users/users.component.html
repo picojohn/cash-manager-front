@@ -1,11 +1,11 @@
 <div class="view-card">
   <div class="view-header">
-    <h3 class="view-title">Usuarios</h3>
+    <h3 class="view-title">{{ 'USERS.TITLE' | translate }}</h3>
     <div class="view-search">
-      <input type="search" [(ngModel)]="buscador" class="form-control" placeholder="Buscar....">
+      <input type="search" [(ngModel)]="buscador" class="form-control" [placeholder]="'GENERAL.SEARCH' | translate">
     </div>
     <button *ngIf="permisionBoolean.INSERT" (click)="newUser()" class="btn-create">
-      <i class="fa-solid fa-plus"></i> Agregar usuario
+      <i class="fa-solid fa-plus"></i> {{ 'USERS.ADD_USER' | translate }}
     </button>
   </div>
 
@@ -13,14 +13,14 @@
     <table class="modern-table">
       <thead>
         <tr>
-          <th>#</th>
-          <th>Nombre</th>
-          <th>Email</th>
-          <th>Teléfono</th>
-          <th>Rol</th>
-          <th>Empresa</th>
-          <th *ngIf="permisionBoolean.STATUS">Estado</th>
-          <th>Acciones</th>
+          <th>{{ 'USERS.TABLE.NUMBER' | translate }}</th>
+          <th>{{ 'USERS.TABLE.NAME' | translate }}</th>
+          <th>{{ 'USERS.TABLE.EMAIL' | translate }}</th>
+          <th>{{ 'USERS.TABLE.PHONE' | translate }}</th>
+          <th>{{ 'USERS.TABLE.ROLE' | translate }}</th>
+          <th>{{ 'USERS.TABLE.COMPANY' | translate }}</th>
+          <th *ngIf="permisionBoolean.STATUS">{{ 'USERS.TABLE.STATUS' | translate }}</th>
+          <th>{{ 'USERS.TABLE.ACTIONS' | translate }}</th>
         </tr>
       </thead>
       <tbody>
@@ -35,7 +35,7 @@
             <span class="status-badge" (click)="statesUser(user.id)"
               [ngClass]="user.status == 1 ? 'status-active' : 'status-inactive'">
               <i class="fa-solid" [ngClass]="user.status == 1 ? 'fa-circle-check' : 'fa-circle-xmark'"></i>
-              {{user.status == 1 ? 'Activo' : 'Inactivo'}}
+              {{user.status == 1 ? ('GENERAL.ACTIVE' | translate) : ('GENERAL.INACTIVE' | translate)}}
             </span>
           </td>
           <td>
@@ -53,10 +53,10 @@
       <option *ngFor="let option of nPaginas" [value]="option" [selected]="option === totalPaginas">{{ option }}</option>
     </select>
     <span *ngIf="filterData().length" class="pagination-info">
-      Mostrando <strong>{{ (page - 1) * totalPaginas + 1 }}</strong> - <strong>{{ (page * totalPaginas < filterData().length) ? (page * totalPaginas) : filterData().length }}</strong> de <strong>{{ filterData().length }}</strong>
+      {{ 'GENERAL.SHOWING' | translate }} <strong>{{ (page - 1) * totalPaginas + 1 }}</strong> - <strong>{{ (page * totalPaginas < filterData().length) ? (page * totalPaginas) : filterData().length }}</strong> {{ 'GENERAL.OF' | translate }} <strong>{{ filterData().length }}</strong>
     </span>
     <pagination-controls id="itemUsers" (pageChange)="page=$event"
-      previousLabel="Anterior" nextLabel="Siguiente"
+      [previousLabel]="'GENERAL.PREVIOUS' | translate" [nextLabel]="'GENERAL.NEXT' | translate"
       style="font-size: 13px; color: var(--text-secondary);">
     </pagination-controls>
   </div>

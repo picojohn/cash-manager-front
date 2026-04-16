@@ -8,6 +8,7 @@ import { IPermisionValue } from 'src/app/shared/interface/permission.interface';
 import { firstValueFrom } from 'rxjs';
 import { PanelService } from '../panel/services/panel.service';
 import { EditUserComponent } from './components/edit-user/edit-user.component';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-users',
@@ -33,6 +34,7 @@ export class UsersComponent implements OnInit {
     private panelService: PanelService,
     private sweetAlertService: SweetAlertService,
     private permissionService: PermissionService,
+    private translateService: TranslateService,
   ) {
     const pestanas = this.permissionService.getPermissions('users');
     if (pestanas && pestanas.permission) {
@@ -61,7 +63,7 @@ export class UsersComponent implements OnInit {
 
   newUser() {
     this.bsModalRef = this.modalService.show(EditUserComponent, { backdrop: 'static', class: 'modal-lg p-5' });
-    this.bsModalRef.content.title = 'Crear Usuario';
+    this.bsModalRef.content.title = this.translateService.instant('USERS.CREATE_USER');
     this.bsModalRef.content.roles = this.roles;
     this.bsModalRef.content.companies = this.companies;
     this.bsModalRef.onHidden?.subscribe((_) => { this.loadData(); });
@@ -69,7 +71,7 @@ export class UsersComponent implements OnInit {
 
   editUser(user) {
     this.bsModalRef = this.modalService.show(EditUserComponent, { backdrop: 'static', class: 'modal-lg p-5' });
-    this.bsModalRef.content.title = 'Editar Usuario';
+    this.bsModalRef.content.title = this.translateService.instant('USERS.EDIT_USER');
     this.bsModalRef.content.user = user;
     this.bsModalRef.content.roles = this.roles;
     this.bsModalRef.content.companies = this.companies;
@@ -79,7 +81,7 @@ export class UsersComponent implements OnInit {
   async statesUser(id): Promise<void> {
     if (await this.sweetAlertService.alertStatesMessage()) {
       await firstValueFrom(this.panelService.cambiarEstadosByidUser(id)).then(_ => {
-        this.toast.success('Estado cambiado correctamente');
+        this.toast.success(this.translateService.instant('USERS.STATUS_CHANGED'));
         this.loadData();
       }, err => {
         const errorObject = this.errorService.showNotification(err);

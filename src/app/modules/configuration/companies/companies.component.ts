@@ -8,6 +8,7 @@ import { IPermisionValue } from 'src/app/shared/interface/permission.interface';
 import { firstValueFrom } from 'rxjs';
 import { PanelService } from '../panel/services/panel.service';
 import { EditCompanyComponent } from './components/edit-company/edit-company.component';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-companies',
@@ -31,6 +32,7 @@ export class CompaniesComponent implements OnInit {
     private panelService: PanelService,
     private sweetAlertService: SweetAlertService,
     private permissionService: PermissionService,
+    private translateService: TranslateService,
   ) {
     const pestanas = this.permissionService.getPermissions('companies');
     if (pestanas && pestanas.permission) {
@@ -54,13 +56,13 @@ export class CompaniesComponent implements OnInit {
 
   newCompany() {
     this.bsModalRef = this.modalService.show(EditCompanyComponent, { backdrop: 'static', class: 'modal-lg p-5' });
-    this.bsModalRef.content.title = 'Crear Empresa';
+    this.bsModalRef.content.title = this.translateService.instant('COMPANIES.CREATE_COMPANY');
     this.bsModalRef.onHidden?.subscribe((_) => { this.loadData(); });
   }
 
   editCompany(company) {
     this.bsModalRef = this.modalService.show(EditCompanyComponent, { backdrop: 'static', class: 'modal-lg p-5' });
-    this.bsModalRef.content.title = 'Editar Empresa';
+    this.bsModalRef.content.title = this.translateService.instant('COMPANIES.EDIT_COMPANY');
     this.bsModalRef.content.company = company;
     this.bsModalRef.onHidden?.subscribe((_) => { this.loadData(); });
   }
@@ -68,7 +70,7 @@ export class CompaniesComponent implements OnInit {
   async statesCompany(id): Promise<void> {
     if (await this.sweetAlertService.alertStatesMessage()) {
       await firstValueFrom(this.panelService.cambiarEstadosByidCompany(id)).then(_ => {
-        this.toast.success('Estado cambiado correctamente');
+        this.toast.success(this.translateService.instant('COMPANIES.STATUS_CHANGED'));
         this.loadData();
       }, err => {
         const errorObject = this.errorService.showNotification(err);

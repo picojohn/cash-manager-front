@@ -12,30 +12,30 @@
 
         <div class="card_form col-md-6 mb-3">
           <div class="form-group">
-            <label> Nombre </label>
-            <input type="text" class="form-control" formControlName="name" placeholder="Ingrese el nombre del modulo">
+            <label> {{ 'GENERAL.NAME' | translate }} </label>
+            <input type="text" class="form-control" formControlName="name" [placeholder]="'PANEL.MODULES.NAME_PLACEHOLDER' | translate">
             <div *ngIf="formModule.controls.name.touched && formModule.controls.name.errors?.required"
               class="text text-danger">
-              El nombre es requerido
+              {{ 'PANEL.MODULES.NAME_REQUIRED' | translate }}
             </div>
           </div>
         </div>
 
         <div class="card_form col-md-6 mb-3">
           <div class="form-group">
-            <label> Url </label>
-            <input type="text" class="form-control" formControlName="path" placeholder="Ingrese la url">
+            <label> {{ 'PANEL.MODULES.URL_LABEL' | translate }} </label>
+            <input type="text" class="form-control" formControlName="path" [placeholder]="'PANEL.MODULES.URL_PLACEHOLDER' | translate">
             <div *ngIf="formModule.controls.path.touched && formModule.controls.path.errors?.required"
               class="text text-danger">
-              La url es requerida
+              {{ 'PANEL.MODULES.URL_REQUIRED' | translate }}
             </div>
           </div>
         </div>
 
         <div class="card_form col-md-6">
           <div class="form-group">
-            <label>Icono</label>
-            <ng-select formControlName="icon" [items]="freeIcons" placeholder="Seleccione un ícono">
+            <label>{{ 'PANEL.MODULES.ICON_LABEL' | translate }}</label>
+            <ng-select formControlName="icon" [items]="freeIcons" [placeholder]="'PANEL.MODULES.ICON_PLACEHOLDER' | translate">
               <ng-template ng-option-tmp let-item="item">
                 <i [class]="item"></i> {{ item }}
               </ng-template>
@@ -45,7 +45,7 @@
             </ng-select>
             <div *ngIf="formModule.controls.icon.touched && formModule.controls.icon.errors?.required"
               class="text text-danger">
-              El icono es requerido
+              {{ 'PANEL.MODULES.ICON_REQUIRED' | translate }}
             </div>
           </div>
         </div>
@@ -54,10 +54,10 @@
         </div>
         <div class="row justify-content-between p-3 col-md-10">
           <button (click)="saveData()" class="btn btn-outline-primary btn-ms btn-block col-md-5">
-            <i class="fa-solid fa-floppy-disk" style="color: #0a3754"></i><strong> Guardar</strong>
+            <i class="fa-solid fa-floppy-disk" style="color: #0a3754"></i><strong> {{ 'GENERAL.SAVE' | translate }}</strong>
           </button>
           <button (click)="bsModalRef.hide()" class="btn btn-outline-secondary btn-ms btn-block col-md-5">
-            <i class="fa-solid fa-ban" id="icon_cancel"></i><strong> Cerrar</strong>
+            <i class="fa-solid fa-ban" id="icon_cancel"></i><strong> {{ 'GENERAL.CLOSE' | translate }}</strong>
           </button>
         </div>
       </div>

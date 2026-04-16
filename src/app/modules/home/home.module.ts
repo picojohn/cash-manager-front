@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from '../../shared/shared.module';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -13,8 +14,7 @@ import { SharedModule } from '../../shared/shared.module';
     InicioRouterModule,
     FormsModule,
     SharedModule,
-
-
+    TranslateModule,
   ],
   declarations: [HomeComponent]
 })

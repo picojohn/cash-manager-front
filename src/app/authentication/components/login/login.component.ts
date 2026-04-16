@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { firstValueFrom } from 'rxjs';
@@ -9,6 +9,8 @@ import jwt_decode from 'jwt-decode';
 import { ETitleMessages } from 'src/app/shared/enums/error.service.eum';
 import { IDatosUsuario } from '../../interface/authentication';
 import { ThemeService } from 'src/app/shared/services/theme.service';
+import { TranslateService } from '@ngx-translate/core';
+import { LanguageService, Lang } from 'src/app/shared/services/language.service';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +21,9 @@ export class LoginComponent implements OnInit {
 
   public loginForm: FormGroup;
   loadingSession = false;
-  textIniSesssion = 'Iniciar sesión';
+  textIniSesssion = '';
+  currentLang: Lang = 'es';
+  langDropdownOpen = false;
 
   constructor(
     public toast: ToastrService,
@@ -27,11 +31,39 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private errorService: ErrorService,
     private themeService: ThemeService,
+    private translateService: TranslateService,
+    private languageService: LanguageService,
   ) { }
 
   async ngOnInit() {
-    localStorage.clear()
+    const savedLang = localStorage.getItem('lang');
+    localStorage.clear();
+    if (savedLang) localStorage.setItem('lang', savedLang);
+    this.currentLang = this.languageService.currentLang;
     this.buildForm();
+    // Esperar a que se carguen las traducciones
+    this.translateService.get('AUTH.LOGIN.SUBMIT').subscribe(val => {
+      this.textIniSesssion = val;
+    });
+  }
+
+  toggleLangDropdown(event: Event) {
+    event.stopPropagation();
+    this.langDropdownOpen = !this.langDropdownOpen;
+  }
+
+  switchLang(lang: Lang) {
+    this.languageService.switchLang(lang);
+    this.currentLang = lang;
+    this.langDropdownOpen = false;
+    this.translateService.get('AUTH.LOGIN.SUBMIT').subscribe(val => {
+      this.textIniSesssion = val;
+    });
+  }
+
+  @HostListener('document:click')
+  onDocumentClick() {
+    this.langDropdownOpen = false;
   }
 
   private buildForm(): void {
@@ -47,11 +79,11 @@ export class LoginComponent implements OnInit {
   login(): void {
     this.loginForm.markAllAsTouched()
     if (this.loginForm.invalid) {
-      this.toast.info('Todos los campos son obligatorios', ETitleMessages.LOGIN);
+      this.toast.info(this.translateService.instant('GENERAL.REQUIRED_FIELDS'), ETitleMessages.LOGIN);
     }
     else {
       this.loadingSession = true;
-      this.textIniSesssion = 'Iniciando sesión...';
+      this.textIniSesssion = this.translateService.instant('AUTH.LOGIN.LOGGING_IN');
       firstValueFrom(this.authenticationService.login(this.loginForm.value)).then(itemLogin => {
 
         if (itemLogin) {
@@ -86,14 +118,14 @@ export class LoginComponent implements OnInit {
           this.themeService.initFromLogin(decodedJSON['userLogin']['themePreferences']);
           this.router.navigate(['gestiones'])
         } else {
-          this.toast.error('Usuario o contraseña errada', ETitleMessages.LOGIN);
+          this.toast.error(this.translateService.instant('AUTH.LOGIN.WRONG_CREDENTIALS'), ETitleMessages.LOGIN);
         }
 
       }, err => {
         const errorObject = this.errorService.showNotification(err);
         this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
         this.loadingSession = false;
-        this.textIniSesssion = 'Iniciar sesión -';
+        this.textIniSesssion = this.translateService.instant('AUTH.LOGIN.SUBMIT');
       })
     }
   }

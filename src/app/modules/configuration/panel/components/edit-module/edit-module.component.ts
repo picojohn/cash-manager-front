@@ -8,6 +8,7 @@ import { IModule } from '../../interface/panel.interface';
 import { PanelService } from '../../services/panel.service';
 import { constFreeIcons } from 'src/app/shared/data/const';
 import { ETitleMessages } from 'src/app/shared/enums/error.service.eum';
+import { TranslateService } from '@ngx-translate/core';
 
 
 @Component({
@@ -28,6 +29,7 @@ export class EditModuleComponent {
     private panelService: PanelService,
     public toast: ToastrService,
     private errorService: ErrorService,
+    private translateService: TranslateService,
   ) {
 
   }
@@ -61,10 +63,10 @@ export class EditModuleComponent {
    */
   saveData() {
     this.formModule.markAllAsTouched();
-    if (this.formModule.invalid) return this.toast.info('Debes llenar todos los datos requiridos del formulario', ETitleMessages.MODULE)
+    if (this.formModule.invalid) return this.toast.info(this.translateService.instant('PANEL.MODULES.FORM_REQUIRED'), ETitleMessages.MODULE)
     const rawValue: IModule = this.formModule.value;
     firstValueFrom(this.module ? this.panelService.editModule(rawValue) : this.panelService.newModule(rawValue)).then(item => {
-      this.toast.success(` Modulos ${this.module ? 'modificado' : 'creado'} correctamente`, ETitleMessages.MODULE)
+      this.toast.success(this.translateService.instant(this.module ? 'PANEL.MODULES.MODULE_UPDATED' : 'PANEL.MODULES.MODULE_CREATED'), ETitleMessages.MODULE)
       this.bsModalRef.hide()
     }, err => {
       const errorObject = this.errorService.showNotification(err);

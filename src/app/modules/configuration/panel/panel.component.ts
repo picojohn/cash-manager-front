@@ -13,6 +13,7 @@ import { EditRoleComponent } from './components/edit-role/edit-role.component';
 import { EditMenuPermissionsComponent } from './components/edit-menu-permissions/edit-menu-permissions.component';
 import { IPermisionValue, IPermissionAction } from 'src/app/shared/interface/permission.interface';
 import { PermissionService } from 'src/app/shared/services/permission.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-panel',
@@ -57,6 +58,7 @@ export class PanelComponent implements OnInit {
     private panelService: PanelService,
     private sweetAlertService: SweetAlertService,
     private permissionService: PermissionService,
+    private translateService: TranslateService,
   ) {
     const pestanas = this.permissionService.getPermissions('panel');
     if (pestanas && pestanas.permission) {
@@ -115,13 +117,13 @@ export class PanelComponent implements OnInit {
   // ===== MODULES =====
   newModule() {
     this.bsModalRef = this.modalService.show(EditModuleComponent, { backdrop: 'static', class: 'modal-lg p-5' });
-    this.bsModalRef.content.title = 'Crear Modulo';
+    this.bsModalRef.content.title = this.translateService.instant('PANEL.MODULES.CREATE_MODULE');
     this.bsModalRef.onHidden?.subscribe((_) => { this.loadData(); });
   }
 
   editModule(module: IModule) {
     this.bsModalRef = this.modalService.show(EditModuleComponent, { backdrop: 'static', class: 'modal-lg p-5' });
-    this.bsModalRef.content.title = 'Editar Modulo';
+    this.bsModalRef.content.title = this.translateService.instant('PANEL.MODULES.EDIT_MODULE');
     this.bsModalRef.content.module = module;
     this.bsModalRef.onHidden?.subscribe((_) => { this.loadData(); });
   }
@@ -137,13 +139,13 @@ export class PanelComponent implements OnInit {
   // ===== SUBMODULES =====
   newSubModule() {
     this.bsModalRef = this.modalService.show(EditSubModuleComponent, { backdrop: 'static', class: 'modal-lg p-5' });
-    this.bsModalRef.content.title = 'Crear SubModulo';
+    this.bsModalRef.content.title = this.translateService.instant('PANEL.SUBMODULES.CREATE_SUBMODULE');
     this.bsModalRef.onHidden?.subscribe((_) => { this.loadData(); });
   }
 
   editSubModule(subModule: ISubModule) {
     this.bsModalRef = this.modalService.show(EditSubModuleComponent, { backdrop: 'static', class: 'modal-lg p-5' });
-    this.bsModalRef.content.title = 'Editar SubModulo';
+    this.bsModalRef.content.title = this.translateService.instant('PANEL.SUBMODULES.EDIT_SUBMODULE');
     this.bsModalRef.content.subModule = subModule;
     this.bsModalRef.onHidden?.subscribe((_) => { this.loadData(); });
   }
@@ -151,7 +153,7 @@ export class PanelComponent implements OnInit {
   async statesSubModule(id): Promise<void> {
     if (await this.sweetAlertService.alertStatesMessage()) {
       await firstValueFrom(this.panelService.cambiarEstadosByidSubModule(id)).then(_ => {
-        this.toast.success('Estado cambiado correctamente', ETitleMessages.SUBMODULE);
+        this.toast.success(this.translateService.instant('PANEL.ROLES.STATUS_CHANGED'), ETitleMessages.SUBMODULE);
         this.loadData();
       }, err => {
         const errorObject = this.errorService.showNotification(err);
@@ -175,13 +177,13 @@ export class PanelComponent implements OnInit {
   // ===== ROLES =====
   newRole() {
     this.bsModalRef = this.modalService.show(EditRoleComponent, { backdrop: 'static', class: 'modal-lg p-5' });
-    this.bsModalRef.content.title = 'Crear Rol';
+    this.bsModalRef.content.title = this.translateService.instant('PANEL.ROLES.CREATE_ROLE');
     this.bsModalRef.onHidden?.subscribe((_) => { this.loadData(); });
   }
 
   editRole(role: IRole) {
     this.bsModalRef = this.modalService.show(EditRoleComponent, { backdrop: 'static', class: 'modal-lg p-5' });
-    this.bsModalRef.content.title = 'Editar Rol';
+    this.bsModalRef.content.title = this.translateService.instant('PANEL.ROLES.EDIT_ROLE');
     this.bsModalRef.content.role = role;
     this.bsModalRef.onHidden?.subscribe((_) => { this.loadData(); });
   }
@@ -189,7 +191,7 @@ export class PanelComponent implements OnInit {
   editMenuPermissions(role: IRole) {
     let menuPermission = this.menuPermissions.find(i => i.idRole == role.id);
     this.bsModalRef = this.modalService.show(EditMenuPermissionsComponent, { backdrop: 'static', class: 'modal-lg p-5' });
-    this.bsModalRef.content.title = 'Editar Menú Permisos';
+    this.bsModalRef.content.title = this.translateService.instant('PANEL.PERMISSIONS.EDIT_MENU_PERMISSIONS');
     this.bsModalRef.content.menuPermission = menuPermission;
     this.bsModalRef.content.role = role;
     this.bsModalRef.onHidden?.subscribe((_) => { this.loadData(); });
@@ -198,7 +200,7 @@ export class PanelComponent implements OnInit {
   async statesRole(id): Promise<void> {
     if (await this.sweetAlertService.alertStatesMessage()) {
       await firstValueFrom(this.panelService.cambiarEstadosByidRole(id)).then(_ => {
-        this.toast.success('Estado cambiado correctamente', ETitleMessages.ROLES);
+        this.toast.success(this.translateService.instant('PANEL.ROLES.STATUS_CHANGED'), ETitleMessages.ROLES);
         this.loadData();
       }, err => {
         const errorObject = this.errorService.showNotification(err);

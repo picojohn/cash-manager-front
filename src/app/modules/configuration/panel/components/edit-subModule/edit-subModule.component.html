@@ -12,30 +12,30 @@
 
         <div class="card_form col-md-6 mb-3">
           <div class="form-group">
-            <label> Nombre </label>
-            <input type="text" class="form-control" formControlName="name" placeholder="Ingrese el nombre del modulo">
+            <label> {{ 'GENERAL.NAME' | translate }} </label>
+            <input type="text" class="form-control" formControlName="name" [placeholder]="'PANEL.SUBMODULES.NAME_PLACEHOLDER' | translate">
             <div *ngIf="formSubModule.controls.name.touched && formSubModule.controls.name.errors?.required"
               class="text text-danger">
-              El nombre es requerido
+              {{ 'PANEL.SUBMODULES.NAME_REQUIRED' | translate }}
             </div>
           </div>
         </div>
 
         <div class="card_form col-md-6 mb-3">
           <div class="form-group">
-            <label> Url </label>
-            <input type="text" class="form-control" formControlName="path" placeholder="Ingrese la url">
+            <label> {{ 'PANEL.SUBMODULES.URL_LABEL' | translate }} </label>
+            <input type="text" class="form-control" formControlName="path" [placeholder]="'PANEL.SUBMODULES.URL_PLACEHOLDER' | translate">
             <div *ngIf="formSubModule.controls.path.touched && formSubModule.controls.path.errors?.required"
               class="text text-danger">
-              La url es requerida
+              {{ 'PANEL.SUBMODULES.URL_REQUIRED' | translate }}
             </div>
           </div>
         </div>
 
         <div class="card_form col-md-6">
           <div class="form-group">
-            <label>Icono</label>
-            <ng-select formControlName="icon" [items]="freeIcons" placeholder="Seleccione un ícono">
+            <label>{{ 'PANEL.SUBMODULES.ICON_LABEL' | translate }}</label>
+            <ng-select formControlName="icon" [items]="freeIcons" [placeholder]="'PANEL.SUBMODULES.ICON_PLACEHOLDER' | translate">
               <ng-template ng-option-tmp let-item="item">
                 <i [class]="item"></i> {{ item }}
               </ng-template>
@@ -45,19 +45,19 @@
             </ng-select>
             <div *ngIf="formSubModule.controls.icon.touched && formSubModule.controls.icon.errors?.required"
               class="text text-danger">
-              El icono es requerido
+              {{ 'PANEL.SUBMODULES.ICON_REQUIRED' | translate }}
             </div>
           </div>
         </div>
 
         <div class="card_form col-md-6">
           <div class="form-group">
-            <label> Módulos </label>
+            <label> {{ 'PANEL.SUBMODULES.MODULE_LABEL' | translate }} </label>
             <ng-select [items]="modules" bindLabel="name" bindValue="id" formControlName="idModule" >
             </ng-select>
             <div *ngIf="formSubModule.controls.idModule.touched && formSubModule.controls.idModule.errors?.required"
               class="text text-danger">
-              El modulo es requerido
+              {{ 'PANEL.SUBMODULES.MODULE_REQUIRED' | translate }}
             </div>
           </div>
         </div>
@@ -67,10 +67,10 @@
         </div>
         <div class="row justify-content-between p-3 col-md-10">
           <button (click)="saveData()" class="btn btn-outline-primary btn-ms btn-block col-md-5">
-            <i class="fa-solid fa-floppy-disk" style="color: #0a3754"></i><strong> Guardar</strong>
+            <i class="fa-solid fa-floppy-disk" style="color: #0a3754"></i><strong> {{ 'GENERAL.SAVE' | translate }}</strong>
           </button>
           <button (click)="bsModalRef.hide()" class="btn btn-outline-secondary btn-ms btn-block col-md-5">
-            <i class="fa-solid fa-ban" id="icon_cancel"></i><strong> Cerrar</strong>
+            <i class="fa-solid fa-ban" id="icon_cancel"></i><strong> {{ 'GENERAL.CLOSE' | translate }}</strong>
           </button>
         </div>
       </div>

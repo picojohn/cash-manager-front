@@ -1,6 +1,7 @@
 import Swal from 'sweetalert2'
 declare var require: any;
 import { Injectable } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
 interface paramMessage {
   title: string;
@@ -24,7 +25,7 @@ interface validationResponse {
 })
 export class SweetAlertService {
 
-  constructor() { }
+  constructor(private translateService: TranslateService) { }
 
   /**
    *
@@ -42,12 +43,12 @@ export class SweetAlertService {
     })
 
     return await swalWithBootstrapButtons.fire({
-      title: '¿Estas Seguro?',
-      text: "¡No podrás revertir esto!",
+      title: this.translateService.instant('SWEET_ALERT.ARE_YOU_SURE'),
+      text: this.translateService.instant('SWEET_ALERT.CANNOT_REVERT'),
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: '<i class="fa-regular fa-trash-can"  style="color: red" ></i> <strong>¡Sí, bórralo!</strong>',
-      cancelButtonText: '<i class="fa-solid fa-ban" style="color: red"></i> <strong>Cancelar</strong>'
+      confirmButtonText: `<i class="fa-regular fa-trash-can"  style="color: red" ></i> <strong>${this.translateService.instant('SWEET_ALERT.YES_DELETE')}</strong>`,
+      cancelButtonText: `<i class="fa-solid fa-ban" style="color: red"></i> <strong>${this.translateService.instant('GENERAL.CANCEL')}</strong>`
 
     }).then((validation: any) => {
       return validation.value ? true : false;
@@ -64,12 +65,12 @@ export class SweetAlertService {
     })
 
     return await swalWithBootstrapButtons.fire({
-      title: '¿Estás seguro?',
-      text: "¡Vas a cambiar el estado!",
+      title: this.translateService.instant('SWEET_ALERT.CHANGE_STATUS_TITLE'),
+      text: this.translateService.instant('SWEET_ALERT.CHANGE_STATUS_TEXT'),
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Cambiar',
-      cancelButtonText: 'Cancelar'
+      confirmButtonText: this.translateService.instant('GENERAL.CHANGE'),
+      cancelButtonText: this.translateService.instant('GENERAL.CANCEL')
     }).then((validation: any) => {
       return validation.value ? true : false;
     })
@@ -86,12 +87,12 @@ export class SweetAlertService {
     })
 
     return await swalWithBootstrapButtons.fire({
-      title: '¿Estas Seguro?',
-      text: "¡Vas a cambiar el estado de la factura",
+      title: this.translateService.instant('SWEET_ALERT.ARE_YOU_SURE'),
+      text: this.translateService.instant('SWEET_ALERT.CHANGE_INVOICE_STATUS'),
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Cambiar',
-      cancelButtonText: 'Volver'
+      confirmButtonText: this.translateService.instant('GENERAL.CHANGE'),
+      cancelButtonText: this.translateService.instant('GENERAL.BACK')
     }).then((validation: any) => {
       return validation.value ? true : false;
     })
@@ -114,29 +115,14 @@ export class SweetAlertService {
     })
 
     return await swalWithBootstrapButtons.fire({
-      title: '¿Estas Seguro que deseas cambiar la foto?',
-      text: "¡No podrás revertir esto!",
+      title: this.translateService.instant('SWEET_ALERT.CHANGE_PHOTO'),
+      text: this.translateService.instant('SWEET_ALERT.CANNOT_REVERT'),
       icon: 'info',
       showCancelButton: true,
-      confirmButtonText: 'Sí',
-      cancelButtonText: 'Cancelar'
+      confirmButtonText: this.translateService.instant('GENERAL.YES'),
+      cancelButtonText: this.translateService.instant('GENERAL.CANCEL')
     }).then((validation: any) => {
       return validation.value ? true : false;
     })
   }
-
-  // /**
-  //  *
-  //  * @returns Promise<any>
-  //  */
-  // messageLoading(): any {
-  //   return Swal.fire({
-  //     title: 'Cambio de imagen',
-  //     html: 'Cambiando imagen...',
-  //     onBeforeOpen: () => {
-  //       Swal.showLoading()
-  //     },
-  //     onClose: () => { }
-  //   })
-  // }
 }

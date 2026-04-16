@@ -16,6 +16,7 @@ import { UsersComponent } from './users/users.component';
 import { EditUserComponent } from './users/components/edit-user/edit-user.component';
 import { CompaniesComponent } from './companies/companies.component';
 import { EditCompanyComponent } from './companies/components/edit-company/edit-company.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @NgModule({
@@ -39,6 +40,7 @@ import { EditCompanyComponent } from './companies/components/edit-company/edit-c
     FormsModule,
     NgxPaginationModule,
     ReactiveFormsModule,
+    TranslateModule,
   ],
   providers: [
     PanelService

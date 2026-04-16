@@ -6,6 +6,7 @@ import { firstValueFrom } from 'rxjs';
 import { ErrorService } from 'src/app/shared/services/error.service';
 import { PanelService } from '../../../panel/services/panel.service';
 import { UserStateService } from 'src/app/shared/services/user-state.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-edit-company',
@@ -24,6 +25,7 @@ export class EditCompanyComponent implements OnInit {
     private errorService: ErrorService,
     private panelService: PanelService,
     private userStateService: UserStateService,
+    private translateService: TranslateService,
   ) { }
 
   ngOnInit(): void {
@@ -44,7 +46,7 @@ export class EditCompanyComponent implements OnInit {
   save() {
     if (this.formCompany.invalid) {
       this.formCompany.markAllAsTouched();
-      return this.toast.info('Todos los campos son obligatorios');
+      return this.toast.info(this.translateService.instant('GENERAL.REQUIRED_FIELDS'));
     }
     firstValueFrom(
       this.company
@@ -58,7 +60,7 @@ export class EditCompanyComponent implements OnInit {
         this.userStateService.updateUsuario({ companyName: formData.name });
       }
       this.bsModalRef.hide();
-      this.toast.success(`Empresa ${this.company ? 'modificada' : 'creada'} correctamente`);
+      this.toast.success(this.translateService.instant(this.company ? 'COMPANIES.COMPANY_UPDATED' : 'COMPANIES.COMPANY_CREATED'));
     }, err => {
       const errorObject = this.errorService.showNotification(err);
       this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });

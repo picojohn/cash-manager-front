@@ -8,6 +8,7 @@ import { IModule, ISubModule } from '../../interface/panel.interface';
 import { PanelService } from '../../services/panel.service';
 import { constFreeIcons } from 'src/app/shared/data/const';
 import { ETitleMessages } from 'src/app/shared/enums/error.service.eum';
+import { TranslateService } from '@ngx-translate/core';
 
 
 @Component({
@@ -29,6 +30,7 @@ export class EditSubModuleComponent {
     private panelService: PanelService,
     public toast: ToastrService,
     private errorService: ErrorService,
+    private translateService: TranslateService,
   ) {
 
   }
@@ -71,10 +73,10 @@ export class EditSubModuleComponent {
 
   saveData() {
     this.formSubModule.markAllAsTouched();
-    if (this.formSubModule.invalid) return this.toast.info('Debes llenar todos los datos requiridos del formulario', ETitleMessages.SUBMODULE)
+    if (this.formSubModule.invalid) return this.toast.info(this.translateService.instant('PANEL.SUBMODULES.FORM_REQUIRED'), ETitleMessages.SUBMODULE)
     const rawValue: ISubModule = this.formSubModule.value;
     firstValueFrom(this.subModule ? this.panelService.editSubModule(rawValue) : this.panelService.newSubModule(rawValue)).then(_ => {
-      this.toast.success(` SubModulo ${this.subModule ? 'modificado' : 'creado'} correctamente`, ETitleMessages.SUBMODULE)
+      this.toast.success(this.translateService.instant(this.subModule ? 'PANEL.SUBMODULES.SUBMODULE_UPDATED' : 'PANEL.SUBMODULES.SUBMODULE_CREATED'), ETitleMessages.SUBMODULE)
       this.bsModalRef.hide()
     }, err => {
       const errorObject = this.errorService.showNotification(err);

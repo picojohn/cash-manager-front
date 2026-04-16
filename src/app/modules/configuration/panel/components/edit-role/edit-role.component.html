@@ -12,24 +12,24 @@
 
         <div class="card_form col-md-6 mb-3">
           <div class="form-group">
-            <label> Nombre </label>
-            <input type="text" class="form-control" formControlName="name" placeholder="Ingrese el nombre del impuesto">
+            <label> {{ 'GENERAL.NAME' | translate }} </label>
+            <input type="text" class="form-control" formControlName="name" [placeholder]="'PANEL.ROLES.NAME_PLACEHOLDER' | translate">
             <div *ngIf="formRole.controls.name.touched && formRole.controls.name.errors?.required"
               class="text text-danger">
-              El nombre es requerido
+              {{ 'PANEL.ROLES.NAME_REQUIRED' | translate }}
             </div>
           </div>
         </div>
 
-  
+
         <div class="card_select p-3 col-md-10">
         </div>
         <div class="row justify-content-between p-3 col-md-10">
           <button (click)="saveData()" class="btn btn-outline-primary btn-ms btn-block col-md-5">
-            <i class="fa-solid fa-floppy-disk" style="color: #0a3754"></i><strong> Guardar</strong>
+            <i class="fa-solid fa-floppy-disk" style="color: #0a3754"></i><strong> {{ 'GENERAL.SAVE' | translate }}</strong>
           </button>
           <button (click)="bsModalRef.hide()" class="btn btn-outline-secondary btn-ms btn-block col-md-5">
-            <i class="fa-solid fa-ban" id="icon_cancel"></i><strong> Cerrar</strong>
+            <i class="fa-solid fa-ban" id="icon_cancel"></i><strong> {{ 'GENERAL.CLOSE' | translate }}</strong>
           </button>
         </div>
       </div>

@@ -7,6 +7,7 @@ import { firstValueFrom } from 'rxjs';
 import { ETitleMessages } from 'src/app/shared/enums/error.service.eum';
 import { IRole } from '../../interface/panel.interface';
 import { PanelService } from '../../services/panel.service';
+import { TranslateService } from '@ngx-translate/core';
 
 
 
@@ -28,6 +29,7 @@ export class EditRoleComponent {
     private panelService: PanelService,
     public toast: ToastrService,
     private errorService: ErrorService,
+    private translateService: TranslateService,
   ) {
 
   }
@@ -64,10 +66,10 @@ export class EditRoleComponent {
    */
   saveData() {
     this.formRole.markAllAsTouched();
-    if (this.formRole.invalid) return this.toast.info('Debes llenar todos los datos requiridos del formulario', ETitleMessages.ROLES)
+    if (this.formRole.invalid) return this.toast.info(this.translateService.instant('PANEL.ROLES.FORM_REQUIRED'), ETitleMessages.ROLES)
     const rawValue: IRole = this.formRole.value;
     firstValueFrom(this.role ? this.panelService.editRol(rawValue) : this.panelService.newRol(rawValue)).then(item => {
-      this.toast.success(` Rol ${this.role ? 'modificado' : 'creado'} correctamente`, ETitleMessages.ROLES)
+      this.toast.success(this.translateService.instant(this.role ? 'PANEL.ROLES.ROLE_UPDATED' : 'PANEL.ROLES.ROLE_CREATED'), ETitleMessages.ROLES)
       this.bsModalRef.hide()
     }, err => {
       const errorObject = this.errorService.showNotification(err);

@@ -1,0 +1,279 @@
+{
+  "GENERAL": {
+    "SAVE": "Save",
+    "CLOSE": "Close",
+    "CANCEL": "Cancel",
+    "CREATE": "Create",
+    "EDIT": "Edit",
+    "DELETE": "Delete",
+    "SEARCH": "Search....",
+    "ACTIONS": "Actions",
+    "STATUS": "Status",
+    "ACTIVE": "Active",
+    "INACTIVE": "Inactive",
+    "NAME": "Name",
+    "EMAIL": "Email",
+    "PHONE": "Phone",
+    "ADDRESS": "Address",
+    "PASSWORD": "Password",
+    "PREVIOUS": "Previous",
+    "NEXT": "Next",
+    "SHOWING": "Showing",
+    "OF": "of",
+    "YES": "Yes",
+    "CHANGE": "Change",
+    "BACK": "Back",
+    "REQUIRED_FIELDS": "All fields are required",
+    "NAVIGATION": "NAVIGATION"
+  },
+
+  "AUTH": {
+    "LOGIN": {
+      "TITLE": "Log in",
+      "INFO_MESSAGE": "Please enter the required information!",
+      "EMAIL_LABEL": "Email",
+      "EMAIL_PLACEHOLDER": "email address",
+      "EMAIL_REQUIRED": "Email is required",
+      "EMAIL_INVALID": "Email is invalid",
+      "PASSWORD_LABEL": "Password",
+      "PASSWORD_PLACEHOLDER": "Password",
+      "PASSWORD_REQUIRED": "Password is required",
+      "SUBMIT": "Log in",
+      "LOGGING_IN": "Logging in...",
+      "FORGOT_PASSWORD": "Forgot your password?",
+      "WRONG_CREDENTIALS": "Wrong username or password"
+    },
+    "RECOVER_PASSWORD": {
+      "TITLE": "Password Recovery",
+      "DESCRIPTION": "Through this form you can request a verification code via email, which will allow you to set a new password.",
+      "ENTER_EMAIL": "Enter your email address.",
+      "EMAIL_LABEL": "Email",
+      "EMAIL_PLACEHOLDER": "Example@gmail.com",
+      "REQUEST_CODE": "Request Code",
+      "ENTER_CODE_DESCRIPTION": "Check your email and enter the received code.",
+      "CODE_LABEL": "Code",
+      "CODE_PLACEHOLDER": "Enter code",
+      "VERIFY_CODE": "Verify Code",
+      "NEW_PASSWORD_DESCRIPTION": "Enter the new password and confirm it.",
+      "NEW_PASSWORD_LABEL": "New Password",
+      "NEW_PASSWORD_PLACEHOLDER": "Minimum 8 characters",
+      "PASSWORD_REQUIREMENTS": "The new password must contain at least one uppercase letter, one lowercase letter, one number, and a minimum of 6 characters",
+      "CONFIRM_PASSWORD_LABEL": "Confirm Password",
+      "PASSWORDS_NOT_MATCH": "Passwords do not match",
+      "RESET_PASSWORD": "Reset Password"
+    }
+  },
+
+  "HOME": {
+    "WELCOME": "Welcome, ",
+    "DESCRIPTION": "In this space, you will find the main tools for your growth within the Company."
+  },
+
+  "SIDEBAR": {
+    "MY_PROFILE": "My Profile",
+    "CHANGE_PASSWORD": "Change Password",
+    "CUSTOMIZE_THEME": "Customize Theme",
+    "LOGOUT": "Log Out",
+    "NO_COMPANY": "No company"
+  },
+
+  "CHANGE_PASSWORD": {
+    "CURRENT_PASSWORD_LABEL": "Current Password",
+    "CURRENT_PASSWORD_PLACEHOLDER": "Current Password",
+    "CURRENT_PASSWORD_REQUIRED": "Password is required",
+    "NEW_PASSWORD_LABEL": "New Password",
+    "NEW_PASSWORD_PLACEHOLDER": "New Password",
+    "NEW_PASSWORD_REQUIRED": "New password is required",
+    "PASSWORD_REQUIREMENTS": "The new password must contain at least one uppercase letter, one lowercase letter, one number, and a minimum of 6 characters",
+    "CONFIRM_PASSWORD_LABEL": "Confirm Password",
+    "CONFIRM_PASSWORD_PLACEHOLDER": "Repeat password",
+    "CONFIRM_PASSWORD_REQUIRED": "Password confirmation is required"
+  },
+
+  "USERS": {
+    "TITLE": "Users",
+    "ADD_USER": "Add user",
+    "CREATE_USER": "Create User",
+    "EDIT_USER": "Edit User",
+    "NAME_PLACEHOLDER": "Full name",
+    "NAME_REQUIRED": "Name is required",
+    "EMAIL_PLACEHOLDER": "email@example.com",
+    "EMAIL_REQUIRED": "A valid email is required",
+    "PHONE_PLACEHOLDER": "Phone",
+    "ADDRESS_PLACEHOLDER": "Address",
+    "ROLE_LABEL": "Role",
+    "ROLE_PLACEHOLDER": "Select Role",
+    "ROLE_REQUIRED": "Role is required",
+    "COMPANY_LABEL": "Company",
+    "COMPANY_PLACEHOLDER": "Select Company",
+    "COMPANY_REQUIRED": "Company is required",
+    "USER_UPDATED": "User updated successfully",
+    "USER_CREATED": "User created successfully",
+    "STATUS_CHANGED": "Status changed successfully",
+    "TABLE": {
+      "NUMBER": "#",
+      "NAME": "Name",
+      "EMAIL": "Email",
+      "PHONE": "Phone",
+      "ROLE": "Role",
+      "COMPANY": "Company",
+      "STATUS": "Status",
+      "ACTIONS": "Actions"
+    }
+  },
+
+  "COMPANIES": {
+    "TITLE": "Companies",
+    "ADD_COMPANY": "Add company",
+    "CREATE_COMPANY": "Create Company",
+    "EDIT_COMPANY": "Edit Company",
+    "NAME_PLACEHOLDER": "Company name",
+    "NAME_REQUIRED": "Name is required",
+    "COMPANY_UPDATED": "Company updated successfully",
+    "COMPANY_CREATED": "Company created successfully",
+    "STATUS_CHANGED": "Status changed successfully",
+    "TABLE": {
+      "NUMBER": "#",
+      "NAME": "Name",
+      "STATUS": "Status",
+      "ACTIONS": "Actions"
+    }
+  },
+
+  "PANEL": {
+    "TABS": {
+      "MODULES": "Modules",
+      "SUBMODULES": "SubModules",
+      "ROLES": "Roles"
+    },
+    "MODULES": {
+      "TITLE": "Module Management",
+      "CREATE_MODULE": "Create Module",
+      "EDIT_MODULE": "Edit Module",
+      "NAME_PLACEHOLDER": "Enter the module name",
+      "NAME_REQUIRED": "Name is required",
+      "URL_LABEL": "URL",
+      "URL_PLACEHOLDER": "Enter the URL",
+      "URL_REQUIRED": "URL is required",
+      "ICON_LABEL": "Icon",
+      "ICON_PLACEHOLDER": "Select an icon",
+      "ICON_REQUIRED": "Icon is required",
+      "MODULE_UPDATED": "Module updated successfully",
+      "MODULE_CREATED": "Module created successfully",
+      "FORM_REQUIRED": "You must fill in all required fields in the form",
+      "TABLE": {
+        "NUMBER": "#",
+        "NAME": "Name",
+        "PATH": "Path",
+        "ICON": "Icon",
+        "ACTIONS": "Actions"
+      }
+    },
+    "SUBMODULES": {
+      "TITLE": "SubModule Management",
+      "CREATE_SUBMODULE": "Create SubModule",
+      "EDIT_SUBMODULE": "Edit SubModule",
+      "NAME_PLACEHOLDER": "Enter the module name",
+      "NAME_REQUIRED": "Name is required",
+      "URL_LABEL": "URL",
+      "URL_PLACEHOLDER": "Enter the URL",
+      "URL_REQUIRED": "URL is required",
+      "ICON_LABEL": "Icon",
+      "ICON_PLACEHOLDER": "Select an icon",
+      "ICON_REQUIRED": "Icon is required",
+      "MODULE_LABEL": "Modules",
+      "MODULE_REQUIRED": "Module is required",
+      "SUBMODULE_UPDATED": "SubModule updated successfully",
+      "SUBMODULE_CREATED": "SubModule created successfully",
+      "FORM_REQUIRED": "You must fill in all required fields in the form",
+      "TABLE": {
+        "NUMBER": "#",
+        "NAME": "Name",
+        "PATH": "Path",
+        "MODULE": "Module",
+        "STATUS": "Status",
+        "ACTIONS": "Actions"
+      }
+    },
+    "ROLES": {
+      "TITLE": "Role Management",
+      "CREATE_ROLE": "Create Role",
+      "EDIT_ROLE": "Edit Role",
+      "NAME_PLACEHOLDER": "Enter the role name",
+      "NAME_REQUIRED": "Name is required",
+      "ROLE_UPDATED": "Role updated successfully",
+      "ROLE_CREATED": "Role created successfully",
+      "FORM_REQUIRED": "You must fill in all required fields in the form",
+      "STATUS_CHANGED": "Status changed successfully",
+      "TABLE": {
+        "NUMBER": "#",
+        "NAME": "Name",
+        "STATUS": "Status",
+        "ACTIONS": "Actions"
+      }
+    },
+    "PERMISSIONS": {
+      "EDIT_MENU_PERMISSIONS": "Edit Menu Permissions",
+      "ROLE_LABEL": "Role:",
+      "ACTION_CREATE": "Create",
+      "ACTION_EDIT": "Edit",
+      "ACTION_STATUS": "Status",
+      "ACTION_DELETE": "Delete",
+      "SELECT_PERMISSION": "You must select at least one permission",
+      "PERMISSIONS_UPDATED": "Permissions updated successfully",
+      "PERMISSIONS_CREATED": "Permissions created successfully"
+    }
+  },
+
+  "SETTINGS": {
+    "TITLE": "Settings",
+    "THEME_MODE": "Theme Mode",
+    "THEME_MODE_DESC": "Choose Light or Dark Mode",
+    "CUSTOM_THEME": "Custom Theme",
+    "CUSTOM_THEME_DESC": "Choose your Primary color",
+    "MENU_ORIENTATION": "Menu Orientation",
+    "MENU_ORIENTATION_DESC": "Select vertical, horizontal, or compact",
+    "VERTICAL": "Vertical",
+    "HORIZONTAL": "Horizontal",
+    "COMPACT": "Compact",
+    "THEME_LAYOUT": "Theme Layout",
+    "RESET_LAYOUT": "Reset Layout"
+  },
+
+  "SWEET_ALERT": {
+    "ARE_YOU_SURE": "Are you sure?",
+    "CANNOT_REVERT": "You won't be able to revert this!",
+    "YES_DELETE": "Yes, delete it!",
+    "CHANGE_STATUS_TITLE": "Are you sure?",
+    "CHANGE_STATUS_TEXT": "You are about to change the status!",
+    "CHANGE_INVOICE_STATUS": "You are about to change the invoice status",
+    "CHANGE_PHOTO": "Are you sure you want to change the photo?"
+  },
+
+  "TITLES": {
+    "AUTHENTICATION": "Authentication",
+    "UNKNOWN_ERROR": "Unknown error",
+    "LOGIN": "Login",
+    "CURRENCIES": "Currencies",
+    "COUNTRIES": "Countries",
+    "TAXES": "Taxes",
+    "MODULES": "Modules",
+    "SUBMODULES": "SubModules",
+    "GROUPS": "Groups",
+    "TYPES": "Types",
+    "CATEGORIES": "Categories",
+    "PAYMENT_METHODS": "Payment Methods",
+    "PAYMENT_MEANS": "Payment Means",
+    "TABS": "Tabs",
+    "ROLES_PERMISSIONS": "Roles and Permissions",
+    "PRODUCTS": "Products",
+    "INVOICE": "Invoice"
+  },
+
+  "NOTIFICATIONS": {
+    "NEW_MESSAGE": "You have a new message.",
+    "TASK_COMPLETED": "Your task has been completed.",
+    "ACCOUNT_PROBLEM": "There is a problem with your account.",
+    "NEW_USER_REGISTERED": "A new user has registered."
+  }
+}

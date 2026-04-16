@@ -89,6 +89,11 @@ export class PanelService {
     return this.http.get<Array<any>>(`${this.url}/companies/estados/${id}`);
   }
 
+  // Change password
+  changePassword(data: { password: string, newPassword: string }): Observable<any> {
+    return this.http.patch<any>(`${this.url}/users/change-password`, data);
+  }
+
   // Users
   public getAllUsers(): Observable<Array<any>> {
     return this.http.get<Array<any>>(`${this.url}/users`)

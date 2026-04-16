@@ -6,6 +6,7 @@ import { firstValueFrom } from 'rxjs';
 import { ErrorService } from 'src/app/shared/services/error.service';
 import { PanelService } from '../../../panel/services/panel.service';
 import { UserStateService } from 'src/app/shared/services/user-state.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-edit-user',
@@ -26,6 +27,7 @@ export class EditUserComponent implements OnInit {
     private errorService: ErrorService,
     private panelService: PanelService,
     private userStateService: UserStateService,
+    private translateService: TranslateService,
   ) { }
 
   ngOnInit(): void {
@@ -51,7 +53,7 @@ export class EditUserComponent implements OnInit {
   save() {
     if (this.formUser.invalid) {
       this.formUser.markAllAsTouched();
-      return this.toast.info('Todos los campos son obligatorios');
+      return this.toast.info(this.translateService.instant('GENERAL.REQUIRED_FIELDS'));
     }
     firstValueFrom(
       this.user
@@ -70,7 +72,7 @@ export class EditUserComponent implements OnInit {
         });
       }
       this.bsModalRef.hide();
-      this.toast.success(`Usuario ${this.user ? 'modificado' : 'creado'} correctamente`);
+      this.toast.success(this.translateService.instant(this.user ? 'USERS.USER_UPDATED' : 'USERS.USER_CREATED'));
     }, err => {
       const errorObject = this.errorService.showNotification(err);
       this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });

@@ -7,6 +7,7 @@ import { ErrorService } from '../../../../../shared/services/error.service';
 import { IMenuPermissions, IRole } from '../../interface/panel.interface';
 import { PanelService } from '../../services/panel.service';
 import { ETitleMessages } from 'src/app/shared/enums/error.service.eum';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-edit-menu-permissions',
@@ -27,7 +28,8 @@ export class EditMenuPermissionsComponent implements OnInit {
     public toast: ToastrService,
     private errorService: ErrorService,
     private panelService: PanelService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private translateService: TranslateService,
   ) { }
 
   ngOnInit(): void {
@@ -55,7 +57,12 @@ export class EditMenuPermissionsComponent implements OnInit {
                 o => o.idModule === mod.id && o.idSubModule === sm.id
               );
               if (match) {
-                const actionNames = { INSERT: 'Crear', UPDATE: 'Editar', STATUS: 'Estado', DELETE: 'Borrar' };
+                const actionNames = {
+                  INSERT: this.translateService.instant('PANEL.PERMISSIONS.ACTION_CREATE'),
+                  UPDATE: this.translateService.instant('PANEL.PERMISSIONS.ACTION_EDIT'),
+                  STATUS: this.translateService.instant('PANEL.PERMISSIONS.ACTION_STATUS'),
+                  DELETE: this.translateService.instant('PANEL.PERMISSIONS.ACTION_DELETE')
+                };
                 existingActions = JSON.parse(atob(match.actions)).permision.map(a => ({
                   ...a,
                   name: actionNames[a.action] || a.action
@@ -70,10 +77,10 @@ export class EditMenuPermissionsComponent implements OnInit {
               path: sm.path,
               mostrarAdicionales: mostrar,
               actions: existingActions || [
-                { name: 'Crear', action: 'INSERT', codeAction: 'I', status: false },
-                { name: 'Editar', action: 'UPDATE', codeAction: 'U', status: false },
-                { name: 'Estado', action: 'STATUS', codeAction: 'S', status: false },
-                { name: 'Borrar', action: 'DELETE', codeAction: 'D', status: false },
+                { name: this.translateService.instant('PANEL.PERMISSIONS.ACTION_CREATE'), action: 'INSERT', codeAction: 'I', status: false },
+                { name: this.translateService.instant('PANEL.PERMISSIONS.ACTION_EDIT'), action: 'UPDATE', codeAction: 'U', status: false },
+                { name: this.translateService.instant('PANEL.PERMISSIONS.ACTION_STATUS'), action: 'STATUS', codeAction: 'S', status: false },
+                { name: this.translateService.instant('PANEL.PERMISSIONS.ACTION_DELETE'), action: 'DELETE', codeAction: 'D', status: false },
               ]
             };
           })
@@ -152,7 +159,7 @@ export class EditMenuPermissionsComponent implements OnInit {
     });
 
     if (countMostrar < 1) {
-      return this.toast.info('Debes seleccionar al menos un permiso', ETitleMessages.ROLES);
+      return this.toast.info(this.translateService.instant('PANEL.PERMISSIONS.SELECT_PERMISSION'), ETitleMessages.ROLES);
     }
 
     const payload = {
@@ -167,7 +174,7 @@ export class EditMenuPermissionsComponent implements OnInit {
         : this.panelService.newMenuPermissions(payload)
     ).then(_ => {
       this.bsModalRef.hide();
-      this.toast.success(`Permisos ${this.menuPermission ? 'modificados' : 'creados'} correctamente`, ETitleMessages.ROLES);
+      this.toast.success(this.translateService.instant(this.menuPermission ? 'PANEL.PERMISSIONS.PERMISSIONS_UPDATED' : 'PANEL.PERMISSIONS.PERMISSIONS_CREATED'), ETitleMessages.ROLES);
     }, err => {
       this.guardarSolicitudBoleano = false;
       const errorObject = this.errorService.showNotification(err);
