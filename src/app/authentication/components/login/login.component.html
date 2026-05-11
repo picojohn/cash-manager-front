@@ -49,7 +49,11 @@
 
                 <div data-mdb-input-init class="form-outline mb-4">
                   <label class="form-label"><strong>{{ 'AUTH.LOGIN.PASSWORD_LABEL' | translate }}</strong></label>
-                  <input formControlName="password" type="password" class="form-control" [placeholder]="'AUTH.LOGIN.PASSWORD_PLACEHOLDER' | translate" />
+                  <div class="input-password">
+                    <input formControlName="password" [type]="showPassword ? 'text' : 'password'" class="form-control" [placeholder]="'AUTH.LOGIN.PASSWORD_PLACEHOLDER' | translate" />
+                    <i class="fa-solid eye-toggle" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"
+                      (click)="showPassword = !showPassword"></i>
+                  </div>
                   <div *ngIf="loginForm.controls.password.touched && loginForm.controls.password.errors?.required"
                     class="text text-danger">
                     {{ 'AUTH.LOGIN.PASSWORD_REQUIRED' | translate }}

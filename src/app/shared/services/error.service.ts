@@ -56,8 +56,8 @@ export class ErrorService {
         customError.typeToast = 'info';
         this.messageObject = customError;
         break;
-      case '3002':
-        customError.typeMessage = ETitleMessages.CURRENCY;
+      case '3002': /// sin ocupar
+        customError.typeMessage = ETitleMessages.LOGIN;
         customError.timeOut = this.timeOut;
         customError.typeToast = 'info';
         this.messageObject = customError;
@@ -74,97 +74,97 @@ export class ErrorService {
         customError.typeToast = 'info';
         this.messageObject = customError;
         break;
-      case '3005': // va esta
+      case '3005':
         customError.typeMessage = 'Login';
         customError.timeOut = this.timeOut;
         customError.typeToast = 'info';
         this.messageObject = customError;
         break;
-      case '3006': // va esta
+      case '3006':
         customError.typeMessage = 'Contratos';
         customError.timeOut = this.timeOut;
         customError.typeToast = 'info';
         this.messageObject = customError;
         break;
-      case '3007': // va esta
+      case '3007':
         customError.typeMessage = 'Afiliados';
         customError.timeOut = this.timeOut;
         customError.typeToast = 'info';
         this.messageObject = customError;
         break;
-      case '3008': // va esta
+      case '3008':
         customError.typeMessage = 'Cuentas Comerciales';
         customError.timeOut = this.timeOut;
         customError.typeToast = 'info';
         this.messageObject = customError;
         break;
-      case '3009':// va esta
+      case '3009':
         customError.typeMessage = 'Grupos Empresariales';
         customError.timeOut = this.timeOut;
         customError.typeToast = 'info';
         this.messageObject = customError;
         break;
-      case '3010': // va esta
+      case '3010':
         customError.typeMessage = 'Clientes';
         customError.timeOut = this.timeOut;
         customError.typeToast = 'info';
         this.messageObject = customError;
         break;
-      case '3011': // va esta
+      case '3011':
         customError.typeMessage = 'Productos';
         customError.timeOut = this.timeOut;
         customError.typeToast = 'info';
         this.messageObject = customError;
         break;
-      case '3012': // va esta
+      case '3012':
         customError.typeMessage = 'Lineas';
         customError.timeOut = this.timeOut;
         customError.typeToast = 'info';
         this.messageObject = customError;
         break;
-      case '3013':// va esta
+      case '3013':
         customError.typeMessage = 'Lineas';
         customError.timeOut = this.timeOut;
         customError.typeToast = 'info';
         this.messageObject = customError;
         break;
-      case '3014': // va esta
+      case '3014':
         customError.typeMessage = 'Sector';
         customError.timeOut = this.timeOut;
         customError.typeToast = 'info';
         this.messageObject = customError;
         break;
-      case '3015': // va esta
+      case '3015':
         customError.typeMessage = 'SubSector';
         customError.timeOut = this.timeOut;
         customError.typeToast = 'info';
         this.messageObject = customError;
         break;
-      case '3016':// va esta
+      case '3016':
         customError.typeMessage = 'Sistemas';
         customError.timeOut = this.timeOut;
         customError.typeToast = 'info';
         this.messageObject = customError;
         break;
-      case '3017':// va esta
+      case '3017':
         customError.typeMessage = 'Productos';
         customError.timeOut = this.timeOut;
         customError.typeToast = 'info';
         this.messageObject = customError;
         break;
-      case '3018':// va esta
+      case '3018':
         customError.typeMessage = 'Tarifas';
         customError.timeOut = this.timeOut;
         customError.typeToast = 'info';
         this.messageObject = customError;
         break;
-      case '3019':// va esta
+      case '3019':
         customError.typeMessage = 'Tarifas';
         customError.timeOut = this.timeOut;
         customError.typeToast = 'info';
         this.messageObject = customError;
         break;
-      case '3020':// va esta
+      case '3020':
         customError.typeMessage = 'Tarifas';
         customError.timeOut = this.timeOut;
         customError.typeToast = 'info';

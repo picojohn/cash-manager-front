@@ -23,6 +23,7 @@ export class LoginComponent implements OnInit {
   loadingSession = false;
   textIniSesssion = '';
   currentLang: Lang = 'es';
+  showPassword: boolean = false;
   langDropdownOpen = false;
 
   constructor(

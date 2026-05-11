@@ -82,9 +82,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
   toggleDropdown(idModule: number) {
     this.menuSidebar = this.menuSidebar.map(menu => ({
       ...menu,
-      isOpen: menu.idModule === idModule ? !menu.isOpen : false // Cierra los demás menús
+      isOpen: menu.idModule === idModule ? !menu.isOpen : false
     }));
   }
+
 
   /**
    * metodo para cargar la barra en el mobil
@@ -139,9 +140,16 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.langDropdownOpen = false;
   }
 
-  @HostListener('document:click')
-  onDocumentClick() {
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event) {
     this.langDropdownOpen = false;
+    const target = event.target as HTMLElement;
+    if (!target.closest('.sidebar') && !target.closest('.horizontal-nav')) {
+      this.menuSidebar = this.menuSidebar.map(menu => ({
+        ...menu,
+        isOpen: false
+      }));
+    }
   }
 
   changePassword(id: number) {

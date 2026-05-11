@@ -30,7 +30,7 @@
     <div class="nav-menu">
       <div *ngFor="let menu of menuSidebar" class="nav-group">
         <button class="nav-module" [class.active]="menu.isOpen"
-          (click)="toggleDropdown(menu.idModule)"
+          (click)="toggleDropdown(menu.idModule); $event.stopPropagation()"
           [title]="menuOrientation === 'compact' ? menu.nameModule : ''">
           <div class="nav-module-left">
             <i [class]="menu.iconModule" class="nav-icon"></i>
@@ -43,7 +43,8 @@
           <a *ngFor="let sub of menu.children"
             class="nav-child"
             routerLink="{{menu.pathModule}}/{{sub.pathSubModule}}"
-            routerLinkActive="nav-child-active">
+            routerLinkActive="nav-child-active"
+            (click)="isMobile() ? toggleMenu() : null">
             <span class="nav-dot"></span>
             {{sub.nameSubModule}}
           </a>
@@ -59,7 +60,7 @@
     </div>
     <div class="horizontal-menu">
       <div *ngFor="let menu of menuSidebar" class="horizontal-group">
-        <button class="horizontal-module" (click)="toggleDropdown(menu.idModule)" [class.active]="menu.isOpen">
+        <button class="horizontal-module" (click)="toggleDropdown(menu.idModule); $event.stopPropagation()" [class.active]="menu.isOpen">
           <i [class]="menu.iconModule"></i>
           <span>{{menu.nameModule}}</span>
           <i class="fa-solid fa-chevron-down nav-arrow" [class.rotated]="menu.isOpen"></i>

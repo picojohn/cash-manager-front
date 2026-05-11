@@ -16,6 +16,9 @@ export class ChangePasswordComponent implements OnInit {
   public idColaborador: number;
   public formPassword: FormGroup;
   public cargarFormularioBoolean: boolean = false;
+  public showPassword: boolean = false;
+  public showNewPassword: boolean = false;
+  public showConfirmPassword: boolean = false;
 
   constructor(
     public bsModalRef: BsModalRef,
