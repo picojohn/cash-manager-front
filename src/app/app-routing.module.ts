@@ -4,6 +4,7 @@ import { LoginComponent } from './authentication/components/login/login.componen
 import { SidebarComponent } from './shared/sidebar/sidebar.component';
 import { content } from './shared/routes/content-routes';
 import { AuthenticationGuard } from './authentication/authentication.guard';
+import { QuickbooksCallbackComponent } from './authentication/components/quickbooks-callback/quickbooks-callback.component';
 
 const routes: Routes = [
   {
@@ -20,6 +21,10 @@ const routes: Routes = [
   {
     path: 'authentication',
     loadChildren: () => import('./authentication/authentication.module').then(m => m.AuthenticationModule),
+  },
+  {
+    path: 'auth/quickbooks-callback',
+    component: QuickbooksCallbackComponent,
   }
 ];
 

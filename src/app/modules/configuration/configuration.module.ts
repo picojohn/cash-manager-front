@@ -16,6 +16,7 @@ import { UsersComponent } from './users/users.component';
 import { EditUserComponent } from './users/components/edit-user/edit-user.component';
 import { CompaniesComponent } from './companies/companies.component';
 import { EditCompanyComponent } from './companies/components/edit-company/edit-company.component';
+import { QuickbooksComponent } from './quickbooks/quickbooks.component';
 import { TranslateModule } from '@ngx-translate/core';
 
 
@@ -31,6 +32,7 @@ import { TranslateModule } from '@ngx-translate/core';
     EditUserComponent,
     CompaniesComponent,
     EditCompanyComponent,
+    QuickbooksComponent,
   ],
   imports: [
     CommonModule,

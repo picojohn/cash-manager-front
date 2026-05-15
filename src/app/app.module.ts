@@ -12,10 +12,12 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { AuthenticationInterceptorService } from './shared/services/authentication.interceptor.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader, TRANSLATE_HTTP_LOADER_CONFIG } from '@ngx-translate/http-loader';
+import { QuickbooksCallbackComponent } from './authentication/components/quickbooks-callback/quickbooks-callback.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    QuickbooksCallbackComponent,
   ],
   imports: [
     BrowserModule,

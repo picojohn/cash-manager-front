@@ -1,0 +1,109 @@
+<div class="container-fluid p-4">
+  <div class="d-flex align-items-center mb-4">
+    <i class="fa-solid fa-link me-2 fs-3 text-success"></i>
+    <h3 class="mb-0">QuickBooks Online</h3>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status"></div>
+    <p class="mt-2">Cargando estado de QuickBooks...</p>
+  </div>
+
+  <!-- NO conectado -->
+  <div *ngIf="!loading && !status.connected" class="card">
+    <div class="card-body text-center py-5">
+      <i class="fa-solid fa-plug-circle-xmark fs-1 text-secondary mb-3"></i>
+      <h4>Aún no has conectado QuickBooks</h4>
+      <p class="text-muted mb-4">
+        Conecta tu cuenta de QuickBooks Online para sincronizar clientes, facturas,
+        productos y reportes con Cash Manager.
+      </p>
+      <button class="btn btn-success btn-lg" (click)="connect()" [disabled]="connecting">
+        <i class="fa-brands fa-intercom me-2" *ngIf="!connecting"></i>
+        <span class="spinner-border spinner-border-sm me-2" *ngIf="connecting"></span>
+        {{ connecting ? 'Redirigiendo...' : 'Connect to QuickBooks' }}
+      </button>
+      <p class="text-muted small mt-3">
+        Te redirigiremos a Intuit para autorizar el acceso.
+      </p>
+    </div>
+  </div>
+
+  <!-- SÍ conectado -->
+  <div *ngIf="!loading && status.connected">
+    <!-- Card de status -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <div class="row align-items-center">
+          <div class="col-md-8">
+            <div class="d-flex align-items-center mb-2">
+              <i class="fa-solid fa-circle-check text-success fs-4 me-2"></i>
+              <h5 class="mb-0">Conectado a QuickBooks</h5>
+            </div>
+            <div *ngIf="companyInfo" class="ms-4">
+              <p class="mb-1">
+                <strong>Empresa QB:</strong> {{ companyInfo.CompanyName }}
+              </p>
+              <p class="mb-1">
+                <strong>País:</strong> {{ companyInfo.Country }}
+              </p>
+              <p class="mb-1">
+                <strong>Año fiscal inicia:</strong> {{ companyInfo.FiscalYearStartMonth }}
+              </p>
+              <p class="mb-0">
+                <strong>realmId:</strong> <code>{{ status.realmId }}</code>
+              </p>
+            </div>
+          </div>
+          <div class="col-md-4 text-end">
+            <button class="btn btn-outline-danger" (click)="disconnect()">
+              <i class="fa-solid fa-plug-circle-xmark me-1"></i>
+              Desconectar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Preview de Customers -->
+    <div class="card">
+      <div class="card-header d-flex align-items-center justify-content-between">
+        <h6 class="mb-0">
+          <i class="fa-solid fa-users me-1"></i>
+          Customers (preview, primeros 10)
+        </h6>
+        <small class="text-muted">Datos en vivo desde QuickBooks</small>
+      </div>
+      <div class="card-body p-0">
+        <table class="table table-sm table-hover mb-0" *ngIf="customers.length > 0">
+          <thead class="table-light">
+            <tr>
+              <th>ID</th>
+              <th>Display Name</th>
+              <th>Company</th>
+              <th>Balance</th>
+              <th>Activo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let c of customers">
+              <td>{{ c.Id }}</td>
+              <td>{{ c.DisplayName }}</td>
+              <td>{{ c.CompanyName || '—' }}</td>
+              <td>${{ c.Balance | number: '1.2-2' }}</td>
+              <td>
+                <span class="badge" [class.bg-success]="c.Active" [class.bg-secondary]="!c.Active">
+                  {{ c.Active ? 'Sí' : 'No' }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div *ngIf="customers.length === 0" class="text-center py-4 text-muted">
+          No hay customers en QuickBooks
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
