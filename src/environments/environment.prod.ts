@@ -1,10 +1,4 @@
 export const environment = {
   production: true,
-
-  //local
-
-
-
-// creo que no esta
-}
-
+  endpoint: 'https://api.sgf.com.pa',
+};

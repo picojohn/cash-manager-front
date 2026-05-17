@@ -28,6 +28,8 @@ export interface IQbCustomer {
   id: number;
   idCompany: number;
   qbId: string;
+  parentRef: string;
+  job: number;
   syncToken: string;
   displayName: string;
   companyName: string;

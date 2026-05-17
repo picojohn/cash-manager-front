@@ -339,6 +339,7 @@
     "TOAST_DISCONNECTED": "QuickBooks desconectado",
     "TOAST_SYNC_OK": "Sincronización exitosa",
     "BLOCK_DEACTIVATE_BALANCE": "No se puede desactivar este cliente porque tiene un balance pendiente. Cierra o cancela las facturas/pagos pendientes en QuickBooks primero.",
+    "BLOCK_DEACTIVATE_SUBCUSTOMERS": "No se puede desactivar este cliente porque tiene sub-clientes con balance pendiente: {{names}}. Resuelve el balance de los sub-clientes en QuickBooks primero.",
     "SAVING": "Guardando...",
     "TOAST_FORM_INVALID": "Revisa los campos requeridos",
     "TIME_FEW_SECONDS": "hace unos segundos",

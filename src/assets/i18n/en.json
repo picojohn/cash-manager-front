@@ -339,6 +339,7 @@
     "TOAST_DISCONNECTED": "QuickBooks disconnected",
     "TOAST_SYNC_OK": "Sync successful",
     "BLOCK_DEACTIVATE_BALANCE": "Cannot deactivate this customer because it has a pending balance. Close or cancel any pending invoices/payments in QuickBooks first.",
+    "BLOCK_DEACTIVATE_SUBCUSTOMERS": "Cannot deactivate this customer because it has sub-customers with a pending balance: {{names}}. Resolve those sub-customers' balances in QuickBooks first.",
     "SAVING": "Saving...",
     "TOAST_FORM_INVALID": "Please check the required fields",
     "TIME_FEW_SECONDS": "a few seconds ago",

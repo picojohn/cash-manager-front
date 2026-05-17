@@ -117,6 +117,26 @@ export class CustomersComponent implements OnInit {
       return;
     }
 
+    // Guard preventivo: QB tampoco deja desactivar customers con sub-customers (jobs)
+    // activos con balance != 0. Detectamos sub-customers usando parentRef.
+    if (!willActivate) {
+      const blockingChildren = this.customers.filter(
+        (x) =>
+          x.parentRef === customer.qbId &&
+          x.active === 1 &&
+          Math.abs(Number(x.balance) || 0) > 0.001,
+      );
+      if (blockingChildren.length > 0) {
+        const names = blockingChildren.map((b) => b.displayName).join(', ');
+        this.toast.warning(
+          this.translate.instant('QUICKBOOKS.BLOCK_DEACTIVATE_SUBCUSTOMERS', { names }),
+          'QuickBooks',
+          { timeOut: 10000 },
+        );
+        return;
+      }
+    }
+
     const confirmed = await this.sweetAlertService.alertStatesMessage();
     if (!confirmed) return;
 
