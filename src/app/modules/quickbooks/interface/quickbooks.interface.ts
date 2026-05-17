@@ -44,6 +44,17 @@ export interface IQbCustomer {
   updatedAt: string;
 }
 
+/** Input para crear o editar un Customer (envia al backend) */
+export interface IQbCustomerInput {
+  displayName: string;
+  companyName?: string;
+  givenName?: string;
+  familyName?: string;
+  email?: string;
+  phone?: string;
+  active?: boolean;
+}
+
 export interface IQbCustomersResponse {
   items: Array<IQbCustomer>;
   total: number;

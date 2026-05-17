@@ -6,7 +6,9 @@ import {
   IQuickbooksAuthUrl,
   IQuickbooksStatus,
   IQuickbooksCompanyInfo,
+  IQbCustomer,
   IQbCustomersResponse,
+  IQbCustomerInput,
   IQbSyncLog,
   IQbSyncResult,
 } from '../interface/quickbooks.interface';
@@ -48,6 +50,24 @@ export class QuickbooksService {
 
   getCustomersCount(): Observable<{ count: number }> {
     return this.http.get<{ count: number }>(`${this.url}/quickbooks/customers/count`);
+  }
+
+  /** Crear un Customer (POST a QB → upsert local) */
+  createCustomer(dto: IQbCustomerInput): Observable<IQbCustomer> {
+    return this.http.post<IQbCustomer>(`${this.url}/quickbooks/customers`, dto);
+  }
+
+  /** Editar un Customer (sparse update en QB → upsert local) */
+  updateCustomer(qbId: string, dto: IQbCustomerInput): Observable<IQbCustomer> {
+    return this.http.patch<IQbCustomer>(`${this.url}/quickbooks/customers/${qbId}`, dto);
+  }
+
+  /** Activa/desactiva un Customer (atajo que solo envia { active }) */
+  setCustomerActive(qbId: string, active: boolean): Observable<IQbCustomer> {
+    return this.http.patch<IQbCustomer>(`${this.url}/quickbooks/customers/${qbId}`, {
+      displayName: undefined,
+      active,
+    } as any);
   }
 
   // === Sync (quickbooks/sync/*) ===

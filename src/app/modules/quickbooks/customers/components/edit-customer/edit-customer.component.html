@@ -1,0 +1,76 @@
+<div class="container mt-3 p-3">
+  <div class="text-center">
+    <h2 class="p-3">
+      <i class="fa-solid fa-user" style="color:#0039a5;"></i> {{ title }}
+    </h2>
+  </div>
+  <div *ngIf="cargarFormulario">
+    <form [formGroup]="formCustomer">
+      <!-- Display Name -->
+      <div class="row p-2">
+        <div class="form-group col-md-12 mb-3">
+          <label for="displayName">Display Name *</label>
+          <input type="text" class="form-control" formControlName="displayName"
+            placeholder="Nombre con el que aparece en QB">
+          <div *ngIf="formCustomer.get('displayName').invalid && formCustomer.get('displayName').touched"
+            class="text-danger small">
+            Este campo es obligatorio
+          </div>
+        </div>
+      </div>
+
+      <!-- Company Name -->
+      <div class="row p-2">
+        <div class="form-group col-md-12 mb-3">
+          <label for="companyName">Empresa</label>
+          <input type="text" class="form-control" formControlName="companyName"
+            placeholder="Nombre de la empresa (si aplica)">
+        </div>
+      </div>
+
+      <!-- Given + Family -->
+      <div class="row p-2">
+        <div class="form-group col-md-6 mb-3">
+          <label for="givenName">Nombre</label>
+          <input type="text" class="form-control" formControlName="givenName"
+            placeholder="John">
+        </div>
+        <div class="form-group col-md-6 mb-3">
+          <label for="familyName">Apellido</label>
+          <input type="text" class="form-control" formControlName="familyName"
+            placeholder="Smith">
+        </div>
+      </div>
+
+      <!-- Email + Phone -->
+      <div class="row p-2">
+        <div class="form-group col-md-6 mb-3">
+          <label for="email">Email</label>
+          <input type="email" class="form-control" formControlName="email"
+            placeholder="contacto@cliente.com">
+          <div *ngIf="formCustomer.get('email').invalid && formCustomer.get('email').touched"
+            class="text-danger small">
+            Email inválido
+          </div>
+        </div>
+        <div class="form-group col-md-6 mb-3">
+          <label for="phone">Teléfono</label>
+          <input type="text" class="form-control" formControlName="phone"
+            placeholder="+507 6000-0000">
+        </div>
+      </div>
+
+      <!-- Botones -->
+      <div class="row justify-content-center p-3">
+        <button (click)="save()" class="btn btn-outline-primary col-md-4 me-2" [disabled]="saving">
+          <i class="fa-solid fa-floppy-disk" *ngIf="!saving"></i>
+          <span class="spinner-border spinner-border-sm" *ngIf="saving"></span>
+          {{ saving ? 'Guardando...' : 'Guardar' }}
+        </button>
+        <button (click)="bsModalRef.hide()" class="btn btn-outline-secondary col-md-4" [disabled]="saving">
+          <i class="fa-solid fa-ban" style="color: red"></i> Cerrar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

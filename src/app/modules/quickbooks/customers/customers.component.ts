@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { firstValueFrom } from 'rxjs';
 import { ErrorService } from 'src/app/shared/services/error.service';
+import { SweetAlertService } from 'src/app/shared/services/sweetAlert.service';
 import { QuickbooksService } from '../services/quickbooks.service';
 import { IQbCustomer } from '../interface/quickbooks.interface';
+import { EditCustomerComponent } from './components/edit-customer/edit-customer.component';
 
 @Component({
   selector: 'app-qb-customers',
@@ -12,19 +15,23 @@ import { IQbCustomer } from '../interface/quickbooks.interface';
 })
 export class CustomersComponent implements OnInit {
   public customers: Array<IQbCustomer> = [];
-  public totalCustomers: number = 0;
   public loading: boolean = false;
   public syncing: boolean = false;
+  public showInactive: boolean = false;
 
   public nPaginas = [10, 25, 50, 100];
   public totalPaginas = 10;
   public page: number = 1;
   public _buscador: string = '';
 
+  private bsModalRef: BsModalRef;
+
   constructor(
     public toast: ToastrService,
     private errorService: ErrorService,
+    private sweetAlertService: SweetAlertService,
     private quickbooksService: QuickbooksService,
+    private modalService: BsModalService,
   ) {}
 
   ngOnInit(): void {
@@ -34,11 +41,8 @@ export class CustomersComponent implements OnInit {
   async loadCustomers(): Promise<void> {
     this.loading = true;
     try {
-      // Por ahora bajamos todos (max 1000) y filtramos client-side.
-      // Cuando crezca, paginamos server-side (skip/take + filter parameter).
       const res = await firstValueFrom(this.quickbooksService.getCustomers(0, 1000));
       this.customers = res.items;
-      this.totalCustomers = res.total;
     } catch (err) {
       this.handleError(err);
     } finally {
@@ -62,16 +66,59 @@ export class CustomersComponent implements OnInit {
     }
   }
 
+  newCustomer(): void {
+    this.bsModalRef = this.modalService.show(EditCustomerComponent, {
+      backdrop: 'static',
+      class: 'modal-lg p-5',
+    });
+    this.bsModalRef.content.title = 'Crear customer';
+    this.bsModalRef.content.customer = null;
+    this.bsModalRef.onHidden?.subscribe(() => this.loadCustomers());
+  }
+
+  editCustomer(customer: IQbCustomer): void {
+    this.bsModalRef = this.modalService.show(EditCustomerComponent, {
+      backdrop: 'static',
+      class: 'modal-lg p-5',
+    });
+    this.bsModalRef.content.title = 'Editar customer';
+    this.bsModalRef.content.customer = customer;
+    this.bsModalRef.onHidden?.subscribe(() => this.loadCustomers());
+  }
+
+  async toggleActive(customer: IQbCustomer): Promise<void> {
+    const willActivate = customer.active !== 1;
+    const action = willActivate ? 'activar' : 'desactivar';
+    const confirmed = await this.sweetAlertService.alertStatesMessage();
+    if (!confirmed) return;
+
+    try {
+      await firstValueFrom(
+        this.quickbooksService.setCustomerActive(customer.qbId, willActivate),
+      );
+      this.toast.success(`Customer ${action}do en QuickBooks`);
+      await this.loadCustomers();
+    } catch (err) {
+      this.handleError(err);
+    }
+  }
+
   filterData(): Array<IQbCustomer> {
-    if (!this._buscador) return this.customers;
-    const q = this._buscador.toLowerCase();
-    return this.customers.filter(
-      (c) =>
-        c.displayName?.toLowerCase().includes(q) ||
-        c.companyName?.toLowerCase().includes(q) ||
-        c.primaryEmail?.toLowerCase().includes(q) ||
-        c.qbId?.toLowerCase().includes(q),
-    );
+    let list = this.customers;
+    if (!this.showInactive) {
+      list = list.filter((c) => c.active === 1);
+    }
+    if (this._buscador) {
+      const q = this._buscador.toLowerCase();
+      list = list.filter(
+        (c) =>
+          c.displayName?.toLowerCase().includes(q) ||
+          c.companyName?.toLowerCase().includes(q) ||
+          c.primaryEmail?.toLowerCase().includes(q) ||
+          c.qbId?.toLowerCase().includes(q),
+      );
+    }
+    return list;
   }
 
   numeroPaginas($event: any) {
