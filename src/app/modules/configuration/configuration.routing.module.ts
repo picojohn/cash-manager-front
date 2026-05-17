@@ -4,7 +4,6 @@ import { ConfigurationComponent } from './configuration.component';
 import { PanelComponent } from './panel/panel.component';
 import { UsersComponent } from './users/users.component';
 import { CompaniesComponent } from './companies/companies.component';
-import { QuickbooksComponent } from './quickbooks/quickbooks.component';
 
 const routes: Routes = [
   {
@@ -22,10 +21,6 @@ const routes: Routes = [
      {
        path: 'companies',
        component: CompaniesComponent,
-     },
-     {
-       path: 'quickbooks',
-       component: QuickbooksComponent,
      },
     ]
   }

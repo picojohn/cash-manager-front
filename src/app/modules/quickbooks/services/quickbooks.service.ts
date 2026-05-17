@@ -35,36 +35,31 @@ export class QuickbooksService {
 
   // === Data (quickbooks/*) ===
 
-  /** Info live de la company conectada en QB (CompanyName, etc.) */
   getCompanyInfo(): Observable<IQuickbooksCompanyInfo> {
     return this.http.get<IQuickbooksCompanyInfo>(`${this.url}/quickbooks/company-info`);
   }
 
-  /** Customers desde la DB local (snapshot sincronizado de QB) */
-  getCustomers(skip = 0, take = 10): Observable<IQbCustomersResponse> {
+  /** Customers desde la DB local */
+  getCustomers(skip = 0, take = 100): Observable<IQbCustomersResponse> {
     return this.http.get<IQbCustomersResponse>(
       `${this.url}/quickbooks/customers?skip=${skip}&take=${take}`,
     );
   }
 
-  /** Conteo total de customers locales */
   getCustomersCount(): Observable<{ count: number }> {
     return this.http.get<{ count: number }>(`${this.url}/quickbooks/customers/count`);
   }
 
   // === Sync (quickbooks/sync/*) ===
 
-  /** Dispara una sync manual de customers (full upsert desde QB) */
   syncCustomers(): Observable<IQbSyncResult> {
     return this.http.post<IQbSyncResult>(`${this.url}/quickbooks/sync/customers`, {});
   }
 
-  /** Logs recientes de sync */
   getSyncLogs(limit = 20): Observable<Array<IQbSyncLog>> {
     return this.http.get<Array<IQbSyncLog>>(`${this.url}/quickbooks/sync/logs?limit=${limit}`);
   }
 
-  /** Ultimo sync para una entidad (default Customer) */
   getSyncStatus(entity: string = 'Customer'): Observable<IQbSyncLog | null> {
     return this.http.get<IQbSyncLog | null>(
       `${this.url}/quickbooks/sync/status?entity=${entity}`,

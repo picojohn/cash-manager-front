@@ -1,0 +1,78 @@
+<div class="view-card">
+  <div class="view-header">
+    <h3 class="view-title">Customers de QuickBooks</h3>
+    <div class="view-search">
+      <input type="search" [(ngModel)]="buscador" class="form-control"
+        placeholder="Buscar por nombre, empresa, email o QB ID...">
+    </div>
+    <button class="btn-create" (click)="syncNow()" [disabled]="syncing">
+      <i class="fa-solid fa-arrows-rotate" *ngIf="!syncing"></i>
+      <span class="spinner-border spinner-border-sm" *ngIf="syncing"></span>
+      {{ syncing ? 'Sincronizando...' : 'Sync Now' }}
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status"></div>
+    <p class="mt-2">Cargando customers...</p>
+  </div>
+
+  <div *ngIf="!loading && customers.length === 0" class="text-center py-5">
+    <i class="fa-solid fa-users-slash fs-1 text-secondary mb-3"></i>
+    <p class="text-muted">
+      No hay customers sincronizados. Click en <strong>Sync Now</strong> para traerlos desde QuickBooks.
+    </p>
+  </div>
+
+  <div *ngIf="!loading && customers.length > 0" style="overflow-x: auto;">
+    <table class="modern-table">
+      <thead>
+        <tr>
+          <th>QB ID</th>
+          <th>Display Name</th>
+          <th>Company</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th class="text-end">Balance</th>
+          <th>Activo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let c of filterData() | paginate: {itemsPerPage: totalPaginas, currentPage: page, id: 'itemCustomers'}">
+          <td>{{ c.qbId }}</td>
+          <td class="td-name">{{ c.displayName }}</td>
+          <td>{{ c.companyName || '—' }}</td>
+          <td>{{ c.primaryEmail || '—' }}</td>
+          <td>{{ c.primaryPhone || '—' }}</td>
+          <td class="text-end">${{ c.balance | number: '1.2-2' }}</td>
+          <td>
+            <span class="status-badge"
+              [ngClass]="c.active === 1 ? 'status-active' : 'status-inactive'">
+              <i class="fa-solid" [ngClass]="c.active === 1 ? 'fa-circle-check' : 'fa-circle-xmark'"></i>
+              {{ c.active === 1 ? 'Activo' : 'Inactivo' }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="view-pagination" *ngIf="!loading && customers.length > 0">
+    <select class="form-select" (change)="numeroPaginas($event)">
+      <option *ngFor="let option of nPaginas" [value]="option" [selected]="option === totalPaginas">
+        {{ option }}
+      </option>
+    </select>
+    <span *ngIf="filterData().length" class="pagination-info">
+      Mostrando
+      <strong>{{ (page - 1) * totalPaginas + 1 }}</strong>
+      -
+      <strong>{{ (page * totalPaginas < filterData().length) ? (page * totalPaginas) : filterData().length }}</strong>
+      de <strong>{{ filterData().length }}</strong>
+    </span>
+    <pagination-controls id="itemCustomers" (pageChange)="page=$event"
+      previousLabel="Anterior" nextLabel="Siguiente"
+      style="font-size: 13px; color: var(--text-secondary);">
+    </pagination-controls>
+  </div>
+</div>

@@ -1,13 +1,12 @@
 <div class="container-fluid p-4">
   <div class="d-flex align-items-center mb-4">
     <i class="fa-solid fa-link me-2 fs-3 text-success"></i>
-    <h3 class="mb-0">QuickBooks Online</h3>
+    <h3 class="mb-0">Estado de QuickBooks</h3>
   </div>
 
-  <!-- Loading inicial -->
   <div *ngIf="loading" class="text-center py-5">
     <div class="spinner-border text-primary" role="status"></div>
-    <p class="mt-2">Cargando estado de QuickBooks...</p>
+    <p class="mt-2">Cargando estado...</p>
   </div>
 
   <!-- NO conectado -->
@@ -16,24 +15,19 @@
       <i class="fa-solid fa-plug-circle-xmark fs-1 text-secondary mb-3"></i>
       <h4>Aún no has conectado QuickBooks</h4>
       <p class="text-muted mb-4">
-        Conecta tu cuenta de QuickBooks Online para sincronizar clientes, facturas,
-        productos y reportes con Cash Manager.
+        Conecta tu cuenta de QuickBooks Online para sincronizar tu información contable con Cash Manager.
       </p>
       <button class="btn btn-success btn-lg" (click)="connect()" [disabled]="connecting">
         <i class="fa-brands fa-intercom me-2" *ngIf="!connecting"></i>
         <span class="spinner-border spinner-border-sm me-2" *ngIf="connecting"></span>
         {{ connecting ? 'Redirigiendo...' : 'Connect to QuickBooks' }}
       </button>
-      <p class="text-muted small mt-3">
-        Te redirigiremos a Intuit para autorizar el acceso.
-      </p>
     </div>
   </div>
 
-  <!-- SÍ conectado -->
+  <!-- Conectado -->
   <div *ngIf="!loading && status.connected">
 
-    <!-- Card de status -->
     <div class="card mb-4">
       <div class="card-body">
         <div class="row align-items-center">
@@ -58,14 +52,13 @@
       </div>
     </div>
 
-    <!-- Card de sync -->
     <div class="card mb-4">
       <div class="card-body">
         <div class="row align-items-center">
           <div class="col-md-8">
             <h6 class="mb-2">
               <i class="fa-solid fa-arrows-rotate me-1"></i>
-              Sincronización
+              Sincronización de Customers
             </h6>
             <div *ngIf="lastSync; else noSync" class="small">
               <p class="mb-1">
@@ -82,10 +75,10 @@
                 {{ lastSync.recordsCreated }} nuevos,
                 {{ lastSync.recordsUpdated }} actualizados,
                 {{ lastSync.recordsFailed }} fallidos
-                (total fetched: {{ lastSync.recordsFetched }})
+                (total: {{ lastSync.recordsFetched }})
               </p>
-              <p class="mb-0" *ngIf="lastSync.status === 'failed' && lastSync.errorMessage">
-                <strong>Error:</strong> <code>{{ lastSync.errorMessage }}</code>
+              <p class="mb-0">
+                <strong>Customers locales:</strong> {{ customersCount }}
               </p>
             </div>
             <ng-template #noSync>
@@ -101,51 +94,6 @@
               {{ syncing ? 'Sincronizando...' : 'Sync Now' }}
             </button>
           </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Card de Customers locales -->
-    <div class="card">
-      <div class="card-header d-flex align-items-center justify-content-between">
-        <h6 class="mb-0">
-          <i class="fa-solid fa-users me-1"></i>
-          Customers locales ({{ customersCount }})
-        </h6>
-        <small class="text-muted">Mostrando primeros 10</small>
-      </div>
-      <div class="card-body p-0">
-        <table class="table table-sm table-hover mb-0" *ngIf="customers.length > 0">
-          <thead class="table-light">
-            <tr>
-              <th>QB ID</th>
-              <th>Display Name</th>
-              <th>Company</th>
-              <th>Email</th>
-              <th>Balance</th>
-              <th>Activo</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let c of customers">
-              <td>{{ c.qbId }}</td>
-              <td>{{ c.displayName }}</td>
-              <td>{{ c.companyName || '—' }}</td>
-              <td>{{ c.primaryEmail || '—' }}</td>
-              <td>${{ c.balance | number: '1.2-2' }}</td>
-              <td>
-                <span class="badge"
-                  [class.bg-success]="c.active === 1"
-                  [class.bg-secondary]="c.active !== 1">
-                  {{ c.active === 1 ? 'Sí' : 'No' }}
-                </span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div *ngIf="customers.length === 0" class="text-center py-4 text-muted">
-          No hay customers locales. Presioná
-          <strong>"Sync Now"</strong> para traerlos desde QuickBooks.
         </div>
       </div>
     </div>
