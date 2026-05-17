@@ -61,8 +61,9 @@
           <td>{{ c.primaryPhone || '—' }}</td>
           <td class="text-end">${{ c.balance | number: '1.2-2' }}</td>
           <td>
-            <span class="status-badge"
-              [ngClass]="c.active === 1 ? 'status-active' : 'status-inactive'">
+            <span class="status-badge" (click)="toggleActive(c)"
+              [ngClass]="c.active === 1 ? 'status-active' : 'status-inactive'"
+              [title]="c.active === 1 ? 'Click para desactivar' : 'Click para activar'">
               <i class="fa-solid" [ngClass]="c.active === 1 ? 'fa-circle-check' : 'fa-circle-xmark'"></i>
               {{ c.active === 1 ? 'Activo' : 'Inactivo' }}
             </span>
@@ -70,10 +71,6 @@
           <td>
             <div class="td-actions">
               <i (click)="editCustomer(c)" class="fa-solid fa-pen-to-square" title="Editar"></i>
-              <i (click)="toggleActive(c)"
-                [class]="c.active === 1 ? 'fa-solid fa-toggle-on text-success' : 'fa-solid fa-toggle-off text-secondary'"
-                [title]="c.active === 1 ? 'Desactivar' : 'Activar'"
-                style="margin-left: 10px; cursor: pointer;"></i>
             </div>
           </td>
         </tr>
