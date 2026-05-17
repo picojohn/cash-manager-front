@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
+import { TranslateService } from '@ngx-translate/core';
 import { firstValueFrom } from 'rxjs';
 import { ErrorService } from 'src/app/shared/services/error.service';
 import { SweetAlertService } from 'src/app/shared/services/sweetAlert.service';
@@ -21,11 +22,7 @@ export class CustomersComponent implements OnInit {
   public syncing: boolean = false;
 
   public filterStatus: FilterStatus = 'all';
-  public statusOptions = [
-    { value: 'all', label: 'Todos' },
-    { value: 'active', label: 'Activos' },
-    { value: 'inactive', label: 'Inactivos' },
-  ];
+  public statusOptions: Array<{ value: FilterStatus; label: string }> = [];
 
   public nPaginas = [10, 25, 50, 100];
   public totalPaginas = 10;
@@ -40,10 +37,21 @@ export class CustomersComponent implements OnInit {
     private sweetAlertService: SweetAlertService,
     private quickbooksService: QuickbooksService,
     private modalService: BsModalService,
+    private translate: TranslateService,
   ) {}
 
   ngOnInit(): void {
+    this.buildStatusOptions();
+    this.translate.onLangChange.subscribe(() => this.buildStatusOptions());
     this.loadCustomers();
+  }
+
+  private buildStatusOptions(): void {
+    this.statusOptions = [
+      { value: 'all', label: this.translate.instant('QUICKBOOKS.FILTER_ALL') },
+      { value: 'active', label: this.translate.instant('QUICKBOOKS.FILTER_ACTIVE') },
+      { value: 'inactive', label: this.translate.instant('QUICKBOOKS.FILTER_INACTIVE') },
+    ];
   }
 
   async loadCustomers(): Promise<void> {
@@ -66,9 +74,8 @@ export class CustomersComponent implements OnInit {
     this.syncing = true;
     try {
       const result = await firstValueFrom(this.quickbooksService.syncCustomers());
-      this.toast.success(
-        `Sync OK: ${result.recordsCreated} nuevos, ${result.recordsUpdated} actualizados`,
-      );
+      const msg = `${this.translate.instant('QUICKBOOKS.TOAST_SYNC_OK')}: ${result.recordsCreated} ${this.translate.instant('QUICKBOOKS.RESULT_NEW')}, ${result.recordsUpdated} ${this.translate.instant('QUICKBOOKS.RESULT_UPDATED')}`;
+      this.toast.success(msg);
       await this.loadCustomers();
     } catch (err) {
       this.handleError(err);
@@ -82,7 +89,7 @@ export class CustomersComponent implements OnInit {
       backdrop: 'static',
       class: 'modal-lg p-5',
     });
-    this.bsModalRef.content.title = 'Crear customer';
+    this.bsModalRef.content.title = this.translate.instant('QUICKBOOKS.MODAL_CREATE_TITLE');
     this.bsModalRef.content.customer = null;
     this.bsModalRef.onHidden?.subscribe(() => this.loadCustomers());
   }
@@ -92,20 +99,18 @@ export class CustomersComponent implements OnInit {
       backdrop: 'static',
       class: 'modal-lg p-5',
     });
-    this.bsModalRef.content.title = 'Editar customer';
+    this.bsModalRef.content.title = this.translate.instant('QUICKBOOKS.MODAL_EDIT_TITLE');
     this.bsModalRef.content.customer = customer;
     this.bsModalRef.onHidden?.subscribe(() => this.loadCustomers());
   }
 
   async toggleActive(customer: IQbCustomer): Promise<void> {
     const willActivate = customer.active !== 1;
-    const action = willActivate ? 'activar' : 'desactivar';
 
     // Guard preventivo: QB no deja desactivar customers con balance != 0.
-    // Lo validamos aca para evitar el roundtrip a QB y dar feedback inmediato.
     if (!willActivate && Math.abs(Number(customer.balance) || 0) > 0.001) {
       this.toast.warning(
-        `No se puede desactivar este customer porque tiene un balance pendiente de $${Number(customer.balance).toFixed(2)}. Cierra o cancela las facturas/pagos pendientes en QuickBooks primero.`,
+        this.translate.instant('QUICKBOOKS.BLOCK_DEACTIVATE_BALANCE'),
         'QuickBooks',
         { timeOut: 10000 },
       );
@@ -119,7 +124,8 @@ export class CustomersComponent implements OnInit {
       await firstValueFrom(
         this.quickbooksService.setCustomerActive(customer.qbId, willActivate),
       );
-      this.toast.success(`Customer ${action}do en QuickBooks`);
+      const toastKey = willActivate ? 'QUICKBOOKS.TOAST_ACTIVATED' : 'QUICKBOOKS.TOAST_DEACTIVATED';
+      this.toast.success(this.translate.instant(toastKey));
       await this.loadCustomers();
     } catch (err) {
       this.handleError(err);

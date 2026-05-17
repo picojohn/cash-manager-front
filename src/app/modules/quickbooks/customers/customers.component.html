@@ -1,18 +1,18 @@
 <div class="view-card">
   <div class="view-header">
-    <h3 class="view-title">Customers de QuickBooks</h3>
+    <h3 class="view-title">{{ 'QUICKBOOKS.TITLE_CUSTOMERS' | translate }}</h3>
     <div class="view-search">
       <input type="search" [(ngModel)]="buscador" class="form-control"
-        placeholder="Buscar por nombre, empresa, email o QB ID...">
+        [placeholder]="'QUICKBOOKS.SEARCH_PLACEHOLDER' | translate">
     </div>
-    <button class="btn-create" (click)="newCustomer()" title="Crear customer">
-      <i class="fa-solid fa-plus"></i> Nuevo
+    <button class="btn-create" (click)="newCustomer()" [title]="'QUICKBOOKS.MODAL_CREATE_TITLE' | translate">
+      <i class="fa-solid fa-plus"></i> {{ 'QUICKBOOKS.NEW' | translate }}
     </button>
     <button class="btn-create" (click)="syncNow()" [disabled]="syncing"
-      style="margin-left: 8px;" title="Sincronizar con QuickBooks">
+      style="margin-left: 8px;" [title]="'QUICKBOOKS.SYNC_BUTTON_TITLE' | translate">
       <i class="fa-solid fa-arrows-rotate" *ngIf="!syncing"></i>
       <span class="spinner-border spinner-border-sm" *ngIf="syncing"></span>
-      {{ syncing ? '...' : 'Sync' }}
+      {{ (syncing ? 'QUICKBOOKS.SYNCING' : 'QUICKBOOKS.SYNC_NOW') | translate }}
     </button>
   </div>
 
@@ -20,20 +20,20 @@
   <div class="px-3 pt-3 pb-2" style="max-width: 280px;">
     <ng-select [items]="statusOptions" bindLabel="label" bindValue="value"
       [(ngModel)]="filterStatus" [clearable]="false" (change)="onFilterStatusChange()"
-      placeholder="Filtrar por estado">
+      [placeholder]="'QUICKBOOKS.FILTER_BY_STATUS' | translate">
     </ng-select>
   </div>
 
   <div *ngIf="loading" class="text-center py-5">
     <div class="spinner-border text-primary" role="status"></div>
-    <p class="mt-2">Cargando customers...</p>
+    <p class="mt-2">{{ 'QUICKBOOKS.LOADING_CUSTOMERS' | translate }}</p>
   </div>
 
   <div *ngIf="!loading && customers.length === 0" class="text-center py-5">
     <i class="fa-solid fa-users-slash fs-1 text-secondary mb-3"></i>
     <p class="text-muted">
-      No hay customers sincronizados. Click en <strong>Sync</strong> para traerlos desde QuickBooks,
-      o <strong>Nuevo</strong> para crear uno.
+      {{ 'QUICKBOOKS.EMPTY_STATE_TITLE' | translate }}.
+      {{ 'QUICKBOOKS.EMPTY_STATE_DESC' | translate }}
     </p>
   </div>
 
@@ -41,14 +41,14 @@
     <table class="modern-table">
       <thead>
         <tr>
-          <th>QB ID</th>
-          <th>Display Name</th>
-          <th>Company</th>
-          <th>Email</th>
-          <th>Phone</th>
-          <th class="text-end">Balance</th>
-          <th>Estado</th>
-          <th>Acciones</th>
+          <th>{{ 'QUICKBOOKS.TABLE_QB_ID' | translate }}</th>
+          <th>{{ 'QUICKBOOKS.TABLE_DISPLAY_NAME' | translate }}</th>
+          <th>{{ 'QUICKBOOKS.TABLE_COMPANY' | translate }}</th>
+          <th>{{ 'QUICKBOOKS.TABLE_EMAIL' | translate }}</th>
+          <th>{{ 'QUICKBOOKS.TABLE_PHONE' | translate }}</th>
+          <th class="text-end">{{ 'QUICKBOOKS.TABLE_BALANCE' | translate }}</th>
+          <th>{{ 'GENERAL.STATUS' | translate }}</th>
+          <th>{{ 'GENERAL.ACTIONS' | translate }}</th>
         </tr>
       </thead>
       <tbody>
@@ -63,14 +63,14 @@
           <td>
             <span class="status-badge" (click)="toggleActive(c)"
               [ngClass]="c.active === 1 ? 'status-active' : 'status-inactive'"
-              [title]="c.active === 1 ? 'Click para desactivar' : 'Click para activar'">
+              [title]="(c.active === 1 ? 'QUICKBOOKS.BADGE_CLICK_DEACTIVATE' : 'QUICKBOOKS.BADGE_CLICK_ACTIVATE') | translate">
               <i class="fa-solid" [ngClass]="c.active === 1 ? 'fa-circle-check' : 'fa-circle-xmark'"></i>
-              {{ c.active === 1 ? 'Activo' : 'Inactivo' }}
+              {{ (c.active === 1 ? 'GENERAL.ACTIVE' : 'GENERAL.INACTIVE') | translate }}
             </span>
           </td>
           <td>
             <div class="td-actions">
-              <i (click)="editCustomer(c)" class="fa-solid fa-pen-to-square" title="Editar"></i>
+              <i (click)="editCustomer(c)" class="fa-solid fa-pen-to-square" [title]="'GENERAL.EDIT' | translate"></i>
             </div>
           </td>
         </tr>
@@ -85,14 +85,14 @@
       </option>
     </select>
     <span *ngIf="filterData().length" class="pagination-info">
-      Mostrando
+      {{ 'GENERAL.SHOWING' | translate }}
       <strong>{{ (page - 1) * totalPaginas + 1 }}</strong>
       -
       <strong>{{ (page * totalPaginas < filterData().length) ? (page * totalPaginas) : filterData().length }}</strong>
-      de <strong>{{ filterData().length }}</strong>
+      {{ 'GENERAL.OF' | translate }} <strong>{{ filterData().length }}</strong>
     </span>
     <pagination-controls id="itemCustomers" (pageChange)="page=$event"
-      previousLabel="Anterior" nextLabel="Siguiente"
+      [previousLabel]="'GENERAL.PREVIOUS' | translate" [nextLabel]="'GENERAL.NEXT' | translate"
       style="font-size: 13px; color: var(--text-secondary);">
     </pagination-controls>
   </div>

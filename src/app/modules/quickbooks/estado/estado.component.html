@@ -1,26 +1,26 @@
 <div class="container-fluid p-4">
   <div class="d-flex align-items-center mb-4">
     <i class="fa-solid fa-link me-2 fs-3 text-success"></i>
-    <h3 class="mb-0">Estado de QuickBooks</h3>
+    <h3 class="mb-0">{{ 'QUICKBOOKS.TITLE_STATUS' | translate }}</h3>
   </div>
 
   <div *ngIf="loading" class="text-center py-5">
     <div class="spinner-border text-primary" role="status"></div>
-    <p class="mt-2">Cargando estado...</p>
+    <p class="mt-2">{{ 'QUICKBOOKS.LOADING_STATUS' | translate }}</p>
   </div>
 
   <!-- NO conectado -->
   <div *ngIf="!loading && !status.connected" class="card">
     <div class="card-body text-center py-5">
       <i class="fa-solid fa-plug-circle-xmark fs-1 text-secondary mb-3"></i>
-      <h4>Aún no has conectado QuickBooks</h4>
+      <h4>{{ 'QUICKBOOKS.NOT_CONNECTED' | translate }}</h4>
       <p class="text-muted mb-4">
-        Conecta tu cuenta de QuickBooks Online para sincronizar tu información contable con Cash Manager.
+        {{ 'QUICKBOOKS.NOT_CONNECTED_DESC' | translate }}
       </p>
       <button class="btn btn-success btn-lg" (click)="connect()" [disabled]="connecting">
         <i class="fa-brands fa-intercom me-2" *ngIf="!connecting"></i>
         <span class="spinner-border spinner-border-sm me-2" *ngIf="connecting"></span>
-        {{ connecting ? 'Redirigiendo...' : 'Connect to QuickBooks' }}
+        {{ (connecting ? 'QUICKBOOKS.CONNECTING' : 'QUICKBOOKS.CONNECT') | translate }}
       </button>
     </div>
   </div>
@@ -34,18 +34,18 @@
           <div class="col-md-8">
             <div class="d-flex align-items-center mb-2">
               <i class="fa-solid fa-circle-check text-success fs-4 me-2"></i>
-              <h5 class="mb-0">Conectado a QuickBooks</h5>
+              <h5 class="mb-0">{{ 'QUICKBOOKS.CONNECTED' | translate }}</h5>
             </div>
             <div *ngIf="companyInfo" class="ms-4">
-              <p class="mb-1"><strong>Empresa QB:</strong> {{ companyInfo.CompanyName }}</p>
-              <p class="mb-1"><strong>País:</strong> {{ companyInfo.Country }}</p>
-              <p class="mb-1"><strong>realmId:</strong> <code>{{ status.realmId }}</code></p>
+              <p class="mb-1"><strong>{{ 'QUICKBOOKS.COMPANY_QB' | translate }}:</strong> {{ companyInfo.CompanyName }}</p>
+              <p class="mb-1"><strong>{{ 'QUICKBOOKS.COUNTRY' | translate }}:</strong> {{ companyInfo.Country }}</p>
+              <p class="mb-1"><strong>{{ 'QUICKBOOKS.REALM_ID' | translate }}:</strong> <code>{{ status.realmId }}</code></p>
             </div>
           </div>
           <div class="col-md-4 text-end">
             <button class="btn btn-outline-danger" (click)="disconnect()">
               <i class="fa-solid fa-plug-circle-xmark me-1"></i>
-              Desconectar
+              {{ 'QUICKBOOKS.DISCONNECT' | translate }}
             </button>
           </div>
         </div>
@@ -58,11 +58,11 @@
           <div class="col-md-8">
             <h6 class="mb-2">
               <i class="fa-solid fa-arrows-rotate me-1"></i>
-              Sincronización de Customers
+              {{ 'QUICKBOOKS.SYNC_TITLE' | translate }}
             </h6>
             <div *ngIf="lastSync; else noSync" class="small">
               <p class="mb-1">
-                <strong>Último sync:</strong> {{ formatRelative(lastSync.startedAt) }}
+                <strong>{{ 'QUICKBOOKS.LAST_SYNC' | translate }}:</strong> {{ formatRelative(lastSync.startedAt) }}
                 <span class="badge ms-2"
                   [class.bg-success]="lastSync.status === 'completed'"
                   [class.bg-warning]="lastSync.status === 'started'"
@@ -71,19 +71,19 @@
                 </span>
               </p>
               <p class="mb-1" *ngIf="lastSync.status === 'completed'">
-                <strong>Resultado:</strong>
-                {{ lastSync.recordsCreated }} nuevos,
-                {{ lastSync.recordsUpdated }} actualizados,
-                {{ lastSync.recordsFailed }} fallidos
-                (total: {{ lastSync.recordsFetched }})
+                <strong>{{ 'QUICKBOOKS.RESULT_LABEL' | translate }}:</strong>
+                {{ lastSync.recordsCreated }} {{ 'QUICKBOOKS.RESULT_NEW' | translate }},
+                {{ lastSync.recordsUpdated }} {{ 'QUICKBOOKS.RESULT_UPDATED' | translate }},
+                {{ lastSync.recordsFailed }} {{ 'QUICKBOOKS.RESULT_FAILED' | translate }}
+                ({{ 'QUICKBOOKS.RESULT_TOTAL' | translate }}: {{ lastSync.recordsFetched }})
               </p>
               <p class="mb-0">
-                <strong>Customers locales:</strong> {{ customersCount }}
+                <strong>{{ 'QUICKBOOKS.LOCAL_CUSTOMERS' | translate }}:</strong> {{ customersCount }}
               </p>
             </div>
             <ng-template #noSync>
               <p class="text-muted small mb-0">
-                Aún no se ha sincronizado data desde QuickBooks.
+                {{ 'QUICKBOOKS.NO_SYNC_YET' | translate }}
               </p>
             </ng-template>
           </div>
@@ -91,7 +91,7 @@
             <button class="btn btn-primary" (click)="syncNow()" [disabled]="syncing">
               <i class="fa-solid fa-arrows-rotate me-1" *ngIf="!syncing"></i>
               <span class="spinner-border spinner-border-sm me-1" *ngIf="syncing"></span>
-              {{ syncing ? 'Sincronizando...' : 'Sync Now' }}
+              {{ (syncing ? 'QUICKBOOKS.SYNCING' : 'QUICKBOOKS.SYNC_NOW') | translate }}
             </button>
           </div>
         </div>

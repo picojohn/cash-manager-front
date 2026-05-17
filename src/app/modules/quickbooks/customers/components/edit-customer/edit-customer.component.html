@@ -9,12 +9,12 @@
       <!-- Display Name -->
       <div class="row p-2">
         <div class="form-group col-md-12 mb-3">
-          <label for="displayName">Display Name *</label>
+          <label for="displayName">{{ 'QUICKBOOKS.FORM_DISPLAY_NAME' | translate }} *</label>
           <input type="text" class="form-control" formControlName="displayName"
-            placeholder="Nombre con el que aparece en QB">
+            [placeholder]="'QUICKBOOKS.FORM_DISPLAY_NAME_PLACEHOLDER' | translate">
           <div *ngIf="formCustomer.get('displayName').invalid && formCustomer.get('displayName').touched"
             class="text-danger small">
-            Este campo es obligatorio
+            {{ 'QUICKBOOKS.FORM_DISPLAY_NAME_REQUIRED' | translate }}
           </div>
         </div>
       </div>
@@ -22,41 +22,41 @@
       <!-- Company Name -->
       <div class="row p-2">
         <div class="form-group col-md-12 mb-3">
-          <label for="companyName">Empresa</label>
+          <label for="companyName">{{ 'QUICKBOOKS.FORM_COMPANY' | translate }}</label>
           <input type="text" class="form-control" formControlName="companyName"
-            placeholder="Nombre de la empresa (si aplica)">
+            [placeholder]="'QUICKBOOKS.FORM_COMPANY_PLACEHOLDER' | translate">
         </div>
       </div>
 
       <!-- Given + Family -->
       <div class="row p-2">
         <div class="form-group col-md-6 mb-3">
-          <label for="givenName">Nombre</label>
+          <label for="givenName">{{ 'QUICKBOOKS.FORM_GIVEN_NAME' | translate }}</label>
           <input type="text" class="form-control" formControlName="givenName"
-            placeholder="John">
+            [placeholder]="'QUICKBOOKS.FORM_GIVEN_NAME_PLACEHOLDER' | translate">
         </div>
         <div class="form-group col-md-6 mb-3">
-          <label for="familyName">Apellido</label>
+          <label for="familyName">{{ 'QUICKBOOKS.FORM_FAMILY_NAME' | translate }}</label>
           <input type="text" class="form-control" formControlName="familyName"
-            placeholder="Smith">
+            [placeholder]="'QUICKBOOKS.FORM_FAMILY_NAME_PLACEHOLDER' | translate">
         </div>
       </div>
 
       <!-- Email + Phone -->
       <div class="row p-2">
         <div class="form-group col-md-6 mb-3">
-          <label for="email">Email</label>
+          <label for="email">{{ 'GENERAL.EMAIL' | translate }}</label>
           <input type="email" class="form-control" formControlName="email"
-            placeholder="contacto@cliente.com">
+            [placeholder]="'QUICKBOOKS.FORM_EMAIL_PLACEHOLDER' | translate">
           <div *ngIf="formCustomer.get('email').invalid && formCustomer.get('email').touched"
             class="text-danger small">
-            Email inválido
+            {{ 'QUICKBOOKS.FORM_EMAIL_INVALID' | translate }}
           </div>
         </div>
         <div class="form-group col-md-6 mb-3">
-          <label for="phone">Teléfono</label>
+          <label for="phone">{{ 'GENERAL.PHONE' | translate }}</label>
           <input type="text" class="form-control" formControlName="phone"
-            placeholder="+507 6000-0000">
+            [placeholder]="'QUICKBOOKS.FORM_PHONE_PLACEHOLDER' | translate">
         </div>
       </div>
 
@@ -65,10 +65,10 @@
         <button (click)="save()" class="btn btn-outline-primary col-md-4 me-2" [disabled]="saving">
           <i class="fa-solid fa-floppy-disk" *ngIf="!saving"></i>
           <span class="spinner-border spinner-border-sm" *ngIf="saving"></span>
-          {{ saving ? 'Guardando...' : 'Guardar' }}
+          {{ (saving ? 'QUICKBOOKS.SAVING' : 'GENERAL.SAVE') | translate }}
         </button>
         <button (click)="bsModalRef.hide()" class="btn btn-outline-secondary col-md-4" [disabled]="saving">
-          <i class="fa-solid fa-ban" style="color: red"></i> Cerrar
+          <i class="fa-solid fa-ban" style="color: red"></i> {{ 'GENERAL.CLOSE' | translate }}
         </button>
       </div>
     </form>

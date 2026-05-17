@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
+import { TranslateService } from '@ngx-translate/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { ErrorService } from 'src/app/shared/services/error.service';
@@ -27,6 +28,7 @@ export class EditCustomerComponent implements OnInit {
     public toast: ToastrService,
     private errorService: ErrorService,
     private quickbooksService: QuickbooksService,
+    private translate: TranslateService,
   ) {}
 
   ngOnInit(): void {
@@ -54,7 +56,7 @@ export class EditCustomerComponent implements OnInit {
   async save(): Promise<void> {
     if (this.formCustomer.invalid) {
       this.formCustomer.markAllAsTouched();
-      this.toast.info('Revisá los campos requeridos');
+      this.toast.info(this.translate.instant('QUICKBOOKS.TOAST_FORM_INVALID'));
       return;
     }
     if (this.saving) return;
@@ -72,10 +74,10 @@ export class EditCustomerComponent implements OnInit {
     try {
       if (this.customer) {
         await firstValueFrom(this.quickbooksService.updateCustomer(this.customer.qbId, dto));
-        this.toast.success('Customer actualizado en QuickBooks');
+        this.toast.success(this.translate.instant('QUICKBOOKS.TOAST_UPDATED'));
       } else {
         await firstValueFrom(this.quickbooksService.createCustomer(dto));
-        this.toast.success('Customer creado en QuickBooks');
+        this.toast.success(this.translate.instant('QUICKBOOKS.TOAST_CREATED'));
       }
       this.bsModalRef.hide();
     } catch (err) {

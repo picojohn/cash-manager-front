@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
+import { TranslateService } from '@ngx-translate/core';
 import { firstValueFrom } from 'rxjs';
 import { ErrorService } from 'src/app/shared/services/error.service';
 import { SweetAlertService } from 'src/app/shared/services/sweetAlert.service';
@@ -29,6 +30,7 @@ export class EstadoComponent implements OnInit {
     private errorService: ErrorService,
     private sweetAlertService: SweetAlertService,
     private quickbooksService: QuickbooksService,
+    private translate: TranslateService,
   ) {}
 
   ngOnInit(): void {
@@ -80,9 +82,8 @@ export class EstadoComponent implements OnInit {
     this.syncing = true;
     try {
       const result = await firstValueFrom(this.quickbooksService.syncCustomers());
-      this.toast.success(
-        `Sync OK: ${result.recordsCreated} nuevos, ${result.recordsUpdated} actualizados (${result.recordsFetched} en total)`,
-      );
+      const msg = `${this.translate.instant('QUICKBOOKS.TOAST_SYNC_OK')}: ${result.recordsCreated} ${this.translate.instant('QUICKBOOKS.RESULT_NEW')}, ${result.recordsUpdated} ${this.translate.instant('QUICKBOOKS.RESULT_UPDATED')} (${result.recordsFetched} ${this.translate.instant('QUICKBOOKS.RESULT_TOTAL')})`;
+      this.toast.success(msg);
       await this.loadConnectedData();
     } catch (err) {
       this.handleError(err);
@@ -96,7 +97,7 @@ export class EstadoComponent implements OnInit {
     if (!confirmed) return;
     try {
       await firstValueFrom(this.quickbooksService.disconnect());
-      this.toast.success('QuickBooks desconectado');
+      this.toast.success(this.translate.instant('QUICKBOOKS.TOAST_DISCONNECTED'));
       this.status = { connected: false };
       this.companyInfo = null;
       this.lastSync = null;
@@ -112,12 +113,12 @@ export class EstadoComponent implements OnInit {
     const then = new Date(dateStr).getTime();
     const diffMs = now - then;
     const diffMin = Math.floor(diffMs / 60000);
-    if (diffMin < 1) return 'hace unos segundos';
-    if (diffMin < 60) return `hace ${diffMin} min`;
+    if (diffMin < 1) return this.translate.instant('QUICKBOOKS.TIME_FEW_SECONDS');
+    if (diffMin < 60) return this.translate.instant('QUICKBOOKS.TIME_MIN_AGO', { n: diffMin });
     const diffH = Math.floor(diffMin / 60);
-    if (diffH < 24) return `hace ${diffH} h`;
+    if (diffH < 24) return this.translate.instant('QUICKBOOKS.TIME_HOUR_AGO', { n: diffH });
     const diffD = Math.floor(diffH / 24);
-    return `hace ${diffD} día(s)`;
+    return this.translate.instant('QUICKBOOKS.TIME_DAY_AGO', { n: diffD });
   }
 
   private handleError(err: any): void {
