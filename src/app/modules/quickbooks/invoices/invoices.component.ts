@@ -96,7 +96,9 @@ export class InvoicesComponent implements OnInit {
     if (this.filterPayment === 'paid') {
       list = list.filter((x) => Number(x.balance) <= 0.001);
     } else if (this.filterPayment === 'pending') {
-      list = list.filter((x) => Number(x.balance) > 0.001);
+      list = list.filter(
+        (x) => Number(x.balance) > 0.001 && !(x.dueDate && x.dueDate < today),
+      );
     } else if (this.filterPayment === 'overdue') {
       list = list.filter(
         (x) => Number(x.balance) > 0.001 && x.dueDate && x.dueDate < today,
