@@ -97,6 +97,18 @@ export class CustomersComponent implements OnInit {
   async toggleActive(customer: IQbCustomer): Promise<void> {
     const willActivate = customer.active !== 1;
     const action = willActivate ? 'activar' : 'desactivar';
+
+    // Guard preventivo: QB no deja desactivar customers con balance != 0.
+    // Lo validamos aca para evitar el roundtrip a QB y dar feedback inmediato.
+    if (!willActivate && Math.abs(Number(customer.balance) || 0) > 0.001) {
+      this.toast.warning(
+        `No se puede desactivar este customer porque tiene un balance pendiente de $${Number(customer.balance).toFixed(2)}. Cierra o cancela las facturas/pagos pendientes en QuickBooks primero.`,
+        'QuickBooks',
+        { timeOut: 10000 },
+      );
+      return;
+    }
+
     const confirmed = await this.sweetAlertService.alertStatesMessage();
     if (!confirmed) return;
 
