@@ -9,7 +9,7 @@
       <i class="fa-solid fa-plus"></i> Nuevo
     </button>
     <button class="btn-create" (click)="syncNow()" [disabled]="syncing"
-      style="background: var(--primary-light); margin-left: 8px;" title="Sincronizar con QuickBooks">
+      style="margin-left: 8px;" title="Sincronizar con QuickBooks">
       <i class="fa-solid fa-arrows-rotate" *ngIf="!syncing"></i>
       <span class="spinner-border spinner-border-sm" *ngIf="syncing"></span>
       {{ syncing ? '...' : 'Sync' }}
