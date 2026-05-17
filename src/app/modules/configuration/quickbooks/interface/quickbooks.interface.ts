@@ -23,21 +23,53 @@ export interface IQuickbooksCompanyInfo {
   };
 }
 
-export interface IQuickbooksCustomer {
-  Id: string;
-  DisplayName: string;
-  CompanyName?: string;
-  Active: boolean;
-  Balance: number;
-  PrimaryEmailAddr?: { Address: string };
-  PrimaryPhone?: { FreeFormNumber: string };
-  [key: string]: any;
+/** Customer en el snapshot local (camelCase, mapeado de QB) */
+export interface IQbCustomer {
+  id: number;
+  idCompany: number;
+  qbId: string;
+  syncToken: string;
+  displayName: string;
+  companyName: string;
+  givenName: string;
+  familyName: string;
+  active: number;
+  balance: number;
+  primaryEmail: string;
+  primaryPhone: string;
+  qbCreatedAt: string;
+  qbUpdatedAt: string;
+  syncedAt: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
-export interface IQuickbooksCustomersResponse {
-  customers: Array<IQuickbooksCustomer>;
-  startPosition: number;
-  maxResults: number;
-  totalCount?: number;
-  time: string;
+export interface IQbCustomersResponse {
+  items: Array<IQbCustomer>;
+  total: number;
+}
+
+export interface IQbSyncLog {
+  id: number;
+  idCompany: number;
+  entityType: string;
+  syncType: string;
+  status: string;
+  recordsFetched: number;
+  recordsCreated: number;
+  recordsUpdated: number;
+  recordsFailed: number;
+  errorMessage?: string;
+  startedAt: string;
+  completedAt?: string;
+}
+
+export interface IQbSyncResult {
+  logId: number;
+  status: string;
+  recordsFetched: number;
+  recordsCreated: number;
+  recordsUpdated: number;
+  recordsFailed: number;
+  durationMs: number;
 }
