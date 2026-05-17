@@ -3,24 +3,79 @@
     <h2 class="p-3"><i class="fa-solid fa-building" style="color:#0039a5;"></i> {{ title }}</h2>
   </div>
   <div *ngIf="cargarFormulario">
-  <form [formGroup]="formCompany">
-    <div class="row justify-content-center p-3">
-      <div class="form-group col-md-8 mb-3">
-        <label for="name">{{ 'GENERAL.NAME' | translate }}</label>
-        <input type="text" class="form-control" formControlName="name" [placeholder]="'COMPANIES.NAME_PLACEHOLDER' | translate">
-        <div *ngIf="formCompany.get('name').invalid && formCompany.get('name').touched" class="text-danger">
-          {{ 'COMPANIES.NAME_REQUIRED' | translate }}
+    <form [formGroup]="formCompany">
+      <!-- Fila 1: Nombre comercial y razón social -->
+      <div class="row p-2">
+        <div class="form-group col-md-6 mb-3">
+          <label for="name">{{ 'GENERAL.NAME' | translate }} *</label>
+          <input type="text" class="form-control" formControlName="name"
+            [placeholder]="'COMPANIES.NAME_PLACEHOLDER' | translate">
+          <div *ngIf="formCompany.get('name').invalid && formCompany.get('name').touched" class="text-danger small">
+            {{ 'COMPANIES.NAME_REQUIRED' | translate }}
+          </div>
+        </div>
+        <div class="form-group col-md-6 mb-3">
+          <label for="legalName">Razón social</label>
+          <input type="text" class="form-control" formControlName="legalName"
+            placeholder="Nombre legal completo">
         </div>
       </div>
-    </div>
-    <div class="row justify-content-center p-3">
-      <button (click)="save()" class="btn btn-outline-primary col-md-4 me-2">
-        <i class="fa-solid fa-floppy-disk"></i> {{ 'GENERAL.SAVE' | translate }}
-      </button>
-      <button (click)="bsModalRef.hide()" class="btn btn-outline-secondary col-md-4">
-        <i class="fa-solid fa-ban" style="color: red"></i> {{ 'GENERAL.CLOSE' | translate }}
-      </button>
-    </div>
-  </form>
+
+      <!-- Fila 2: Tax ID y email -->
+      <div class="row p-2">
+        <div class="form-group col-md-6 mb-3">
+          <label for="taxId">RUC / Tax ID</label>
+          <input type="text" class="form-control" formControlName="taxId"
+            placeholder="Ej: 1234567-8-123456">
+        </div>
+        <div class="form-group col-md-6 mb-3">
+          <label for="email">Email</label>
+          <input type="email" class="form-control" formControlName="email"
+            placeholder="contacto@empresa.com">
+          <div *ngIf="formCompany.get('email').invalid && formCompany.get('email').touched"
+            class="text-danger small">
+            Email inválido
+          </div>
+        </div>
+      </div>
+
+      <!-- Fila 3: Teléfono y país -->
+      <div class="row p-2">
+        <div class="form-group col-md-6 mb-3">
+          <label for="phone">Teléfono</label>
+          <input type="text" class="form-control" formControlName="phone"
+            placeholder="+507 6000-0000">
+        </div>
+        <div class="form-group col-md-6 mb-3">
+          <label for="country">País</label>
+          <input type="text" class="form-control" formControlName="country"
+            placeholder="Panamá">
+        </div>
+      </div>
+
+      <!-- Fila 4: Dirección y moneda -->
+      <div class="row p-2">
+        <div class="form-group col-md-8 mb-3">
+          <label for="address">Dirección</label>
+          <input type="text" class="form-control" formControlName="address"
+            placeholder="Calle, edificio, ciudad...">
+        </div>
+        <div class="form-group col-md-4 mb-3">
+          <label for="currency">Moneda</label>
+          <input type="text" class="form-control" formControlName="currency"
+            placeholder="USD">
+        </div>
+      </div>
+
+      <!-- Botones -->
+      <div class="row justify-content-center p-3">
+        <button (click)="save()" class="btn btn-outline-primary col-md-4 me-2">
+          <i class="fa-solid fa-floppy-disk"></i> {{ 'GENERAL.SAVE' | translate }}
+        </button>
+        <button (click)="bsModalRef.hide()" class="btn btn-outline-secondary col-md-4">
+          <i class="fa-solid fa-ban" style="color: red"></i> {{ 'GENERAL.CLOSE' | translate }}
+        </button>
+      </div>
+    </form>
   </div>
 </div>

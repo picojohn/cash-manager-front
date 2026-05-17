@@ -39,6 +39,17 @@ export class EditCompanyComponent implements OnInit {
     this.formCompany = new FormGroup({
       id: new FormControl(this.company ? this.company.id : null),
       name: new FormControl(this.company ? this.company.name : null, [Validators.required]),
+      legalName: new FormControl(this.company ? this.company.legalName : null),
+      taxId: new FormControl(this.company ? this.company.taxId : null),
+      email: new FormControl(this.company ? this.company.email : null, [
+        Validators.pattern(
+          /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+        ),
+      ]),
+      phone: new FormControl(this.company ? this.company.phone : null),
+      address: new FormControl(this.company ? this.company.address : null),
+      country: new FormControl(this.company ? this.company.country : null),
+      currency: new FormControl(this.company ? this.company.currency : null),
       status: new FormControl(this.company ? this.company.status : 1),
     });
   }
