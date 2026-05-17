@@ -47,14 +47,17 @@ export class CustomersComponent implements OnInit {
   }
 
   async loadCustomers(): Promise<void> {
-    this.loading = true;
+    // Solo mostrar spinner en la carga inicial; en refresh mantenemos la tabla
+    // visible y reemplazamos los datos al final para evitar parpadeo.
+    const isInitialLoad = this.customers.length === 0;
+    if (isInitialLoad) this.loading = true;
     try {
       const res = await firstValueFrom(this.quickbooksService.getCustomers(0, 1000));
-      this.customers = res.items;
+      this.customers = (res.items || []).sort((a, b) => (b.id || 0) - (a.id || 0));
     } catch (err) {
       this.handleError(err);
     } finally {
-      this.loading = false;
+      if (isInitialLoad) this.loading = false;
     }
   }
 
