@@ -115,6 +115,15 @@ export class QuickbooksService {
     return this.http.post<IQbSyncResult>(`${this.url}/quickbooks/sync/invoices`, {});
   }
 
+  /** Sincroniza Customers + Items + Invoices en orden */
+  syncAll(): Observable<{
+    customers: IQbSyncResult | { error: string };
+    items: IQbSyncResult | { error: string };
+    invoices: IQbSyncResult | { error: string };
+  }> {
+    return this.http.post<any>(`${this.url}/quickbooks/sync/all`, {});
+  }
+
   getSyncLogs(limit = 20): Observable<Array<IQbSyncLog>> {
     return this.http.get<Array<IQbSyncLog>>(`${this.url}/quickbooks/sync/logs?limit=${limit}`);
   }

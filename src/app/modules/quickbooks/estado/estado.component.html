@@ -28,6 +28,7 @@
   <!-- Conectado -->
   <div *ngIf="!loading && status.connected">
 
+    <!-- Header conexion -->
     <div class="card mb-4">
       <div class="card-body">
         <div class="row align-items-center">
@@ -43,7 +44,12 @@
             </div>
           </div>
           <div class="col-md-4 text-end">
-            <button class="btn btn-outline-danger" (click)="disconnect()">
+            <button class="btn btn-primary me-2" (click)="syncAll()" [disabled]="syncingAll">
+              <i class="fa-solid fa-arrows-rotate me-1" *ngIf="!syncingAll"></i>
+              <span class="spinner-border spinner-border-sm me-1" *ngIf="syncingAll"></span>
+              {{ (syncingAll ? 'QUICKBOOKS.SYNCING' : 'QUICKBOOKS.SYNC_ALL') | translate }}
+            </button>
+            <button class="btn btn-outline-danger" (click)="disconnect()" [disabled]="syncingAll">
               <i class="fa-solid fa-plug-circle-xmark me-1"></i>
               {{ 'QUICKBOOKS.DISCONNECT' | translate }}
             </button>
@@ -52,46 +58,44 @@
       </div>
     </div>
 
-    <div class="card mb-4">
-      <div class="card-body">
-        <div class="row align-items-center">
-          <div class="col-md-8">
-            <h6 class="mb-2">
-              <i class="fa-solid fa-arrows-rotate me-1"></i>
-              {{ 'QUICKBOOKS.SYNC_TITLE' | translate }}
-            </h6>
-            <div *ngIf="lastSync; else noSync" class="small">
+    <!-- Cards por entidad -->
+    <div class="row">
+      <div class="col-md-4 mb-4" *ngFor="let e of entities">
+        <div class="card h-100">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+              <h5 class="mb-0">
+                <i [class]="e.iconClass + ' me-2 text-primary'"></i>
+                {{ e.titleI18n | translate }}
+              </h5>
+              <span class="badge bg-secondary fs-6">{{ e.count }}</span>
+            </div>
+
+            <div *ngIf="e.lastSync; else noSync" class="small text-muted mb-3">
               <p class="mb-1">
-                <strong>{{ 'QUICKBOOKS.LAST_SYNC' | translate }}:</strong> {{ formatRelative(lastSync.startedAt) }}
-                <span class="badge ms-2"
-                  [class.bg-success]="lastSync.status === 'completed'"
-                  [class.bg-warning]="lastSync.status === 'started'"
-                  [class.bg-danger]="lastSync.status === 'failed'">
-                  {{ lastSync.status }}
+                <strong>{{ 'QUICKBOOKS.LAST_SYNC' | translate }}:</strong>
+                {{ formatRelative(e.lastSync.startedAt) }}
+                <span class="badge ms-1"
+                  [class.bg-success]="e.lastSync.status === 'completed'"
+                  [class.bg-warning]="e.lastSync.status === 'started'"
+                  [class.bg-danger]="e.lastSync.status === 'failed'">
+                  {{ e.lastSync.status }}
                 </span>
               </p>
-              <p class="mb-1" *ngIf="lastSync.status === 'completed'">
-                <strong>{{ 'QUICKBOOKS.RESULT_LABEL' | translate }}:</strong>
-                {{ lastSync.recordsCreated }} {{ 'QUICKBOOKS.RESULT_NEW' | translate }},
-                {{ lastSync.recordsUpdated }} {{ 'QUICKBOOKS.RESULT_UPDATED' | translate }},
-                {{ lastSync.recordsFailed }} {{ 'QUICKBOOKS.RESULT_FAILED' | translate }}
-                ({{ 'QUICKBOOKS.RESULT_TOTAL' | translate }}: {{ lastSync.recordsFetched }})
-              </p>
-              <p class="mb-0">
-                <strong>{{ 'QUICKBOOKS.LOCAL_CUSTOMERS' | translate }}:</strong> {{ customersCount }}
+              <p class="mb-0" *ngIf="e.lastSync.status === 'completed'">
+                {{ e.lastSync.recordsCreated }} {{ 'QUICKBOOKS.RESULT_NEW' | translate }},
+                {{ e.lastSync.recordsUpdated }} {{ 'QUICKBOOKS.RESULT_UPDATED' | translate }}
               </p>
             </div>
             <ng-template #noSync>
-              <p class="text-muted small mb-0">
-                {{ 'QUICKBOOKS.NO_SYNC_YET' | translate }}
-              </p>
+              <p class="text-muted small mb-3">{{ 'QUICKBOOKS.NO_SYNC_YET' | translate }}</p>
             </ng-template>
-          </div>
-          <div class="col-md-4 text-end">
-            <button class="btn btn-primary" (click)="syncNow()" [disabled]="syncing">
-              <i class="fa-solid fa-arrows-rotate me-1" *ngIf="!syncing"></i>
-              <span class="spinner-border spinner-border-sm me-1" *ngIf="syncing"></span>
-              {{ (syncing ? 'QUICKBOOKS.SYNCING' : 'QUICKBOOKS.SYNC_NOW') | translate }}
+
+            <button class="btn btn-outline-primary btn-sm w-100"
+              (click)="syncEntity(e)" [disabled]="e.syncing || syncingAll">
+              <i class="fa-solid fa-arrows-rotate me-1" *ngIf="!e.syncing"></i>
+              <span class="spinner-border spinner-border-sm me-1" *ngIf="e.syncing"></span>
+              {{ (e.syncing ? 'QUICKBOOKS.SYNCING' : 'QUICKBOOKS.SYNC_NOW') | translate }}
             </button>
           </div>
         </div>

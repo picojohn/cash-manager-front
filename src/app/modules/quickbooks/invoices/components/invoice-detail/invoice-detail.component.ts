@@ -24,7 +24,11 @@ export class InvoiceDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (this.invoice?.id) this.loadLines();
+    // El caller setea `this.invoice` despues de instanciar el componente, asi
+    // que esperamos un tick para que el binding ya este resuelto.
+    setTimeout(() => {
+      if (this.invoice?.id) this.loadLines();
+    }, 50);
   }
 
   async loadLines(): Promise<void> {

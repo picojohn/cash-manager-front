@@ -385,6 +385,10 @@
     "LINE_DESCRIPTION": "Descripción",
     "LINE_QTY": "Cant.",
     "LINE_UNIT_PRICE": "Precio Unit.",
-    "LINE_AMOUNT": "Importe"
+    "LINE_AMOUNT": "Importe",
+    "SYNC_ALL": "Sincronizar todo",
+    "LOCAL_ITEMS": "Items locales",
+    "LOCAL_INVOICES": "Facturas locales",
+    "TOAST_SYNC_ALL_OK": "Sincronización completa"
   }
 }

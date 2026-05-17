@@ -11,6 +11,17 @@ import {
   IQuickbooksStatus,
 } from '../interface/quickbooks.interface';
 
+type EntityKey = 'Customer' | 'Item' | 'Invoice';
+
+interface EntityState {
+  key: EntityKey;
+  titleI18n: string;
+  iconClass: string;
+  count: number;
+  lastSync: IQbSyncLog | null;
+  syncing: boolean;
+}
+
 @Component({
   selector: 'app-qb-estado',
   templateUrl: './estado.component.html',
@@ -19,11 +30,15 @@ import {
 export class EstadoComponent implements OnInit {
   public status: IQuickbooksStatus = { connected: false };
   public companyInfo: IQuickbooksCompanyInfo['CompanyInfo'] | null = null;
-  public lastSync: IQbSyncLog | null = null;
-  public customersCount: number = 0;
   public loading: boolean = false;
   public connecting: boolean = false;
-  public syncing: boolean = false;
+  public syncingAll: boolean = false;
+
+  public entities: Array<EntityState> = [
+    { key: 'Customer', titleI18n: 'QUICKBOOKS.LOCAL_CUSTOMERS', iconClass: 'fa-solid fa-users', count: 0, lastSync: null, syncing: false },
+    { key: 'Item', titleI18n: 'QUICKBOOKS.LOCAL_ITEMS', iconClass: 'fa-solid fa-box', count: 0, lastSync: null, syncing: false },
+    { key: 'Invoice', titleI18n: 'QUICKBOOKS.LOCAL_INVOICES', iconClass: 'fa-solid fa-file-invoice-dollar', count: 0, lastSync: null, syncing: false },
+  ];
 
   constructor(
     public toast: ToastrService,
@@ -53,14 +68,23 @@ export class EstadoComponent implements OnInit {
 
   private async loadConnectedData(): Promise<void> {
     try {
-      const [info, count, lastSync] = await Promise.all([
-        firstValueFrom(this.quickbooksService.getCompanyInfo()),
-        firstValueFrom(this.quickbooksService.getCustomersCount()),
-        firstValueFrom(this.quickbooksService.getSyncStatus('Customer')),
-      ]);
+      const [info, customersCount, itemsCount, invoicesCount, customerLog, itemLog, invoiceLog] =
+        await Promise.all([
+          firstValueFrom(this.quickbooksService.getCompanyInfo()),
+          firstValueFrom(this.quickbooksService.getCustomersCount()),
+          firstValueFrom(this.quickbooksService.getItemsCount()),
+          firstValueFrom(this.quickbooksService.getInvoicesCount()),
+          firstValueFrom(this.quickbooksService.getSyncStatus('Customer')),
+          firstValueFrom(this.quickbooksService.getSyncStatus('Item')),
+          firstValueFrom(this.quickbooksService.getSyncStatus('Invoice')),
+        ]);
       this.companyInfo = info.CompanyInfo;
-      this.customersCount = count.count;
-      this.lastSync = lastSync;
+      this.entities[0].count = customersCount.count;
+      this.entities[1].count = itemsCount.count;
+      this.entities[2].count = invoicesCount.count;
+      this.entities[0].lastSync = customerLog;
+      this.entities[1].lastSync = itemLog;
+      this.entities[2].lastSync = invoiceLog;
     } catch (err) {
       this.handleError(err);
     }
@@ -77,19 +101,55 @@ export class EstadoComponent implements OnInit {
     }
   }
 
-  async syncNow(): Promise<void> {
-    if (this.syncing) return;
-    this.syncing = true;
+  async syncEntity(entity: EntityState): Promise<void> {
+    if (entity.syncing || this.syncingAll) return;
+    entity.syncing = true;
     try {
-      const result = await firstValueFrom(this.quickbooksService.syncCustomers());
-      const msg = `${this.translate.instant('QUICKBOOKS.TOAST_SYNC_OK')}: ${result.recordsCreated} ${this.translate.instant('QUICKBOOKS.RESULT_NEW')}, ${result.recordsUpdated} ${this.translate.instant('QUICKBOOKS.RESULT_UPDATED')} (${result.recordsFetched} ${this.translate.instant('QUICKBOOKS.RESULT_TOTAL')})`;
-      this.toast.success(msg);
+      let result;
+      if (entity.key === 'Customer') {
+        result = await firstValueFrom(this.quickbooksService.syncCustomers());
+      } else if (entity.key === 'Item') {
+        result = await firstValueFrom(this.quickbooksService.syncItems());
+      } else {
+        result = await firstValueFrom(this.quickbooksService.syncInvoices());
+      }
+      this.toast.success(this.buildSyncToast(entity.key, result));
       await this.loadConnectedData();
     } catch (err) {
       this.handleError(err);
     } finally {
-      this.syncing = false;
+      entity.syncing = false;
     }
+  }
+
+  async syncAll(): Promise<void> {
+    if (this.syncingAll) return;
+    this.syncingAll = true;
+    this.entities.forEach((e) => (e.syncing = true));
+    try {
+      const all = await firstValueFrom(this.quickbooksService.syncAll());
+      const parts: Array<string> = [];
+      (['Customer', 'Item', 'Invoice'] as Array<EntityKey>).forEach((k, idx) => {
+        const r = idx === 0 ? all.customers : idx === 1 ? all.items : all.invoices;
+        if ((r as any).error) {
+          parts.push(`${k}: ❌`);
+        } else {
+          const res: any = r;
+          parts.push(`${k}: ${res.recordsCreated}+${res.recordsUpdated}`);
+        }
+      });
+      this.toast.success(`${this.translate.instant('QUICKBOOKS.TOAST_SYNC_ALL_OK')}: ${parts.join(' | ')}`);
+      await this.loadConnectedData();
+    } catch (err) {
+      this.handleError(err);
+    } finally {
+      this.syncingAll = false;
+      this.entities.forEach((e) => (e.syncing = false));
+    }
+  }
+
+  private buildSyncToast(key: EntityKey, result: any): string {
+    return `${this.translate.instant('QUICKBOOKS.TOAST_SYNC_OK')} (${key}): ${result.recordsCreated} ${this.translate.instant('QUICKBOOKS.RESULT_NEW')}, ${result.recordsUpdated} ${this.translate.instant('QUICKBOOKS.RESULT_UPDATED')}`;
   }
 
   async disconnect(): Promise<void> {
@@ -100,8 +160,10 @@ export class EstadoComponent implements OnInit {
       this.toast.success(this.translate.instant('QUICKBOOKS.TOAST_DISCONNECTED'));
       this.status = { connected: false };
       this.companyInfo = null;
-      this.lastSync = null;
-      this.customersCount = 0;
+      this.entities.forEach((e) => {
+        e.count = 0;
+        e.lastSync = null;
+      });
     } catch (err) {
       this.handleError(err);
     }
