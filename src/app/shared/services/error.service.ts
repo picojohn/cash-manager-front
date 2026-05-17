@@ -165,9 +165,15 @@ export class ErrorService {
         this.messageObject = customError;
         break;
       case '3020':
-        customError.typeMessage = 'Tarifas';
+      case '3021':
+      case '3022':
+      case '3023':
+      case '3024':
+      case '3025':
+      case '3026':
+        customError.typeMessage = 'QuickBooks';
         customError.timeOut = this.timeOut;
-        customError.typeToast = 'info';
+        customError.typeToast = 'warning';
         this.messageObject = customError;
         break;
 

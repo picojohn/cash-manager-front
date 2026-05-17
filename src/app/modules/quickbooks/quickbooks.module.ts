@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { TranslateModule } from '@ngx-translate/core';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { QuickbooksRoutingModule } from './quickbooks.routing.module';
@@ -19,6 +20,7 @@ import { EditCustomerComponent } from './customers/components/edit-customer/edit
     FormsModule,
     ReactiveFormsModule,
     NgxPaginationModule,
+    NgSelectModule,
     TranslateModule,
   ],
 })

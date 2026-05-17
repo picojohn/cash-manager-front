@@ -8,6 +8,8 @@ import { QuickbooksService } from '../services/quickbooks.service';
 import { IQbCustomer } from '../interface/quickbooks.interface';
 import { EditCustomerComponent } from './components/edit-customer/edit-customer.component';
 
+type FilterStatus = 'all' | 'active' | 'inactive';
+
 @Component({
   selector: 'app-qb-customers',
   templateUrl: './customers.component.html',
@@ -17,7 +19,13 @@ export class CustomersComponent implements OnInit {
   public customers: Array<IQbCustomer> = [];
   public loading: boolean = false;
   public syncing: boolean = false;
-  public showInactive: boolean = false;
+
+  public filterStatus: FilterStatus = 'all';
+  public statusOptions = [
+    { value: 'all', label: 'Todos' },
+    { value: 'active', label: 'Activos' },
+    { value: 'inactive', label: 'Inactivos' },
+  ];
 
   public nPaginas = [10, 25, 50, 100];
   public totalPaginas = 10;
@@ -105,8 +113,10 @@ export class CustomersComponent implements OnInit {
 
   filterData(): Array<IQbCustomer> {
     let list = this.customers;
-    if (!this.showInactive) {
+    if (this.filterStatus === 'active') {
       list = list.filter((c) => c.active === 1);
+    } else if (this.filterStatus === 'inactive') {
+      list = list.filter((c) => c.active !== 1);
     }
     if (this._buscador) {
       const q = this._buscador.toLowerCase();
@@ -119,6 +129,10 @@ export class CustomersComponent implements OnInit {
       );
     }
     return list;
+  }
+
+  onFilterStatusChange(): void {
+    this.page = 1;
   }
 
   numeroPaginas($event: any) {

@@ -16,12 +16,12 @@
     </button>
   </div>
 
-  <!-- Toggle Mostrar inactivos -->
-  <div class="px-3 pt-2">
-    <label class="form-check-label" style="cursor: pointer;">
-      <input type="checkbox" [(ngModel)]="showInactive" class="form-check-input me-2">
-      Mostrar inactivos
-    </label>
+  <!-- Filtro por estado -->
+  <div class="px-3 pt-3 pb-2" style="max-width: 280px;">
+    <ng-select [items]="statusOptions" bindLabel="label" bindValue="value"
+      [(ngModel)]="filterStatus" [clearable]="false" (change)="onFilterStatusChange()"
+      placeholder="Filtrar por estado">
+    </ng-select>
   </div>
 
   <div *ngIf="loading" class="text-center py-5">
