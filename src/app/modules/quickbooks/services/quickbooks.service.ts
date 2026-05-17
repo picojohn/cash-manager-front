@@ -9,6 +9,9 @@ import {
   IQbCustomer,
   IQbCustomersResponse,
   IQbCustomerInput,
+  IQbItemsResponse,
+  IQbInvoicesResponse,
+  IQbInvoiceLine,
   IQbSyncLog,
   IQbSyncResult,
 } from '../interface/quickbooks.interface';
@@ -70,10 +73,46 @@ export class QuickbooksService {
     } as any);
   }
 
+  /** Items desde la DB local */
+  getItems(skip = 0, take = 1000): Observable<IQbItemsResponse> {
+    return this.http.get<IQbItemsResponse>(
+      `${this.url}/quickbooks/items?skip=${skip}&take=${take}`,
+    );
+  }
+
+  getItemsCount(): Observable<{ count: number }> {
+    return this.http.get<{ count: number }>(`${this.url}/quickbooks/items/count`);
+  }
+
   // === Sync (quickbooks/sync/*) ===
 
   syncCustomers(): Observable<IQbSyncResult> {
     return this.http.post<IQbSyncResult>(`${this.url}/quickbooks/sync/customers`, {});
+  }
+
+  syncItems(): Observable<IQbSyncResult> {
+    return this.http.post<IQbSyncResult>(`${this.url}/quickbooks/sync/items`, {});
+  }
+
+  /** Invoices desde la DB local */
+  getInvoices(skip = 0, take = 1000): Observable<IQbInvoicesResponse> {
+    return this.http.get<IQbInvoicesResponse>(
+      `${this.url}/quickbooks/invoices?skip=${skip}&take=${take}`,
+    );
+  }
+
+  getInvoicesCount(): Observable<{ count: number }> {
+    return this.http.get<{ count: number }>(`${this.url}/quickbooks/invoices/count`);
+  }
+
+  getInvoiceLines(idInvoice: number): Observable<Array<IQbInvoiceLine>> {
+    return this.http.get<Array<IQbInvoiceLine>>(
+      `${this.url}/quickbooks/invoices/${idInvoice}/lines`,
+    );
+  }
+
+  syncInvoices(): Observable<IQbSyncResult> {
+    return this.http.post<IQbSyncResult>(`${this.url}/quickbooks/sync/invoices`, {});
   }
 
   getSyncLogs(limit = 20): Observable<Array<IQbSyncLog>> {

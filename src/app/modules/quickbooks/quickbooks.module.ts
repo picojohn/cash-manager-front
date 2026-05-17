@@ -10,9 +10,20 @@ import { QuickbooksComponent } from './quickbooks.component';
 import { EstadoComponent } from './estado/estado.component';
 import { CustomersComponent } from './customers/customers.component';
 import { EditCustomerComponent } from './customers/components/edit-customer/edit-customer.component';
+import { ItemsComponent } from './items/items.component';
+import { InvoicesComponent } from './invoices/invoices.component';
+import { InvoiceDetailComponent } from './invoices/components/invoice-detail/invoice-detail.component';
 
 @NgModule({
-  declarations: [QuickbooksComponent, EstadoComponent, CustomersComponent, EditCustomerComponent],
+  declarations: [
+    QuickbooksComponent,
+    EstadoComponent,
+    CustomersComponent,
+    EditCustomerComponent,
+    ItemsComponent,
+    InvoicesComponent,
+    InvoiceDetailComponent,
+  ],
   imports: [
     CommonModule,
     QuickbooksRoutingModule,

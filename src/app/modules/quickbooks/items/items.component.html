@@ -1,0 +1,103 @@
+<div class="view-card">
+  <div class="view-header">
+    <h3 class="view-title">{{ 'QUICKBOOKS.TITLE_ITEMS' | translate }}</h3>
+    <div class="view-search">
+      <input type="search" [(ngModel)]="buscador" class="form-control"
+        [placeholder]="'QUICKBOOKS.SEARCH_ITEMS_PLACEHOLDER' | translate">
+    </div>
+    <button class="btn-create" (click)="syncNow()" [disabled]="syncing"
+      style="margin-left: 8px;" [title]="'QUICKBOOKS.SYNC_BUTTON_TITLE' | translate">
+      <i class="fa-solid fa-arrows-rotate" *ngIf="!syncing"></i>
+      <span class="spinner-border spinner-border-sm" *ngIf="syncing"></span>
+      {{ (syncing ? 'QUICKBOOKS.SYNCING' : 'QUICKBOOKS.SYNC_NOW') | translate }}
+    </button>
+  </div>
+
+  <div class="px-3 pt-3 pb-2 d-flex gap-2" style="gap: 8px;">
+    <div style="min-width: 200px;">
+      <ng-select [items]="statusOptions" bindLabel="label" bindValue="value"
+        [(ngModel)]="filterStatus" [clearable]="false" (change)="onFilterChange()"
+        [placeholder]="'QUICKBOOKS.FILTER_BY_STATUS' | translate">
+      </ng-select>
+    </div>
+    <div style="min-width: 200px;">
+      <ng-select [items]="typeOptions" bindLabel="label" bindValue="value"
+        [(ngModel)]="filterType" [clearable]="false" (change)="onFilterChange()"
+        [placeholder]="'QUICKBOOKS.FILTER_BY_TYPE' | translate">
+      </ng-select>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status"></div>
+    <p class="mt-2">{{ 'QUICKBOOKS.LOADING_ITEMS' | translate }}</p>
+  </div>
+
+  <div *ngIf="!loading && items.length === 0" class="text-center py-5">
+    <i class="fa-solid fa-box-open fs-1 text-secondary mb-3"></i>
+    <p class="text-muted">
+      {{ 'QUICKBOOKS.EMPTY_ITEMS_TITLE' | translate }}.
+      {{ 'QUICKBOOKS.EMPTY_ITEMS_DESC' | translate }}
+    </p>
+  </div>
+
+  <div *ngIf="!loading && items.length > 0" style="overflow-x: auto;">
+    <table class="modern-table">
+      <thead>
+        <tr>
+          <th>{{ 'QUICKBOOKS.TABLE_QB_ID' | translate }}</th>
+          <th>{{ 'QUICKBOOKS.TABLE_ITEM_NAME' | translate }}</th>
+          <th>{{ 'QUICKBOOKS.TABLE_SKU' | translate }}</th>
+          <th>{{ 'QUICKBOOKS.TABLE_TYPE' | translate }}</th>
+          <th class="text-end">{{ 'QUICKBOOKS.TABLE_UNIT_PRICE' | translate }}</th>
+          <th class="text-end">{{ 'QUICKBOOKS.TABLE_QTY_ON_HAND' | translate }}</th>
+          <th>{{ 'GENERAL.STATUS' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let x of filterData() | paginate: {itemsPerPage: totalPaginas, currentPage: page, id: 'itemItems'}"
+          [class.row-inactive]="x.active !== 1">
+          <td>{{ x.qbId }}</td>
+          <td class="td-name">{{ x.name }}</td>
+          <td>{{ x.sku || '—' }}</td>
+          <td>
+            <span class="type-badge" [ngClass]="typeClass(x.type)">{{ x.type || '—' }}</span>
+          </td>
+          <td class="text-end">${{ x.unitPrice | number: '1.2-2' }}</td>
+          <td class="text-end">
+            <ng-container *ngIf="x.trackQtyOnHand === 1; else noTrack">
+              {{ x.qtyOnHand | number: '1.0-2' }}
+            </ng-container>
+            <ng-template #noTrack>—</ng-template>
+          </td>
+          <td>
+            <span class="status-badge"
+              [ngClass]="x.active === 1 ? 'status-active' : 'status-inactive'">
+              <i class="fa-solid" [ngClass]="x.active === 1 ? 'fa-circle-check' : 'fa-circle-xmark'"></i>
+              {{ (x.active === 1 ? 'GENERAL.ACTIVE' : 'GENERAL.INACTIVE') | translate }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="view-pagination" *ngIf="!loading && items.length > 0">
+    <select class="form-select" (change)="numeroPaginas($event)">
+      <option *ngFor="let option of nPaginas" [value]="option" [selected]="option === totalPaginas">
+        {{ option }}
+      </option>
+    </select>
+    <span *ngIf="filterData().length" class="pagination-info">
+      {{ 'GENERAL.SHOWING' | translate }}
+      <strong>{{ (page - 1) * totalPaginas + 1 }}</strong>
+      -
+      <strong>{{ (page * totalPaginas < filterData().length) ? (page * totalPaginas) : filterData().length }}</strong>
+      {{ 'GENERAL.OF' | translate }} <strong>{{ filterData().length }}</strong>
+    </span>
+    <pagination-controls id="itemItems" (pageChange)="page=$event"
+      [previousLabel]="'GENERAL.PREVIOUS' | translate" [nextLabel]="'GENERAL.NEXT' | translate"
+      style="font-size: 13px; color: var(--text-secondary);">
+    </pagination-controls>
+  </div>
+</div>

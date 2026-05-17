@@ -1,0 +1,77 @@
+<div class="container mt-3 p-3" *ngIf="invoice">
+  <div class="d-flex justify-content-between align-items-start mb-3">
+    <div>
+      <h3 class="mb-1">
+        <i class="fa-solid fa-file-invoice-dollar text-primary me-2"></i>
+        {{ 'QUICKBOOKS.MODAL_INVOICE_TITLE' | translate }} #{{ invoice.docNumber || invoice.qbId }}
+      </h3>
+      <small class="text-muted">QB ID: {{ invoice.qbId }}</small>
+    </div>
+    <button (click)="bsModalRef.hide()" class="btn-close" aria-label="Close"></button>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <p class="mb-1"><strong>{{ 'QUICKBOOKS.TABLE_CUSTOMER' | translate }}:</strong> {{ invoice.customerName || '—' }}</p>
+      <p class="mb-1"><strong>{{ 'QUICKBOOKS.TABLE_TXN_DATE' | translate }}:</strong> {{ invoice.txnDate | date: 'mediumDate' }}</p>
+      <p class="mb-1"><strong>{{ 'QUICKBOOKS.TABLE_DUE_DATE' | translate }}:</strong> {{ invoice.dueDate ? (invoice.dueDate | date: 'mediumDate') : '—' }}</p>
+    </div>
+    <div class="col-md-6 text-md-end">
+      <p class="mb-1"><strong>{{ 'QUICKBOOKS.TABLE_TOTAL' | translate }}:</strong> <span class="fs-5">${{ invoice.totalAmt | number: '1.2-2' }}</span></p>
+      <p class="mb-1"><strong>{{ 'QUICKBOOKS.TABLE_BALANCE' | translate }}:</strong>
+        <span [class.text-success]="invoice.balance <= 0"
+              [class.text-danger]="invoice.balance > 0">
+          ${{ invoice.balance | number: '1.2-2' }}
+        </span>
+      </p>
+      <p class="mb-1" *ngIf="invoice.billEmail"><strong>Email:</strong> {{ invoice.billEmail }}</p>
+    </div>
+  </div>
+
+  <h5 class="mt-4 mb-2">{{ 'QUICKBOOKS.LINES_TITLE' | translate }}</h5>
+
+  <div *ngIf="loading" class="text-center py-4">
+    <div class="spinner-border text-primary" role="status"></div>
+  </div>
+
+  <div *ngIf="!loading && itemLines.length === 0" class="text-center py-3 text-muted">
+    {{ 'QUICKBOOKS.NO_LINES' | translate }}
+  </div>
+
+  <div *ngIf="!loading && itemLines.length > 0" style="overflow-x: auto;">
+    <table class="modern-table">
+      <thead>
+        <tr>
+          <th style="width: 40px;">#</th>
+          <th>{{ 'QUICKBOOKS.LINE_ITEM' | translate }}</th>
+          <th>{{ 'QUICKBOOKS.LINE_DESCRIPTION' | translate }}</th>
+          <th class="text-end">{{ 'QUICKBOOKS.LINE_QTY' | translate }}</th>
+          <th class="text-end">{{ 'QUICKBOOKS.LINE_UNIT_PRICE' | translate }}</th>
+          <th class="text-end">{{ 'QUICKBOOKS.LINE_AMOUNT' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let line of itemLines; let i = index">
+          <td>{{ line.lineNum || (i + 1) }}</td>
+          <td>{{ line.itemName || '—' }}</td>
+          <td>{{ line.description || '—' }}</td>
+          <td class="text-end">{{ line.qty | number: '1.0-2' }}</td>
+          <td class="text-end">${{ line.unitPrice | number: '1.2-2' }}</td>
+          <td class="text-end"><strong>${{ line.amount | number: '1.2-2' }}</strong></td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="5" class="text-end"><strong>{{ 'QUICKBOOKS.TABLE_TOTAL' | translate }}:</strong></td>
+          <td class="text-end"><strong>${{ invoice.totalAmt | number: '1.2-2' }}</strong></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <div class="row justify-content-center p-3 mt-3">
+    <button (click)="bsModalRef.hide()" class="btn btn-outline-secondary col-md-4">
+      <i class="fa-solid fa-xmark"></i> {{ 'GENERAL.CLOSE' | translate }}
+    </button>
+  </div>
+</div>
