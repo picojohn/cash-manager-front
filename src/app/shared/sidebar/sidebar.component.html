@@ -16,7 +16,7 @@
     </div>
 
     <!-- Logo -->
-    <div class="sidebar-logo">
+    <div class="sidebar-logo" style="cursor: pointer;" routerLink="/gestiones/home" title="Ir al inicio">
       <img *ngIf="menuOrientation !== 'compact'" src="/assets/img/logocash.png" alt="Logo">
       <img *ngIf="menuOrientation === 'compact'" src="/assets/img/logocash.png" alt="Logo" class="logo-compact">
     </div>
@@ -55,7 +55,7 @@
 
   <!-- ===== HORIZONTAL NAVBAR ===== -->
   <nav class="horizontal-nav" *ngIf="menuOrientation === 'horizontal'">
-    <div class="horizontal-logo">
+    <div class="horizontal-logo" style="cursor: pointer;" routerLink="/gestiones/home" title="Ir al inicio">
       <img src="/assets/img/logocash.png" alt="Logo">
     </div>
     <div class="horizontal-menu">
@@ -132,6 +132,9 @@
       <div class="topbar-left">
         <button class="btn-toggle" (click)="toggleMenu()">
           <i class="fa-solid fa-bars"></i>
+        </button>
+        <button class="btn-toggle" routerLink="/gestiones/home" title="Inicio">
+          <i class="fa-solid fa-house"></i>
         </button>
       </div>
       <div class="topbar-right">
