@@ -18,6 +18,7 @@
 
   <!-- Filtro por estado -->
   <div class="px-3 pt-3 pb-2" style="max-width: 280px;">
+    <label class="form-label small text-muted mb-1">{{ 'GENERAL.STATUS' | translate }}</label>
     <ng-select [items]="statusOptions" bindLabel="label" bindValue="value"
       [(ngModel)]="filterStatus" [clearable]="false" (change)="onFilterStatusChange()"
       [placeholder]="'QUICKBOOKS.FILTER_BY_STATUS' | translate">

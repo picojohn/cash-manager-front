@@ -1,0 +1,101 @@
+<div class="container mt-3 p-3">
+  <div class="text-center">
+    <h2 class="p-3">
+      <i class="fa-solid fa-box" style="color:#0039a5;"></i> {{ title }}
+    </h2>
+  </div>
+
+  <div *ngIf="cargarFormulario">
+    <form [formGroup]="formItem">
+      <!-- Type + Name -->
+      <div class="row p-2">
+        <div class="form-group col-md-4 mb-3">
+          <label>{{ 'QUICKBOOKS.FORM_ITEM_TYPE' | translate }} *</label>
+          <select class="form-control" formControlName="type">
+            <option *ngFor="let t of typeOptions" [value]="t.value">{{ t.label }}</option>
+          </select>
+          <small class="text-muted" *ngIf="isEdit">
+            {{ 'QUICKBOOKS.TYPE_IMMUTABLE_HINT' | translate }}
+          </small>
+        </div>
+        <div class="form-group col-md-8 mb-3">
+          <label>{{ 'QUICKBOOKS.FORM_ITEM_NAME' | translate }} *</label>
+          <input type="text" class="form-control" formControlName="name"
+            [placeholder]="'QUICKBOOKS.FORM_ITEM_NAME_PLACEHOLDER' | translate">
+          <div *ngIf="formItem.get('name').invalid && formItem.get('name').touched"
+            class="text-danger small">
+            {{ 'QUICKBOOKS.FORM_DISPLAY_NAME_REQUIRED' | translate }}
+          </div>
+        </div>
+      </div>
+
+      <!-- SKU + Income Account -->
+      <div class="row p-2">
+        <div class="form-group col-md-4 mb-3">
+          <label>{{ 'QUICKBOOKS.TABLE_SKU' | translate }}</label>
+          <input type="text" class="form-control" formControlName="sku"
+            [placeholder]="'QUICKBOOKS.FORM_ITEM_SKU_PLACEHOLDER' | translate">
+        </div>
+        <div class="form-group col-md-8 mb-3">
+          <label>{{ 'QUICKBOOKS.FORM_INCOME_ACCOUNT' | translate }} *</label>
+          <select class="form-control" formControlName="incomeAccountRef">
+            <option value="" disabled>
+              {{ loadingAccounts ? ('QUICKBOOKS.LOADING_ACCOUNTS' | translate) : ('QUICKBOOKS.SELECT_ACCOUNT' | translate) }}
+            </option>
+            <option *ngFor="let a of incomeAccounts" [value]="a.Id">
+              {{ (a.FullyQualifiedName || a.Name).split(':').join(' : ') }}
+            </option>
+          </select>
+          <div *ngIf="formItem.get('incomeAccountRef').invalid && formItem.get('incomeAccountRef').touched"
+            class="text-danger small">
+            {{ 'QUICKBOOKS.FORM_DISPLAY_NAME_REQUIRED' | translate }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div class="row p-2">
+        <div class="form-group col-md-12 mb-3">
+          <label>{{ 'QUICKBOOKS.FORM_DESCRIPTION' | translate }}</label>
+          <textarea class="form-control" formControlName="description" rows="2"></textarea>
+        </div>
+      </div>
+
+      <!-- Unit Price + Purchase Cost -->
+      <div class="row p-2">
+        <div class="form-group col-md-6 mb-3">
+          <label>{{ 'QUICKBOOKS.FORM_UNIT_PRICE' | translate }}</label>
+          <input type="number" min="0" step="0.01" class="form-control" formControlName="unitPrice">
+        </div>
+        <div class="form-group col-md-6 mb-3">
+          <label>{{ 'QUICKBOOKS.FORM_PURCHASE_COST' | translate }}</label>
+          <input type="number" min="0" step="0.01" class="form-control" formControlName="purchaseCost">
+        </div>
+      </div>
+
+      <!-- Taxable -->
+      <div class="row p-2">
+        <div class="form-group col-md-6 mb-3">
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="chkTaxable" formControlName="taxable">
+            <label class="form-check-label" for="chkTaxable">
+              {{ 'QUICKBOOKS.FORM_TAXABLE' | translate }}
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botones -->
+      <div class="row justify-content-center p-3">
+        <button (click)="save()" class="btn btn-outline-primary col-md-4 me-2" [disabled]="saving">
+          <i class="fa-solid fa-floppy-disk" *ngIf="!saving"></i>
+          <span class="spinner-border spinner-border-sm" *ngIf="saving"></span>
+          {{ (saving ? 'QUICKBOOKS.SAVING' : 'GENERAL.SAVE') | translate }}
+        </button>
+        <button (click)="bsModalRef.hide()" class="btn btn-outline-secondary col-md-4" [disabled]="saving">
+          <i class="fa-solid fa-ban" style="color: red"></i> {{ 'GENERAL.CLOSE' | translate }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

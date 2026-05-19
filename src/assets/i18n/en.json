@@ -389,6 +389,25 @@
     "SYNC_ALL": "Sync all",
     "LOCAL_ITEMS": "Local items",
     "LOCAL_INVOICES": "Local invoices",
-    "TOAST_SYNC_ALL_OK": "Full sync complete"
+    "TOAST_SYNC_ALL_OK": "Full sync complete",
+    "MODAL_CREATE_ITEM": "Create item",
+    "MODAL_EDIT_ITEM": "Edit item",
+    "FORM_ITEM_TYPE": "Type",
+    "FORM_ITEM_NAME": "Name",
+    "FORM_ITEM_NAME_PLACEHOLDER": "Item name",
+    "FORM_ITEM_SKU_PLACEHOLDER": "Code (optional)",
+    "FORM_INCOME_ACCOUNT": "Income account",
+    "FORM_DESCRIPTION": "Description",
+    "FORM_UNIT_PRICE": "Sales price",
+    "FORM_PURCHASE_COST": "Purchase cost",
+    "FORM_TAXABLE": "Taxable",
+    "TYPE_IMMUTABLE_HINT": "Type cannot be changed after item creation",
+    "LOADING_ACCOUNTS": "Loading accounts...",
+    "SELECT_ACCOUNT": "Select an account",
+    "TOAST_ITEM_CREATED": "Item created in QuickBooks",
+    "TOAST_ITEM_UPDATED": "Item updated in QuickBooks",
+    "TOAST_ITEM_ACTIVATED": "Item activated in QuickBooks",
+    "TOAST_ITEM_DEACTIVATED": "Item deactivated in QuickBooks",
+    "LABEL_PAYMENT_STATUS": "Payment status"
   }
 }

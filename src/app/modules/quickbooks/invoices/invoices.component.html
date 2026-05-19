@@ -14,6 +14,7 @@
   </div>
 
   <div class="px-3 pt-3 pb-2" style="max-width: 280px;">
+    <label class="form-label small text-muted mb-1">{{ 'QUICKBOOKS.LABEL_PAYMENT_STATUS' | translate }}</label>
     <ng-select [items]="paymentOptions" bindLabel="label" bindValue="value"
       [(ngModel)]="filterPayment" [clearable]="false" (change)="onFilterChange()"
       [placeholder]="'QUICKBOOKS.FILTER_BY_PAYMENT' | translate">

@@ -5,6 +5,9 @@
       <input type="search" [(ngModel)]="buscador" class="form-control"
         [placeholder]="'QUICKBOOKS.SEARCH_ITEMS_PLACEHOLDER' | translate">
     </div>
+    <button class="btn-create" (click)="newItem()" [title]="'QUICKBOOKS.MODAL_CREATE_ITEM' | translate">
+      <i class="fa-solid fa-plus"></i> {{ 'QUICKBOOKS.NEW' | translate }}
+    </button>
     <button class="btn-create" (click)="syncNow()" [disabled]="syncing"
       style="margin-left: 8px;" [title]="'QUICKBOOKS.SYNC_BUTTON_TITLE' | translate">
       <i class="fa-solid fa-arrows-rotate" *ngIf="!syncing"></i>
@@ -15,12 +18,14 @@
 
   <div class="px-3 pt-3 pb-2 d-flex gap-2" style="gap: 8px;">
     <div style="min-width: 200px;">
+      <label class="form-label small text-muted mb-1">{{ 'GENERAL.STATUS' | translate }}</label>
       <ng-select [items]="statusOptions" bindLabel="label" bindValue="value"
         [(ngModel)]="filterStatus" [clearable]="false" (change)="onFilterChange()"
         [placeholder]="'QUICKBOOKS.FILTER_BY_STATUS' | translate">
       </ng-select>
     </div>
     <div style="min-width: 200px;">
+      <label class="form-label small text-muted mb-1">{{ 'QUICKBOOKS.TABLE_TYPE' | translate }}</label>
       <ng-select [items]="typeOptions" bindLabel="label" bindValue="value"
         [(ngModel)]="filterType" [clearable]="false" (change)="onFilterChange()"
         [placeholder]="'QUICKBOOKS.FILTER_BY_TYPE' | translate">
@@ -52,6 +57,7 @@
           <th class="text-end">{{ 'QUICKBOOKS.TABLE_UNIT_PRICE' | translate }}</th>
           <th class="text-end">{{ 'QUICKBOOKS.TABLE_QTY_ON_HAND' | translate }}</th>
           <th>{{ 'GENERAL.STATUS' | translate }}</th>
+          <th>{{ 'GENERAL.ACTIONS' | translate }}</th>
         </tr>
       </thead>
       <tbody>
@@ -71,11 +77,18 @@
             <ng-template #noTrack>—</ng-template>
           </td>
           <td>
-            <span class="status-badge"
-              [ngClass]="x.active === 1 ? 'status-active' : 'status-inactive'">
+            <span class="status-badge" (click)="toggleActive(x)"
+              [ngClass]="x.active === 1 ? 'status-active' : 'status-inactive'"
+              [title]="(x.active === 1 ? 'QUICKBOOKS.BADGE_CLICK_DEACTIVATE' : 'QUICKBOOKS.BADGE_CLICK_ACTIVATE') | translate">
               <i class="fa-solid" [ngClass]="x.active === 1 ? 'fa-circle-check' : 'fa-circle-xmark'"></i>
               {{ (x.active === 1 ? 'GENERAL.ACTIVE' : 'GENERAL.INACTIVE') | translate }}
             </span>
+          </td>
+          <td>
+            <div class="td-actions">
+              <i (click)="editItem(x)" class="fa-solid fa-pen-to-square"
+                [title]="'GENERAL.EDIT' | translate"></i>
+            </div>
           </td>
         </tr>
       </tbody>

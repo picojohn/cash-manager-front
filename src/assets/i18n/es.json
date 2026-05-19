@@ -389,6 +389,25 @@
     "SYNC_ALL": "Sincronizar todo",
     "LOCAL_ITEMS": "Items locales",
     "LOCAL_INVOICES": "Facturas locales",
-    "TOAST_SYNC_ALL_OK": "Sincronización completa"
+    "TOAST_SYNC_ALL_OK": "Sincronización completa",
+    "MODAL_CREATE_ITEM": "Crear item",
+    "MODAL_EDIT_ITEM": "Editar item",
+    "FORM_ITEM_TYPE": "Tipo",
+    "FORM_ITEM_NAME": "Nombre",
+    "FORM_ITEM_NAME_PLACEHOLDER": "Nombre del item",
+    "FORM_ITEM_SKU_PLACEHOLDER": "Código (opcional)",
+    "FORM_INCOME_ACCOUNT": "Cuenta de ingreso",
+    "FORM_DESCRIPTION": "Descripción",
+    "FORM_UNIT_PRICE": "Precio de venta",
+    "FORM_PURCHASE_COST": "Costo de compra",
+    "FORM_TAXABLE": "Sujeto a impuestos",
+    "TYPE_IMMUTABLE_HINT": "El tipo no se puede cambiar después de crear el item",
+    "LOADING_ACCOUNTS": "Cargando cuentas...",
+    "SELECT_ACCOUNT": "Selecciona una cuenta",
+    "TOAST_ITEM_CREATED": "Item creado en QuickBooks",
+    "TOAST_ITEM_UPDATED": "Item actualizado en QuickBooks",
+    "TOAST_ITEM_ACTIVATED": "Item activado en QuickBooks",
+    "TOAST_ITEM_DEACTIVATED": "Item desactivado en QuickBooks",
+    "LABEL_PAYMENT_STATUS": "Estado de pago"
   }
 }

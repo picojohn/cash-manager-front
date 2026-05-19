@@ -95,6 +95,42 @@ export interface IQbItemsResponse {
   total: number;
 }
 
+/** Input para crear un Item */
+export interface IQbItemCreate {
+  name: string;
+  type: 'Service' | 'NonInventory';
+  incomeAccountRef: string;
+  sku?: string;
+  description?: string;
+  unitPrice?: number;
+  purchaseCost?: number;
+  taxable?: boolean;
+  active?: boolean;
+}
+
+/** Input para editar un Item (sparse update, sin type) */
+export interface IQbItemUpdate {
+  name?: string;
+  sku?: string;
+  description?: string;
+  unitPrice?: number;
+  purchaseCost?: number;
+  incomeAccountRef?: string;
+  taxable?: boolean;
+  active?: boolean;
+}
+
+/** Account del chart of accounts de QB */
+export interface IQbAccount {
+  Id: string;
+  Name: string;
+  FullyQualifiedName?: string;
+  AccountType: string;
+  AccountSubType?: string;
+  Active?: boolean;
+  CurrencyRef?: { value: string; name: string };
+}
+
 /** Invoice en el snapshot local */
 export interface IQbInvoice {
   id: number;

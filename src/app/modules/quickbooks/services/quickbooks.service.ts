@@ -9,7 +9,11 @@ import {
   IQbCustomer,
   IQbCustomersResponse,
   IQbCustomerInput,
+  IQbItem,
   IQbItemsResponse,
+  IQbItemCreate,
+  IQbItemUpdate,
+  IQbAccount,
   IQbInvoicesResponse,
   IQbInvoiceLine,
   IQbSyncLog,
@@ -82,6 +86,24 @@ export class QuickbooksService {
 
   getItemsCount(): Observable<{ count: number }> {
     return this.http.get<{ count: number }>(`${this.url}/quickbooks/items/count`);
+  }
+
+  /** Crear Item (POST a QB → upsert local) */
+  createItem(dto: IQbItemCreate): Observable<IQbItem> {
+    return this.http.post<IQbItem>(`${this.url}/quickbooks/items`, dto);
+  }
+
+  /** Editar Item (sparse update en QB → upsert local) */
+  updateItem(qbId: string, dto: IQbItemUpdate): Observable<IQbItem> {
+    return this.http.patch<IQbItem>(`${this.url}/quickbooks/items/${qbId}`, dto);
+  }
+
+  /** Cuentas (chart of accounts) de QB. Filtro opcional por AccountType (Income, Expense, etc.) */
+  getAccounts(accountType?: string): Observable<{ accounts: Array<IQbAccount> }> {
+    const qs = accountType ? `?type=${encodeURIComponent(accountType)}` : '';
+    return this.http.get<{ accounts: Array<IQbAccount> }>(
+      `${this.url}/quickbooks/accounts${qs}`,
+    );
   }
 
   // === Sync (quickbooks/sync/*) ===

@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
 import { firstValueFrom } from 'rxjs';
 import { ErrorService } from 'src/app/shared/services/error.service';
+import { SweetAlertService } from 'src/app/shared/services/sweetAlert.service';
 import { QuickbooksService } from '../services/quickbooks.service';
 import { IQbItem } from '../interface/quickbooks.interface';
+import { EditItemComponent } from './components/edit-item/edit-item.component';
 
 type FilterStatus = 'all' | 'active' | 'inactive';
 
@@ -29,12 +32,53 @@ export class ItemsComponent implements OnInit {
   public page: number = 1;
   public _buscador: string = '';
 
+  private bsModalRef: BsModalRef;
+
   constructor(
     public toast: ToastrService,
     private errorService: ErrorService,
     private quickbooksService: QuickbooksService,
+    private modalService: BsModalService,
+    private sweetAlertService: SweetAlertService,
     private translate: TranslateService,
   ) {}
+
+  async toggleActive(item: IQbItem): Promise<void> {
+    const willActivate = item.active !== 1;
+    const confirmed = await this.sweetAlertService.alertStatesMessage();
+    if (!confirmed) return;
+
+    try {
+      await firstValueFrom(
+        this.quickbooksService.updateItem(item.qbId, { active: willActivate }),
+      );
+      const toastKey = willActivate ? 'QUICKBOOKS.TOAST_ITEM_ACTIVATED' : 'QUICKBOOKS.TOAST_ITEM_DEACTIVATED';
+      this.toast.success(this.translate.instant(toastKey));
+      await this.loadItems();
+    } catch (err) {
+      this.handleError(err);
+    }
+  }
+
+  newItem(): void {
+    this.bsModalRef = this.modalService.show(EditItemComponent, {
+      backdrop: 'static',
+      class: 'modal-lg p-5',
+    });
+    this.bsModalRef.content.title = this.translate.instant('QUICKBOOKS.MODAL_CREATE_ITEM');
+    this.bsModalRef.content.item = null;
+    this.bsModalRef.onHidden?.subscribe(() => this.loadItems());
+  }
+
+  editItem(item: IQbItem): void {
+    this.bsModalRef = this.modalService.show(EditItemComponent, {
+      backdrop: 'static',
+      class: 'modal-lg p-5',
+    });
+    this.bsModalRef.content.title = this.translate.instant('QUICKBOOKS.MODAL_EDIT_ITEM');
+    this.bsModalRef.content.item = item;
+    this.bsModalRef.onHidden?.subscribe(() => this.loadItems());
+  }
 
   ngOnInit(): void {
     this.buildOptions();
