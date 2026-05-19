@@ -12,6 +12,7 @@ import { CustomersComponent } from './customers/customers.component';
 import { EditCustomerComponent } from './customers/components/edit-customer/edit-customer.component';
 import { ItemsComponent } from './items/items.component';
 import { EditItemComponent } from './items/components/edit-item/edit-item.component';
+import { AdjustStockComponent } from './items/components/adjust-stock/adjust-stock.component';
 import { InvoicesComponent } from './invoices/invoices.component';
 import { InvoiceDetailComponent } from './invoices/components/invoice-detail/invoice-detail.component';
 
@@ -23,6 +24,7 @@ import { InvoiceDetailComponent } from './invoices/components/invoice-detail/inv
     EditCustomerComponent,
     ItemsComponent,
     EditItemComponent,
+    AdjustStockComponent,
     InvoicesComponent,
     InvoiceDetailComponent,
   ],

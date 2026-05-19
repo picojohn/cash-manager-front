@@ -13,6 +13,7 @@ import {
   IQbItemsResponse,
   IQbItemCreate,
   IQbItemUpdate,
+  IQbItemStockAdjust,
   IQbAccount,
   IQbInvoicesResponse,
   IQbInvoiceLine,
@@ -96,6 +97,14 @@ export class QuickbooksService {
   /** Editar Item (sparse update en QB → upsert local) */
   updateItem(qbId: string, dto: IQbItemUpdate): Observable<IQbItem> {
     return this.http.patch<IQbItem>(`${this.url}/quickbooks/items/${qbId}`, dto);
+  }
+
+  /** Ajusta stock de un Inventory item (crea Inventory Adjustment en QB) */
+  adjustItemStock(qbId: string, dto: IQbItemStockAdjust): Observable<IQbItem> {
+    return this.http.post<IQbItem>(
+      `${this.url}/quickbooks/items/${qbId}/adjust-stock`,
+      dto,
+    );
   }
 
   /** Cuentas (chart of accounts) de QB. Filtro opcional por AccountType (Income, Expense, etc.) */

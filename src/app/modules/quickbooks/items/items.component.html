@@ -88,6 +88,9 @@
             <div class="td-actions">
               <i (click)="editItem(x)" class="fa-solid fa-pen-to-square"
                 [title]="'GENERAL.EDIT' | translate"></i>
+              <i *ngIf="x.trackQtyOnHand === 1" (click)="adjustStock(x)"
+                class="fa-solid fa-boxes-stacked ms-2"
+                [title]="'QUICKBOOKS.ADJUST_STOCK' | translate"></i>
             </div>
           </td>
         </tr>

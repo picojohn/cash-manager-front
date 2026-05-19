@@ -98,7 +98,7 @@ export interface IQbItemsResponse {
 /** Input para crear un Item */
 export interface IQbItemCreate {
   name: string;
-  type: 'Service' | 'NonInventory';
+  type: 'Service' | 'NonInventory' | 'Inventory';
   incomeAccountRef: string;
   sku?: string;
   description?: string;
@@ -106,6 +106,18 @@ export interface IQbItemCreate {
   purchaseCost?: number;
   taxable?: boolean;
   active?: boolean;
+  /** Solo aplican cuando type=Inventory */
+  expenseAccountRef?: string;
+  assetAccountRef?: string;
+  qtyOnHand?: number;
+  invStartDate?: string;
+}
+
+/** Input para ajustar stock de un Inventory item */
+export interface IQbItemStockAdjust {
+  qtyDiff: number;
+  adjustAccountRef: string;
+  memo?: string;
 }
 
 /** Input para editar un Item (sparse update, sin type) */

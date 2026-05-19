@@ -61,7 +61,9 @@ export class CustomersComponent implements OnInit {
     if (isInitialLoad) this.loading = true;
     try {
       const res = await firstValueFrom(this.quickbooksService.getCustomers(0, 1000));
-      this.customers = (res.items || []).sort((a, b) => (b.id || 0) - (a.id || 0));
+      this.customers = (res.items || []).sort(
+        (a, b) => Number(b.qbId || 0) - Number(a.qbId || 0),
+      );
     } catch (err) {
       this.handleError(err);
     } finally {

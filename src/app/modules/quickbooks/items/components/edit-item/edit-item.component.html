@@ -42,7 +42,7 @@
             <option value="" disabled>
               {{ loadingAccounts ? ('QUICKBOOKS.LOADING_ACCOUNTS' | translate) : ('QUICKBOOKS.SELECT_ACCOUNT' | translate) }}
             </option>
-            <option *ngFor="let a of incomeAccounts" [value]="a.Id">
+            <option *ngFor="let a of filteredIncomeAccounts" [value]="a.Id">
               {{ (a.FullyQualifiedName || a.Name).split(':').join(' : ') }}
             </option>
           </select>
@@ -65,13 +65,50 @@
       <div class="row p-2">
         <div class="form-group col-md-6 mb-3">
           <label>{{ 'QUICKBOOKS.FORM_UNIT_PRICE' | translate }}</label>
-          <input type="number" min="0" step="0.01" class="form-control" formControlName="unitPrice">
+          <input type="number" min="0" step="0.01" class="form-control" formControlName="unitPrice"
+            placeholder="0.00">
         </div>
         <div class="form-group col-md-6 mb-3">
           <label>{{ 'QUICKBOOKS.FORM_PURCHASE_COST' | translate }}</label>
-          <input type="number" min="0" step="0.01" class="form-control" formControlName="purchaseCost">
+          <input type="number" min="0" step="0.01" class="form-control" formControlName="purchaseCost"
+            placeholder="0.00">
         </div>
       </div>
+
+      <!-- Campos extra solo para Inventory (al crear) -->
+      <ng-container *ngIf="!isEdit && formItem.get('type').value === 'Inventory'">
+        <div class="row p-2">
+          <div class="form-group col-md-6 mb-3">
+            <label>{{ 'QUICKBOOKS.FORM_ASSET_ACCOUNT' | translate }} *</label>
+            <select class="form-control" formControlName="assetAccountRef">
+              <option value="" disabled>{{ 'QUICKBOOKS.SELECT_ACCOUNT' | translate }}</option>
+              <option *ngFor="let a of assetAccounts" [value]="a.Id">
+                {{ (a.FullyQualifiedName || a.Name).split(':').join(' : ') }}
+              </option>
+            </select>
+          </div>
+          <div class="form-group col-md-6 mb-3">
+            <label>{{ 'QUICKBOOKS.FORM_EXPENSE_ACCOUNT' | translate }} *</label>
+            <select class="form-control" formControlName="expenseAccountRef">
+              <option value="" disabled>{{ 'QUICKBOOKS.SELECT_ACCOUNT' | translate }}</option>
+              <option *ngFor="let a of expenseAccounts" [value]="a.Id">
+                {{ (a.FullyQualifiedName || a.Name).split(':').join(' : ') }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="row p-2">
+          <div class="form-group col-md-6 mb-3">
+            <label>{{ 'QUICKBOOKS.FORM_INITIAL_QTY' | translate }}</label>
+            <input type="number" min="0" step="1" class="form-control" formControlName="qtyOnHand"
+              placeholder="0">
+          </div>
+          <div class="form-group col-md-6 mb-3">
+            <label>{{ 'QUICKBOOKS.FORM_INV_START_DATE' | translate }}</label>
+            <input type="date" class="form-control" formControlName="invStartDate">
+          </div>
+        </div>
+      </ng-container>
 
       <!-- Taxable -->
       <div class="row p-2">

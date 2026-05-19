@@ -58,7 +58,9 @@ export class InvoicesComponent implements OnInit {
     if (isInitialLoad) this.loading = true;
     try {
       const res = await firstValueFrom(this.quickbooksService.getInvoices(0, 1000));
-      this.invoices = res.items || [];
+      this.invoices = (res.items || []).sort(
+        (a, b) => Number(b.qbId || 0) - Number(a.qbId || 0),
+      );
     } catch (err) {
       this.handleError(err);
     } finally {

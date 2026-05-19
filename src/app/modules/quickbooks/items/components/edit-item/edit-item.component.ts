@@ -30,11 +30,13 @@ export class EditItemComponent implements OnInit {
   public loadingAccounts: boolean = false;
 
   public incomeAccounts: Array<IQbAccount> = [];
+  public assetAccounts: Array<IQbAccount> = [];
+  public expenseAccounts: Array<IQbAccount> = [];
 
-  /** Solo se ofrecen Service y NonInventory al crear (Inventory requiere mas campos) */
   public typeOptions = [
     { value: 'Service', label: 'Service' },
     { value: 'NonInventory', label: 'NonInventory' },
+    { value: 'Inventory', label: 'Inventory' },
   ];
 
   constructor(
@@ -59,6 +61,7 @@ export class EditItemComponent implements OnInit {
   }
 
   buildForm(): void {
+    const today = new Date().toISOString().slice(0, 10);
     this.formItem = new FormGroup({
       name: new FormControl(this.item?.name || '', [Validators.required]),
       type: new FormControl(
@@ -67,20 +70,51 @@ export class EditItemComponent implements OnInit {
       ),
       sku: new FormControl(this.item?.sku || ''),
       description: new FormControl(this.item?.description || ''),
-      unitPrice: new FormControl(this.item?.unitPrice ?? 0, [Validators.min(0)]),
-      purchaseCost: new FormControl(this.item?.purchaseCost ?? 0, [Validators.min(0)]),
+      unitPrice: new FormControl(this.item?.unitPrice ?? null, [Validators.min(0)]),
+      purchaseCost: new FormControl(this.item?.purchaseCost ?? null, [Validators.min(0)]),
       incomeAccountRef: new FormControl(this.item?.incomeAccountRef || '', [
         Validators.required,
       ]),
       taxable: new FormControl(this.item?.taxable === 1),
+      // Solo aplican cuando type=Inventory
+      assetAccountRef: new FormControl(this.item?.assetAccountRef || ''),
+      expenseAccountRef: new FormControl(this.item?.expenseAccountRef || ''),
+      qtyOnHand: new FormControl(this.item?.qtyOnHand ?? null, [Validators.min(0)]),
+      invStartDate: new FormControl(today),
     });
+  }
+
+  /** Tipo actual del form (reactivo desde el template) */
+  get currentType(): string {
+    return this.formItem?.getRawValue?.()?.type || 'Service';
+  }
+
+  /**
+   * Cuentas de ingreso filtradas segun el tipo actual del item.
+   * QB exige que para Inventory items la income tenga AccountSubType='SalesOfProductIncome'.
+   */
+  get filteredIncomeAccounts(): Array<IQbAccount> {
+    if (this.currentType === 'Inventory') {
+      return this.incomeAccounts.filter((a) => a.AccountSubType === 'SalesOfProductIncome');
+    }
+    return this.incomeAccounts;
   }
 
   async loadAccounts(): Promise<void> {
     this.loadingAccounts = true;
     try {
-      const res = await firstValueFrom(this.quickbooksService.getAccounts('Income'));
-      this.incomeAccounts = (res.accounts || []).filter((a) => a.Active !== false);
+      const [income, asset, expense] = await Promise.all([
+        firstValueFrom(this.quickbooksService.getAccounts('Income')),
+        firstValueFrom(this.quickbooksService.getAccounts('Other Current Asset')),
+        firstValueFrom(this.quickbooksService.getAccounts('Cost of Goods Sold')),
+      ]);
+      this.incomeAccounts = (income.accounts || []).filter((a) => a.Active !== false);
+      // QB exige que la cuenta de inventario tenga AccountSubType='Inventory'.
+      // No basta con que sea Other Current Asset (Prepaid Expenses tambien lo es).
+      this.assetAccounts = (asset.accounts || []).filter(
+        (a) => a.Active !== false && a.AccountSubType === 'Inventory',
+      );
+      this.expenseAccounts = (expense.accounts || []).filter((a) => a.Active !== false);
     } catch (err) {
       const e = this.errorService.showNotification(err);
       this.toast[e.typeToast](e.message, e.typeMessage, { timeOut: e.timeOut });
@@ -95,10 +129,19 @@ export class EditItemComponent implements OnInit {
       this.toast.info(this.translate.instant('QUICKBOOKS.TOAST_FORM_INVALID'));
       return;
     }
-    if (this.saving) return;
-    this.saving = true;
 
     const raw = this.formItem.getRawValue();
+
+    // Validacion extra para Inventory al crear
+    if (!this.isEdit && raw.type === 'Inventory') {
+      if (!raw.assetAccountRef || !raw.expenseAccountRef) {
+        this.toast.warning(this.translate.instant('QUICKBOOKS.INVENTORY_ACCOUNTS_REQUIRED'));
+        return;
+      }
+    }
+
+    if (this.saving) return;
+    this.saving = true;
 
     try {
       if (this.isEdit) {
@@ -125,6 +168,12 @@ export class EditItemComponent implements OnInit {
           taxable: !!raw.taxable,
           active: true,
         };
+        if (raw.type === 'Inventory') {
+          dto.assetAccountRef = raw.assetAccountRef;
+          dto.expenseAccountRef = raw.expenseAccountRef;
+          dto.qtyOnHand = Number(raw.qtyOnHand) || 0;
+          dto.invStartDate = raw.invStartDate;
+        }
         await firstValueFrom(this.quickbooksService.createItem(dto));
         this.toast.success(this.translate.instant('QUICKBOOKS.TOAST_ITEM_CREATED'));
       }

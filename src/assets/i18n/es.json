@@ -408,6 +408,22 @@
     "TOAST_ITEM_UPDATED": "Item actualizado en QuickBooks",
     "TOAST_ITEM_ACTIVATED": "Item activado en QuickBooks",
     "TOAST_ITEM_DEACTIVATED": "Item desactivado en QuickBooks",
-    "LABEL_PAYMENT_STATUS": "Estado de pago"
+    "LABEL_PAYMENT_STATUS": "Estado de pago",
+    "FORM_ASSET_ACCOUNT": "Cuenta de inventario (activo)",
+    "FORM_EXPENSE_ACCOUNT": "Cuenta de costo (COGS)",
+    "FORM_INITIAL_QTY": "Stock inicial",
+    "FORM_INV_START_DATE": "Fecha de inicio del inventario",
+    "INVENTORY_ACCOUNTS_REQUIRED": "Para items de inventario debes seleccionar cuenta de activo y de costo",
+    "ADJUST_STOCK": "Ajustar stock",
+    "MODAL_ADJUST_STOCK_TITLE": "Ajustar stock",
+    "CURRENT_STOCK": "Stock actual",
+    "STOCK_IN": "Entrada",
+    "STOCK_OUT": "Salida",
+    "STOCK_QTY": "Cantidad",
+    "STOCK_MEMO": "Motivo",
+    "STOCK_MEMO_PLACEHOLDER": "Ej: ajuste por inventario físico, merma, devolución...",
+    "FORM_ADJUST_ACCOUNT": "Cuenta de ajuste",
+    "STOCK_INSUFFICIENT": "No puedes sacar más de lo que hay en stock ({{qty}})",
+    "TOAST_STOCK_ADJUSTED": "Stock ajustado en QuickBooks"
   }
 }

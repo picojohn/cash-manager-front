@@ -1,0 +1,83 @@
+<div class="container mt-3 p-3">
+  <div class="text-center">
+    <h2 class="p-3">
+      <i class="fa-solid fa-boxes-stacked" style="color:#0039a5;"></i>
+      {{ 'QUICKBOOKS.MODAL_ADJUST_STOCK_TITLE' | translate }}
+    </h2>
+  </div>
+
+  <div *ngIf="item" class="text-center mb-3">
+    <p class="mb-1"><strong>{{ item.name }}</strong> <small class="text-muted">(SKU: {{ item.sku || '—' }})</small></p>
+    <p class="mb-0">
+      {{ 'QUICKBOOKS.CURRENT_STOCK' | translate }}: <strong>{{ item.qtyOnHand | number: '1.0-2' }}</strong>
+    </p>
+  </div>
+
+  <div *ngIf="cargarFormulario">
+    <form [formGroup]="formAdjust">
+      <!-- Direction -->
+      <div class="row p-2 mb-2">
+        <div class="col-12 d-flex justify-content-center gap-2">
+          <button type="button" class="btn"
+            [class.btn-success]="direction === 'in'"
+            [class.btn-outline-secondary]="direction !== 'in'"
+            (click)="setDirection('in')">
+            <i class="fa-solid fa-plus"></i> {{ 'QUICKBOOKS.STOCK_IN' | translate }}
+          </button>
+          <button type="button" class="btn"
+            [class.btn-danger]="direction === 'out'"
+            [class.btn-outline-secondary]="direction !== 'out'"
+            (click)="setDirection('out')">
+            <i class="fa-solid fa-minus"></i> {{ 'QUICKBOOKS.STOCK_OUT' | translate }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Cantidad -->
+      <div class="row p-2">
+        <div class="form-group col-md-6 mb-3">
+          <label>{{ 'QUICKBOOKS.STOCK_QTY' | translate }} *</label>
+          <input type="number" min="0" step="1" class="form-control" formControlName="qty"
+            placeholder="0">
+
+          <div *ngIf="formAdjust.get('qty').invalid && formAdjust.get('qty').touched"
+            class="text-danger small">
+            {{ 'QUICKBOOKS.FORM_DISPLAY_NAME_REQUIRED' | translate }}
+          </div>
+        </div>
+        <div class="form-group col-md-6 mb-3">
+          <label>{{ 'QUICKBOOKS.FORM_ADJUST_ACCOUNT' | translate }} *</label>
+          <select class="form-control" formControlName="adjustAccountRef">
+            <option value="" disabled>
+              {{ loadingAccounts ? ('QUICKBOOKS.LOADING_ACCOUNTS' | translate) : ('QUICKBOOKS.SELECT_ACCOUNT' | translate) }}
+            </option>
+            <option *ngFor="let a of adjustAccounts" [value]="a.Id">
+              {{ (a.FullyQualifiedName || a.Name).split(':').join(' : ') }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Memo -->
+      <div class="row p-2">
+        <div class="form-group col-md-12 mb-3">
+          <label>{{ 'QUICKBOOKS.STOCK_MEMO' | translate }}</label>
+          <textarea class="form-control" formControlName="memo" rows="2"
+            [placeholder]="'QUICKBOOKS.STOCK_MEMO_PLACEHOLDER' | translate"></textarea>
+        </div>
+      </div>
+
+      <!-- Botones -->
+      <div class="row justify-content-center p-3">
+        <button (click)="save()" class="btn btn-outline-primary col-md-4 me-2" [disabled]="saving">
+          <i class="fa-solid fa-floppy-disk" *ngIf="!saving"></i>
+          <span class="spinner-border spinner-border-sm" *ngIf="saving"></span>
+          {{ (saving ? 'QUICKBOOKS.SAVING' : 'GENERAL.SAVE') | translate }}
+        </button>
+        <button (click)="bsModalRef.hide()" class="btn btn-outline-secondary col-md-4" [disabled]="saving">
+          <i class="fa-solid fa-ban" style="color: red"></i> {{ 'GENERAL.CLOSE' | translate }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

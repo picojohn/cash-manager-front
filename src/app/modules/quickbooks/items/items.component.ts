@@ -8,6 +8,7 @@ import { SweetAlertService } from 'src/app/shared/services/sweetAlert.service';
 import { QuickbooksService } from '../services/quickbooks.service';
 import { IQbItem } from '../interface/quickbooks.interface';
 import { EditItemComponent } from './components/edit-item/edit-item.component';
+import { AdjustStockComponent } from './components/adjust-stock/adjust-stock.component';
 
 type FilterStatus = 'all' | 'active' | 'inactive';
 
@@ -80,6 +81,15 @@ export class ItemsComponent implements OnInit {
     this.bsModalRef.onHidden?.subscribe(() => this.loadItems());
   }
 
+  adjustStock(item: IQbItem): void {
+    this.bsModalRef = this.modalService.show(AdjustStockComponent, {
+      backdrop: 'static',
+      class: 'modal-lg p-5',
+    });
+    this.bsModalRef.content.item = item;
+    this.bsModalRef.onHidden?.subscribe(() => this.loadItems());
+  }
+
   ngOnInit(): void {
     this.buildOptions();
     this.translate.onLangChange.subscribe(() => this.buildOptions());
@@ -97,8 +107,6 @@ export class ItemsComponent implements OnInit {
       { value: 'Service', label: 'Service' },
       { value: 'Inventory', label: 'Inventory' },
       { value: 'NonInventory', label: 'NonInventory' },
-      { value: 'Group', label: 'Group' },
-      { value: 'Category', label: 'Category' },
     ];
   }
 
@@ -107,7 +115,9 @@ export class ItemsComponent implements OnInit {
     if (isInitialLoad) this.loading = true;
     try {
       const res = await firstValueFrom(this.quickbooksService.getItems(0, 1000));
-      this.items = (res.items || []).sort((a, b) => (b.id || 0) - (a.id || 0));
+      this.items = (res.items || []).sort(
+        (a, b) => Number(b.qbId || 0) - Number(a.qbId || 0),
+      );
     } catch (err) {
       this.handleError(err);
     } finally {
