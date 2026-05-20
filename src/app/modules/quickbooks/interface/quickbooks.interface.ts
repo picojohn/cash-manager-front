@@ -227,6 +227,19 @@ export interface IQbTaxCode {
   Taxable?: boolean;
 }
 
+export interface IQbWebhookLog {
+  id: number;
+  idCompany: number;
+  realmId: string;
+  entityName: string;
+  entityId: string;
+  operation: string;
+  status: string;
+  errorMessage?: string;
+  receivedAt: string;
+  processedAt?: string;
+}
+
 export interface IQbSyncLog {
   id: number;
   idCompany: number;

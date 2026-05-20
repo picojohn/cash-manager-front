@@ -439,6 +439,21 @@
     "PRIVATE_NOTE": "Nota privada",
     "PRIVATE_NOTE_PLACEHOLDER": "Nota interna, no aparece en la factura (opcional)",
     "TOAST_INVOICE_CREATED": "Factura creada en QuickBooks",
-    "TOAST_INVOICE_UPDATED": "Factura actualizada en QuickBooks"
+    "TOAST_INVOICE_UPDATED": "Factura actualizada en QuickBooks",
+    "AUTO_SYNC_TITLE": "Sincronización automática",
+    "WEBHOOKS": "Webhooks",
+    "ACTIVE": "Activos",
+    "NO_EVENTS_YET": "Sin eventos aún",
+    "LAST_EVENT": "Último evento",
+    "CDC_POLL": "CDC (respaldo)",
+    "CDC_DESC": "verificación horaria",
+    "LAST_RUN": "Última ejecución",
+    "NO_CDC_YET": "Aún no se ha ejecutado el respaldo horario.",
+    "RECORDS": "registros",
+    "SHOW_EVENTS": "Ver eventos",
+    "HIDE_EVENTS": "Ocultar eventos",
+    "EVENT_TIME": "Cuándo",
+    "EVENT_ENTITY": "Entidad",
+    "EVENT_OPERATION": "Operación"
   }
 }

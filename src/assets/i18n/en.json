@@ -439,6 +439,21 @@
     "PRIVATE_NOTE": "Private note",
     "PRIVATE_NOTE_PLACEHOLDER": "Internal note, not printed on the invoice (optional)",
     "TOAST_INVOICE_CREATED": "Invoice created in QuickBooks",
-    "TOAST_INVOICE_UPDATED": "Invoice updated in QuickBooks"
+    "TOAST_INVOICE_UPDATED": "Invoice updated in QuickBooks",
+    "AUTO_SYNC_TITLE": "Automatic sync",
+    "WEBHOOKS": "Webhooks",
+    "ACTIVE": "Active",
+    "NO_EVENTS_YET": "No events yet",
+    "LAST_EVENT": "Last event",
+    "CDC_POLL": "CDC (fallback)",
+    "CDC_DESC": "hourly check",
+    "LAST_RUN": "Last run",
+    "NO_CDC_YET": "Hourly fallback hasn't run yet.",
+    "RECORDS": "records",
+    "SHOW_EVENTS": "Show events",
+    "HIDE_EVENTS": "Hide events",
+    "EVENT_TIME": "When",
+    "EVENT_ENTITY": "Entity",
+    "EVENT_OPERATION": "Operation"
   }
 }

@@ -7,6 +7,7 @@ import { SweetAlertService } from 'src/app/shared/services/sweetAlert.service';
 import { QuickbooksService } from '../services/quickbooks.service';
 import {
   IQbSyncLog,
+  IQbWebhookLog,
   IQuickbooksCompanyInfo,
   IQuickbooksStatus,
 } from '../interface/quickbooks.interface';
@@ -40,6 +41,11 @@ export class EstadoComponent implements OnInit {
     { key: 'Invoice', titleI18n: 'QUICKBOOKS.LOCAL_INVOICES', iconClass: 'fa-solid fa-file-invoice-dollar', count: 0, lastSync: null, syncing: false },
   ];
 
+  /** Sync automatico */
+  public webhookLogs: Array<IQbWebhookLog> = [];
+  public lastCdc: IQbSyncLog | null = null;
+  public showAllWebhooks: boolean = false;
+
   constructor(
     public toast: ToastrService,
     private errorService: ErrorService,
@@ -68,16 +74,27 @@ export class EstadoComponent implements OnInit {
 
   private async loadConnectedData(): Promise<void> {
     try {
-      const [info, customersCount, itemsCount, invoicesCount, customerLog, itemLog, invoiceLog] =
-        await Promise.all([
-          firstValueFrom(this.quickbooksService.getCompanyInfo()),
-          firstValueFrom(this.quickbooksService.getCustomersCount()),
-          firstValueFrom(this.quickbooksService.getItemsCount()),
-          firstValueFrom(this.quickbooksService.getInvoicesCount()),
-          firstValueFrom(this.quickbooksService.getSyncStatus('Customer')),
-          firstValueFrom(this.quickbooksService.getSyncStatus('Item')),
-          firstValueFrom(this.quickbooksService.getSyncStatus('Invoice')),
-        ]);
+      const [
+        info,
+        customersCount,
+        itemsCount,
+        invoicesCount,
+        customerLog,
+        itemLog,
+        invoiceLog,
+        cdcLog,
+        webhookLogs,
+      ] = await Promise.all([
+        firstValueFrom(this.quickbooksService.getCompanyInfo()),
+        firstValueFrom(this.quickbooksService.getCustomersCount()),
+        firstValueFrom(this.quickbooksService.getItemsCount()),
+        firstValueFrom(this.quickbooksService.getInvoicesCount()),
+        firstValueFrom(this.quickbooksService.getSyncStatus('Customer')),
+        firstValueFrom(this.quickbooksService.getSyncStatus('Item')),
+        firstValueFrom(this.quickbooksService.getSyncStatus('Invoice')),
+        firstValueFrom(this.quickbooksService.getSyncStatus('CDC')),
+        firstValueFrom(this.quickbooksService.getWebhookLogs(20)),
+      ]);
       this.companyInfo = info.CompanyInfo;
       this.entities[0].count = customersCount.count;
       this.entities[1].count = itemsCount.count;
@@ -85,9 +102,19 @@ export class EstadoComponent implements OnInit {
       this.entities[0].lastSync = customerLog;
       this.entities[1].lastSync = itemLog;
       this.entities[2].lastSync = invoiceLog;
+      this.lastCdc = cdcLog;
+      this.webhookLogs = webhookLogs || [];
     } catch (err) {
       this.handleError(err);
     }
+  }
+
+  get latestWebhook(): IQbWebhookLog | null {
+    return this.webhookLogs?.[0] || null;
+  }
+
+  toggleWebhookList(): void {
+    this.showAllWebhooks = !this.showAllWebhooks;
   }
 
   async connect(): Promise<void> {

@@ -22,6 +22,7 @@ import {
   IQbTaxCode,
   IQbSyncLog,
   IQbSyncResult,
+  IQbWebhookLog,
 } from '../interface/quickbooks.interface';
 
 @Injectable({
@@ -175,6 +176,13 @@ export class QuickbooksService {
 
   getSyncLogs(limit = 20): Observable<Array<IQbSyncLog>> {
     return this.http.get<Array<IQbSyncLog>>(`${this.url}/quickbooks/sync/logs?limit=${limit}`);
+  }
+
+  /** Ultimos N eventos de webhooks recibidos (de la company autenticada) */
+  getWebhookLogs(limit = 20): Observable<Array<IQbWebhookLog>> {
+    return this.http.get<Array<IQbWebhookLog>>(
+      `${this.url}/quickbooks/webhook-logs?limit=${limit}`,
+    );
   }
 
   getSyncStatus(entity: string = 'Customer'): Observable<IQbSyncLog | null> {
