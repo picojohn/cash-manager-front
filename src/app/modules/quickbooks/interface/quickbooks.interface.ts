@@ -195,6 +195,38 @@ export interface IQbInvoicesResponse {
   total: number;
 }
 
+/** Linea de factura (input al crear/editar) */
+export interface IQbInvoiceLineInput {
+  itemRef: string;
+  qty: number;
+  unitPrice?: number;
+  description?: string;
+  taxCodeRef?: string;
+  /** Para edit: id de la linea en QB. Si no viene, es linea nueva. */
+  qbLineId?: string;
+}
+
+/** Input para crear o editar una Invoice */
+export interface IQbInvoiceInput {
+  customerRef: string;
+  lines: Array<IQbInvoiceLineInput>;
+  docNumber?: string;
+  txnDate?: string;
+  dueDate?: string;
+  customerMemo?: string;
+  privateNote?: string;
+  billEmail?: string;
+}
+
+/** TaxCode de QB */
+export interface IQbTaxCode {
+  Id: string;
+  Name: string;
+  Description?: string;
+  Active?: boolean;
+  Taxable?: boolean;
+}
+
 export interface IQbSyncLog {
   id: number;
   idCompany: number;

@@ -1,0 +1,151 @@
+<div class="container mt-3 p-3">
+  <div class="text-center">
+    <h2 class="p-3">
+      <i class="fa-solid fa-file-invoice-dollar" style="color:#0039a5;"></i> {{ title }}
+    </h2>
+  </div>
+
+  <div *ngIf="loadingRefs && !cargarFormulario" class="text-center py-4">
+    <div class="spinner-border text-primary" role="status"></div>
+    <p class="mt-2">{{ 'QUICKBOOKS.LOADING_REFS' | translate }}</p>
+  </div>
+
+  <div *ngIf="cargarFormulario">
+    <form [formGroup]="formInvoice">
+      <!-- Cliente + fechas -->
+      <div class="row p-2">
+        <div class="form-group col-md-6 mb-3">
+          <label>{{ 'QUICKBOOKS.TABLE_CUSTOMER' | translate }} *</label>
+          <ng-select [items]="customers" bindLabel="displayName" bindValue="qbId"
+            formControlName="customerRef" [clearable]="false"
+            (change)="onCustomerChange($event?.qbId)"
+            [placeholder]="'QUICKBOOKS.SELECT_CUSTOMER' | translate">
+          </ng-select>
+          <div *ngIf="formInvoice.get('customerRef').invalid && formInvoice.get('customerRef').touched"
+            class="text-danger small">
+            {{ 'QUICKBOOKS.FORM_DISPLAY_NAME_REQUIRED' | translate }}
+          </div>
+        </div>
+        <div class="form-group col-md-3 mb-3">
+          <label>{{ 'QUICKBOOKS.TABLE_TXN_DATE' | translate }}</label>
+          <input type="date" class="form-control" formControlName="txnDate">
+        </div>
+        <div class="form-group col-md-3 mb-3">
+          <label>{{ 'QUICKBOOKS.TABLE_DUE_DATE' | translate }}</label>
+          <input type="date" class="form-control" formControlName="dueDate">
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="row p-2">
+        <div class="form-group col-md-12 mb-3">
+          <label>{{ 'GENERAL.EMAIL' | translate }}</label>
+          <input type="email" class="form-control" formControlName="billEmail"
+            [placeholder]="'QUICKBOOKS.FORM_EMAIL_PLACEHOLDER' | translate">
+        </div>
+      </div>
+
+      <!-- Lineas -->
+      <h5 class="mt-3 mb-2 px-2">{{ 'QUICKBOOKS.LINES_TITLE' | translate }}</h5>
+
+      <div class="table-responsive px-2">
+        <table class="modern-table">
+          <thead>
+            <tr>
+              <th style="min-width: 180px;">{{ 'QUICKBOOKS.LINE_ITEM' | translate }} *</th>
+              <th style="min-width: 180px;">{{ 'QUICKBOOKS.LINE_DESCRIPTION' | translate }}</th>
+              <th style="width: 90px;">{{ 'QUICKBOOKS.LINE_QTY' | translate }} *</th>
+              <th style="width: 110px;">{{ 'QUICKBOOKS.LINE_UNIT_PRICE' | translate }}</th>
+              <th style="width: 120px;">{{ 'QUICKBOOKS.LINE_TAX' | translate }}</th>
+              <th style="width: 110px;" class="text-end">{{ 'QUICKBOOKS.LINE_AMOUNT' | translate }}</th>
+              <th style="width: 40px;"></th>
+            </tr>
+          </thead>
+          <tbody formArrayName="lines">
+            <tr *ngFor="let lineCtrl of lines.controls; let i = index" [formGroupName]="i">
+              <td>
+                <ng-select [items]="items" bindLabel="name" bindValue="qbId"
+                  formControlName="itemRef" [clearable]="false"
+                  (change)="onItemChange(i, $event?.qbId)">
+                </ng-select>
+              </td>
+              <td>
+                <input type="text" class="form-control form-control-sm" formControlName="description">
+              </td>
+              <td>
+                <input type="number" min="0" step="1" class="form-control form-control-sm"
+                  formControlName="qty">
+              </td>
+              <td>
+                <input type="number" min="0" step="0.01" class="form-control form-control-sm"
+                  formControlName="unitPrice" placeholder="0.00">
+              </td>
+              <td>
+                <select class="form-control form-control-sm" formControlName="taxCodeRef">
+                  <option value="">—</option>
+                  <option *ngFor="let t of taxCodes" [value]="t.Id">{{ t.Name }}</option>
+                </select>
+              </td>
+              <td class="text-end" style="font-variant-numeric: tabular-nums;">
+                ${{ lineAmount(i) | number: '1.2-2' }}
+              </td>
+              <td>
+                <button type="button" class="btn btn-sm btn-link text-danger p-0"
+                  (click)="removeLine(i)" [disabled]="lines.length <= 1"
+                  [title]="'QUICKBOOKS.REMOVE_LINE' | translate">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="7" class="px-2">
+                <button type="button" class="btn btn-sm btn-outline-primary" (click)="addLine()">
+                  <i class="fa-solid fa-plus"></i> {{ 'QUICKBOOKS.ADD_LINE' | translate }}
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="5" class="text-end"><strong>{{ 'QUICKBOOKS.SUBTOTAL' | translate }}:</strong></td>
+              <td class="text-end"><strong>${{ subtotal | number: '1.2-2' }}</strong></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td colspan="5" class="text-end text-muted small">
+                {{ 'QUICKBOOKS.TAX_HINT' | translate }}
+              </td>
+              <td colspan="2"></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <!-- Memos -->
+      <div class="row p-2 mt-3">
+        <div class="form-group col-md-6 mb-3">
+          <label>{{ 'QUICKBOOKS.CUSTOMER_MEMO' | translate }}</label>
+          <textarea class="form-control" formControlName="customerMemo" rows="2"
+            [placeholder]="'QUICKBOOKS.CUSTOMER_MEMO_PLACEHOLDER' | translate"></textarea>
+        </div>
+        <div class="form-group col-md-6 mb-3">
+          <label>{{ 'QUICKBOOKS.PRIVATE_NOTE' | translate }}</label>
+          <textarea class="form-control" formControlName="privateNote" rows="2"
+            [placeholder]="'QUICKBOOKS.PRIVATE_NOTE_PLACEHOLDER' | translate"></textarea>
+        </div>
+      </div>
+
+      <!-- Botones -->
+      <div class="row justify-content-center p-3">
+        <button (click)="save()" class="btn btn-outline-primary col-md-4 me-2" [disabled]="saving">
+          <i class="fa-solid fa-floppy-disk" *ngIf="!saving"></i>
+          <span class="spinner-border spinner-border-sm" *ngIf="saving"></span>
+          {{ (saving ? 'QUICKBOOKS.SAVING' : 'GENERAL.SAVE') | translate }}
+        </button>
+        <button (click)="bsModalRef.hide()" class="btn btn-outline-secondary col-md-4" [disabled]="saving">
+          <i class="fa-solid fa-ban" style="color: red"></i> {{ 'GENERAL.CLOSE' | translate }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

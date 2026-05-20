@@ -424,6 +424,21 @@
     "STOCK_MEMO_PLACEHOLDER": "Ej: ajuste por inventario físico, merma, devolución...",
     "FORM_ADJUST_ACCOUNT": "Cuenta de ajuste",
     "STOCK_INSUFFICIENT": "No puedes sacar más de lo que hay en stock ({{qty}})",
-    "TOAST_STOCK_ADJUSTED": "Stock ajustado en QuickBooks"
+    "TOAST_STOCK_ADJUSTED": "Stock ajustado en QuickBooks",
+    "MODAL_CREATE_INVOICE": "Crear factura",
+    "MODAL_EDIT_INVOICE": "Editar factura",
+    "LOADING_REFS": "Cargando clientes, items y códigos de impuesto...",
+    "SELECT_CUSTOMER": "Selecciona un cliente",
+    "ADD_LINE": "Agregar línea",
+    "REMOVE_LINE": "Quitar línea",
+    "LINE_TAX": "Impuesto",
+    "SUBTOTAL": "Subtotal",
+    "TAX_HINT": "Los impuestos se calculan automáticamente en QuickBooks según el Tax Code de cada línea.",
+    "CUSTOMER_MEMO": "Mensaje al cliente",
+    "CUSTOMER_MEMO_PLACEHOLDER": "Mensaje que aparece impreso en la factura (opcional)",
+    "PRIVATE_NOTE": "Nota privada",
+    "PRIVATE_NOTE_PLACEHOLDER": "Nota interna, no aparece en la factura (opcional)",
+    "TOAST_INVOICE_CREATED": "Factura creada en QuickBooks",
+    "TOAST_INVOICE_UPDATED": "Factura actualizada en QuickBooks"
   }
 }

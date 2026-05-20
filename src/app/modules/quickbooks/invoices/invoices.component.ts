@@ -7,6 +7,7 @@ import { ErrorService } from 'src/app/shared/services/error.service';
 import { QuickbooksService } from '../services/quickbooks.service';
 import { IQbInvoice } from '../interface/quickbooks.interface';
 import { InvoiceDetailComponent } from './components/invoice-detail/invoice-detail.component';
+import { EditInvoiceComponent } from './components/edit-invoice/edit-invoice.component';
 
 type PaymentFilter = 'all' | 'paid' | 'pending' | 'overdue';
 
@@ -89,6 +90,34 @@ export class InvoicesComponent implements OnInit {
       class: 'modal-xl p-5',
     });
     this.bsModalRef.content.invoice = invoice;
+  }
+
+  newInvoice(): void {
+    this.bsModalRef = this.modalService.show(EditInvoiceComponent, {
+      backdrop: 'static',
+      class: 'modal-xl p-5',
+    });
+    this.bsModalRef.content.title = this.translate.instant('QUICKBOOKS.MODAL_CREATE_INVOICE');
+    this.bsModalRef.content.invoice = null;
+    this.bsModalRef.onHidden?.subscribe(() => this.loadInvoices());
+  }
+
+  async editInvoice(invoice: IQbInvoice): Promise<void> {
+    try {
+      // Cargamos las lineas existentes para precargar el form
+      const existingLines = await firstValueFrom(
+        this.quickbooksService.getInvoiceLines(invoice.id),
+      );
+      this.bsModalRef = this.modalService.show(EditInvoiceComponent, {
+        backdrop: 'static',
+        class: 'modal-xl p-5',
+      });
+      this.bsModalRef.content.title = this.translate.instant('QUICKBOOKS.MODAL_EDIT_INVOICE');
+      this.bsModalRef.content.invoice = { ...invoice, existingLines } as any;
+      this.bsModalRef.onHidden?.subscribe(() => this.loadInvoices());
+    } catch (err) {
+      this.handleError(err);
+    }
   }
 
   filterData(): Array<IQbInvoice> {

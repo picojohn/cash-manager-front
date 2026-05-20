@@ -424,6 +424,21 @@
     "STOCK_MEMO_PLACEHOLDER": "E.g. physical inventory adjustment, shrinkage, return...",
     "FORM_ADJUST_ACCOUNT": "Adjustment account",
     "STOCK_INSUFFICIENT": "Cannot remove more than the available stock ({{qty}})",
-    "TOAST_STOCK_ADJUSTED": "Stock adjusted in QuickBooks"
+    "TOAST_STOCK_ADJUSTED": "Stock adjusted in QuickBooks",
+    "MODAL_CREATE_INVOICE": "Create invoice",
+    "MODAL_EDIT_INVOICE": "Edit invoice",
+    "LOADING_REFS": "Loading customers, items and tax codes...",
+    "SELECT_CUSTOMER": "Select a customer",
+    "ADD_LINE": "Add line",
+    "REMOVE_LINE": "Remove line",
+    "LINE_TAX": "Tax",
+    "SUBTOTAL": "Subtotal",
+    "TAX_HINT": "Taxes are calculated automatically in QuickBooks based on each line's Tax Code.",
+    "CUSTOMER_MEMO": "Customer memo",
+    "CUSTOMER_MEMO_PLACEHOLDER": "Message that appears printed on the invoice (optional)",
+    "PRIVATE_NOTE": "Private note",
+    "PRIVATE_NOTE_PLACEHOLDER": "Internal note, not printed on the invoice (optional)",
+    "TOAST_INVOICE_CREATED": "Invoice created in QuickBooks",
+    "TOAST_INVOICE_UPDATED": "Invoice updated in QuickBooks"
   }
 }

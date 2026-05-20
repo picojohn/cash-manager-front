@@ -15,8 +15,11 @@ import {
   IQbItemUpdate,
   IQbItemStockAdjust,
   IQbAccount,
+  IQbInvoice,
   IQbInvoicesResponse,
   IQbInvoiceLine,
+  IQbInvoiceInput,
+  IQbTaxCode,
   IQbSyncLog,
   IQbSyncResult,
 } from '../interface/quickbooks.interface';
@@ -144,6 +147,21 @@ export class QuickbooksService {
 
   syncInvoices(): Observable<IQbSyncResult> {
     return this.http.post<IQbSyncResult>(`${this.url}/quickbooks/sync/invoices`, {});
+  }
+
+  /** Crear Invoice (POST a QB → upsert local) */
+  createInvoice(dto: IQbInvoiceInput): Observable<IQbInvoice> {
+    return this.http.post<IQbInvoice>(`${this.url}/quickbooks/invoices`, dto);
+  }
+
+  /** Editar Invoice (full update con SyncToken) */
+  updateInvoice(qbId: string, dto: IQbInvoiceInput): Observable<IQbInvoice> {
+    return this.http.patch<IQbInvoice>(`${this.url}/quickbooks/invoices/${qbId}`, dto);
+  }
+
+  /** TaxCodes de QB (TAX, NON, personalizados) */
+  getTaxCodes(): Observable<{ taxCodes: Array<IQbTaxCode> }> {
+    return this.http.get<{ taxCodes: Array<IQbTaxCode> }>(`${this.url}/quickbooks/tax-codes`);
   }
 
   /** Sincroniza Customers + Items + Invoices en orden */

@@ -5,6 +5,9 @@
       <input type="search" [(ngModel)]="buscador" class="form-control"
         [placeholder]="'QUICKBOOKS.SEARCH_INVOICES_PLACEHOLDER' | translate">
     </div>
+    <button class="btn-create" (click)="newInvoice()" [title]="'QUICKBOOKS.MODAL_CREATE_INVOICE' | translate">
+      <i class="fa-solid fa-plus"></i> {{ 'QUICKBOOKS.NEW' | translate }}
+    </button>
     <button class="btn-create" (click)="syncNow()" [disabled]="syncing"
       style="margin-left: 8px;" [title]="'QUICKBOOKS.SYNC_BUTTON_TITLE' | translate">
       <i class="fa-solid fa-arrows-rotate" *ngIf="!syncing"></i>
@@ -74,6 +77,8 @@
             <div class="td-actions">
               <i (click)="viewDetail(inv)" class="fa-solid fa-eye"
                 [title]="'QUICKBOOKS.VIEW_DETAIL' | translate"></i>
+              <i (click)="editInvoice(inv)" class="fa-solid fa-pen-to-square ms-2"
+                [title]="'GENERAL.EDIT' | translate"></i>
             </div>
           </td>
         </tr>
