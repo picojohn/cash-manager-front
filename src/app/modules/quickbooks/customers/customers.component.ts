@@ -5,8 +5,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { firstValueFrom } from 'rxjs';
 import { ErrorService } from 'src/app/shared/services/error.service';
 import { SweetAlertService } from 'src/app/shared/services/sweetAlert.service';
-import { QuickbooksService } from '../services/quickbooks.service';
-import { IQbCustomer } from '../interface/quickbooks.interface';
+import { CustomersService } from './services/customers.service';
+import { IQbCustomer } from './interface/customer.interface';
 import { EditCustomerComponent } from './components/edit-customer/edit-customer.component';
 
 type FilterStatus = 'all' | 'active' | 'inactive';
@@ -35,7 +35,7 @@ export class CustomersComponent implements OnInit {
     public toast: ToastrService,
     private errorService: ErrorService,
     private sweetAlertService: SweetAlertService,
-    private quickbooksService: QuickbooksService,
+    private customersService: CustomersService,
     private modalService: BsModalService,
     private translate: TranslateService,
   ) {}
@@ -60,7 +60,7 @@ export class CustomersComponent implements OnInit {
     const isInitialLoad = this.customers.length === 0;
     if (isInitialLoad) this.loading = true;
     try {
-      const res = await firstValueFrom(this.quickbooksService.getCustomers(0, 1000));
+      const res = await firstValueFrom(this.customersService.getCustomers(0, 1000));
       this.customers = (res.items || []).sort(
         (a, b) => Number(b.qbId || 0) - Number(a.qbId || 0),
       );
@@ -75,7 +75,7 @@ export class CustomersComponent implements OnInit {
     if (this.syncing) return;
     this.syncing = true;
     try {
-      const result = await firstValueFrom(this.quickbooksService.syncCustomers());
+      const result = await firstValueFrom(this.customersService.syncCustomers());
       const msg = `${this.translate.instant('QUICKBOOKS.TOAST_SYNC_OK')}: ${result.recordsCreated} ${this.translate.instant('QUICKBOOKS.RESULT_NEW')}, ${result.recordsUpdated} ${this.translate.instant('QUICKBOOKS.RESULT_UPDATED')}`;
       this.toast.success(msg);
       await this.loadCustomers();
@@ -144,7 +144,7 @@ export class CustomersComponent implements OnInit {
 
     try {
       await firstValueFrom(
-        this.quickbooksService.setCustomerActive(customer.qbId, willActivate),
+        this.customersService.setCustomerActive(customer.qbId, willActivate),
       );
       const toastKey = willActivate ? 'QUICKBOOKS.TOAST_ACTIVATED' : 'QUICKBOOKS.TOAST_DEACTIVATED';
       this.toast.success(this.translate.instant(toastKey));

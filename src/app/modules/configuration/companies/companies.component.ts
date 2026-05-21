@@ -6,7 +6,7 @@ import { SweetAlertService } from 'src/app/shared/services/sweetAlert.service';
 import { PermissionService } from 'src/app/shared/services/permission.service';
 import { IPermisionValue } from 'src/app/shared/interface/permission.interface';
 import { firstValueFrom } from 'rxjs';
-import { PanelService } from '../panel/services/panel.service';
+import { CompaniesService } from './services/companies.service';
 import { EditCompanyComponent } from './components/edit-company/edit-company.component';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -29,7 +29,7 @@ export class CompaniesComponent implements OnInit {
     private modalService: BsModalService,
     public toast: ToastrService,
     private errorService: ErrorService,
-    private panelService: PanelService,
+    private companiesService: CompaniesService,
     private sweetAlertService: SweetAlertService,
     private permissionService: PermissionService,
     private translateService: TranslateService,
@@ -46,7 +46,7 @@ export class CompaniesComponent implements OnInit {
   }
 
   loadData() {
-    firstValueFrom(this.panelService.getAllCompanies()).then(data => {
+    firstValueFrom(this.companiesService.getAllCompanies()).then(data => {
       this.companies = data;
     }, err => {
       const errorObject = this.errorService.showNotification(err);
@@ -69,7 +69,7 @@ export class CompaniesComponent implements OnInit {
 
   async statesCompany(id): Promise<void> {
     if (await this.sweetAlertService.alertStatesMessage()) {
-      await firstValueFrom(this.panelService.cambiarEstadosByidCompany(id)).then(_ => {
+      await firstValueFrom(this.companiesService.cambiarEstadosByidCompany(id)).then(_ => {
         this.toast.success(this.translateService.instant('COMPANIES.STATUS_CHANGED'));
         this.loadData();
       }, err => {

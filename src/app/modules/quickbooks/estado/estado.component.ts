@@ -4,15 +4,19 @@ import { TranslateService } from '@ngx-translate/core';
 import { firstValueFrom } from 'rxjs';
 import { ErrorService } from 'src/app/shared/services/error.service';
 import { SweetAlertService } from 'src/app/shared/services/sweetAlert.service';
-import { QuickbooksService } from '../services/quickbooks.service';
+import { QuickbooksService } from './services/quickbooks.service';
+import { CustomersService } from '../customers/services/customers.service';
+import { ItemsService } from '../items/services/items.service';
+import { InvoicesService } from '../invoices/services/invoices.service';
+import { AccountsService } from '../accounts/services/accounts.service';
 import {
   IQbSyncLog,
   IQbWebhookLog,
   IQuickbooksCompanyInfo,
   IQuickbooksStatus,
-} from '../interface/quickbooks.interface';
+} from './interface/quickbooks.interface';
 
-type EntityKey = 'Customer' | 'Item' | 'Invoice';
+type EntityKey = 'Customer' | 'Item' | 'Invoice' | 'Account';
 
 interface EntityState {
   key: EntityKey;
@@ -36,6 +40,7 @@ export class EstadoComponent implements OnInit {
   public syncingAll: boolean = false;
 
   public entities: Array<EntityState> = [
+    { key: 'Account', titleI18n: 'QUICKBOOKS.LOCAL_ACCOUNTS', iconClass: 'fa-solid fa-book', count: 0, lastSync: null, syncing: false },
     { key: 'Customer', titleI18n: 'QUICKBOOKS.LOCAL_CUSTOMERS', iconClass: 'fa-solid fa-users', count: 0, lastSync: null, syncing: false },
     { key: 'Item', titleI18n: 'QUICKBOOKS.LOCAL_ITEMS', iconClass: 'fa-solid fa-box', count: 0, lastSync: null, syncing: false },
     { key: 'Invoice', titleI18n: 'QUICKBOOKS.LOCAL_INVOICES', iconClass: 'fa-solid fa-file-invoice-dollar', count: 0, lastSync: null, syncing: false },
@@ -51,6 +56,10 @@ export class EstadoComponent implements OnInit {
     private errorService: ErrorService,
     private sweetAlertService: SweetAlertService,
     private quickbooksService: QuickbooksService,
+    private customersService: CustomersService,
+    private itemsService: ItemsService,
+    private invoicesService: InvoicesService,
+    private accountsService: AccountsService,
     private translate: TranslateService,
   ) {}
 
@@ -76,9 +85,11 @@ export class EstadoComponent implements OnInit {
     try {
       const [
         info,
+        accountsCount,
         customersCount,
         itemsCount,
         invoicesCount,
+        accountLog,
         customerLog,
         itemLog,
         invoiceLog,
@@ -86,9 +97,11 @@ export class EstadoComponent implements OnInit {
         webhookLogs,
       ] = await Promise.all([
         firstValueFrom(this.quickbooksService.getCompanyInfo()),
-        firstValueFrom(this.quickbooksService.getCustomersCount()),
-        firstValueFrom(this.quickbooksService.getItemsCount()),
-        firstValueFrom(this.quickbooksService.getInvoicesCount()),
+        firstValueFrom(this.accountsService.getLocalAccountsCount()),
+        firstValueFrom(this.customersService.getCustomersCount()),
+        firstValueFrom(this.itemsService.getItemsCount()),
+        firstValueFrom(this.invoicesService.getInvoicesCount()),
+        firstValueFrom(this.quickbooksService.getSyncStatus('Account')),
         firstValueFrom(this.quickbooksService.getSyncStatus('Customer')),
         firstValueFrom(this.quickbooksService.getSyncStatus('Item')),
         firstValueFrom(this.quickbooksService.getSyncStatus('Invoice')),
@@ -96,12 +109,14 @@ export class EstadoComponent implements OnInit {
         firstValueFrom(this.quickbooksService.getWebhookLogs(20)),
       ]);
       this.companyInfo = info.CompanyInfo;
-      this.entities[0].count = customersCount.count;
-      this.entities[1].count = itemsCount.count;
-      this.entities[2].count = invoicesCount.count;
-      this.entities[0].lastSync = customerLog;
-      this.entities[1].lastSync = itemLog;
-      this.entities[2].lastSync = invoiceLog;
+      this.entities[0].count = accountsCount.count;
+      this.entities[1].count = customersCount.count;
+      this.entities[2].count = itemsCount.count;
+      this.entities[3].count = invoicesCount.count;
+      this.entities[0].lastSync = accountLog;
+      this.entities[1].lastSync = customerLog;
+      this.entities[2].lastSync = itemLog;
+      this.entities[3].lastSync = invoiceLog;
       this.lastCdc = cdcLog;
       this.webhookLogs = webhookLogs || [];
     } catch (err) {
@@ -133,12 +148,14 @@ export class EstadoComponent implements OnInit {
     entity.syncing = true;
     try {
       let result;
-      if (entity.key === 'Customer') {
-        result = await firstValueFrom(this.quickbooksService.syncCustomers());
+      if (entity.key === 'Account') {
+        result = await firstValueFrom(this.accountsService.syncAccounts());
+      } else if (entity.key === 'Customer') {
+        result = await firstValueFrom(this.customersService.syncCustomers());
       } else if (entity.key === 'Item') {
-        result = await firstValueFrom(this.quickbooksService.syncItems());
+        result = await firstValueFrom(this.itemsService.syncItems());
       } else {
-        result = await firstValueFrom(this.quickbooksService.syncInvoices());
+        result = await firstValueFrom(this.invoicesService.syncInvoices());
       }
       this.toast.success(this.buildSyncToast(entity.key, result));
       await this.loadConnectedData();
@@ -154,17 +171,23 @@ export class EstadoComponent implements OnInit {
     this.syncingAll = true;
     this.entities.forEach((e) => (e.syncing = true));
     try {
-      const all = await firstValueFrom(this.quickbooksService.syncAll());
+      const all: any = await this.quickbooksService.syncAll();
       const parts: Array<string> = [];
-      (['Customer', 'Item', 'Invoice'] as Array<EntityKey>).forEach((k, idx) => {
-        const r = idx === 0 ? all.customers : idx === 1 ? all.items : all.invoices;
+      const order: Array<[EntityKey, string]> = [
+        ['Account', 'accounts'],
+        ['Customer', 'customers'],
+        ['Item', 'items'],
+        ['Invoice', 'invoices'],
+      ];
+      for (const [k, prop] of order) {
+        const r = all[prop];
+        if (!r) continue;
         if ((r as any).error) {
           parts.push(`${k}: ❌`);
         } else {
-          const res: any = r;
-          parts.push(`${k}: ${res.recordsCreated}+${res.recordsUpdated}`);
+          parts.push(`${k}: ${r.recordsCreated}+${r.recordsUpdated}`);
         }
-      });
+      }
       this.toast.success(`${this.translate.instant('QUICKBOOKS.TOAST_SYNC_ALL_OK')}: ${parts.join(' | ')}`);
       await this.loadConnectedData();
     } catch (err) {

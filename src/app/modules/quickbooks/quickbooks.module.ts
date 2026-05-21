@@ -16,6 +16,7 @@ import { AdjustStockComponent } from './items/components/adjust-stock/adjust-sto
 import { InvoicesComponent } from './invoices/invoices.component';
 import { InvoiceDetailComponent } from './invoices/components/invoice-detail/invoice-detail.component';
 import { EditInvoiceComponent } from './invoices/components/edit-invoice/edit-invoice.component';
+import { AccountsComponent } from './accounts/accounts.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { EditInvoiceComponent } from './invoices/components/edit-invoice/edit-in
     InvoicesComponent,
     InvoiceDetailComponent,
     EditInvoiceComponent,
+    AccountsComponent,
   ],
   imports: [
     CommonModule,

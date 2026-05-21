@@ -3,8 +3,8 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { firstValueFrom } from 'rxjs';
 import { ErrorService } from 'src/app/shared/services/error.service';
-import { QuickbooksService } from '../../../services/quickbooks.service';
-import { IQbInvoice, IQbInvoiceLine } from '../../../interface/quickbooks.interface';
+import { InvoicesService } from '../../services/invoices.service';
+import { IQbInvoice, IQbInvoiceLine } from '../../interface/invoice.interface';
 
 @Component({
   selector: 'app-invoice-detail',
@@ -20,7 +20,7 @@ export class InvoiceDetailComponent implements OnInit {
     public bsModalRef: BsModalRef,
     public toast: ToastrService,
     private errorService: ErrorService,
-    private quickbooksService: QuickbooksService,
+    private invoicesService: InvoicesService,
   ) {}
 
   ngOnInit(): void {
@@ -35,7 +35,7 @@ export class InvoiceDetailComponent implements OnInit {
     this.loading = true;
     try {
       this.lines = await firstValueFrom(
-        this.quickbooksService.getInvoiceLines(this.invoice.id),
+        this.invoicesService.getInvoiceLines(this.invoice.id),
       );
     } catch (err) {
       const e = this.errorService.showNotification(err);

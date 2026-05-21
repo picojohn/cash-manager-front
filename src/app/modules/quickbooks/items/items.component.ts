@@ -5,8 +5,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { firstValueFrom } from 'rxjs';
 import { ErrorService } from 'src/app/shared/services/error.service';
 import { SweetAlertService } from 'src/app/shared/services/sweetAlert.service';
-import { QuickbooksService } from '../services/quickbooks.service';
-import { IQbItem } from '../interface/quickbooks.interface';
+import { ItemsService } from './services/items.service';
+import { IQbItem } from './interface/item.interface';
 import { EditItemComponent } from './components/edit-item/edit-item.component';
 import { AdjustStockComponent } from './components/adjust-stock/adjust-stock.component';
 
@@ -38,7 +38,7 @@ export class ItemsComponent implements OnInit {
   constructor(
     public toast: ToastrService,
     private errorService: ErrorService,
-    private quickbooksService: QuickbooksService,
+    private itemsService: ItemsService,
     private modalService: BsModalService,
     private sweetAlertService: SweetAlertService,
     private translate: TranslateService,
@@ -51,7 +51,7 @@ export class ItemsComponent implements OnInit {
 
     try {
       await firstValueFrom(
-        this.quickbooksService.updateItem(item.qbId, { active: willActivate }),
+        this.itemsService.updateItem(item.qbId, { active: willActivate }),
       );
       const toastKey = willActivate ? 'QUICKBOOKS.TOAST_ITEM_ACTIVATED' : 'QUICKBOOKS.TOAST_ITEM_DEACTIVATED';
       this.toast.success(this.translate.instant(toastKey));
@@ -114,7 +114,7 @@ export class ItemsComponent implements OnInit {
     const isInitialLoad = this.items.length === 0;
     if (isInitialLoad) this.loading = true;
     try {
-      const res = await firstValueFrom(this.quickbooksService.getItems(0, 1000));
+      const res = await firstValueFrom(this.itemsService.getItems(0, 1000));
       this.items = (res.items || []).sort(
         (a, b) => Number(b.qbId || 0) - Number(a.qbId || 0),
       );
@@ -129,7 +129,7 @@ export class ItemsComponent implements OnInit {
     if (this.syncing) return;
     this.syncing = true;
     try {
-      const result = await firstValueFrom(this.quickbooksService.syncItems());
+      const result = await firstValueFrom(this.itemsService.syncItems());
       const msg = `${this.translate.instant('QUICKBOOKS.TOAST_SYNC_OK')}: ${result.recordsCreated} ${this.translate.instant('QUICKBOOKS.RESULT_NEW')}, ${result.recordsUpdated} ${this.translate.instant('QUICKBOOKS.RESULT_UPDATED')}`;
       this.toast.success(msg);
       await this.loadItems();

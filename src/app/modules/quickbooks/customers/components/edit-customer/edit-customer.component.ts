@@ -5,8 +5,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { ErrorService } from 'src/app/shared/services/error.service';
-import { QuickbooksService } from '../../../services/quickbooks.service';
-import { IQbCustomer, IQbCustomerInput } from '../../../interface/quickbooks.interface';
+import { CustomersService } from '../../services/customers.service';
+import { IQbCustomer, IQbCustomerInput } from '../../interface/customer.interface';
 
 @Component({
   selector: 'app-edit-customer',
@@ -27,7 +27,7 @@ export class EditCustomerComponent implements OnInit {
     public bsModalRef: BsModalRef,
     public toast: ToastrService,
     private errorService: ErrorService,
-    private quickbooksService: QuickbooksService,
+    private customersService: CustomersService,
     private translate: TranslateService,
   ) {}
 
@@ -73,10 +73,10 @@ export class EditCustomerComponent implements OnInit {
 
     try {
       if (this.customer) {
-        await firstValueFrom(this.quickbooksService.updateCustomer(this.customer.qbId, dto));
+        await firstValueFrom(this.customersService.updateCustomer(this.customer.qbId, dto));
         this.toast.success(this.translate.instant('QUICKBOOKS.TOAST_UPDATED'));
       } else {
-        await firstValueFrom(this.quickbooksService.createCustomer(dto));
+        await firstValueFrom(this.customersService.createCustomer(dto));
         this.toast.success(this.translate.instant('QUICKBOOKS.TOAST_CREATED'));
       }
       this.bsModalRef.hide();

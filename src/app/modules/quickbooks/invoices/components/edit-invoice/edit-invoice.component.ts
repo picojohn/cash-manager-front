@@ -5,16 +5,18 @@ import { TranslateService } from '@ngx-translate/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { ErrorService } from 'src/app/shared/services/error.service';
-import { QuickbooksService } from '../../../services/quickbooks.service';
+import { InvoicesService } from '../../services/invoices.service';
+import { CustomersService } from '../../../customers/services/customers.service';
+import { ItemsService } from '../../../items/services/items.service';
+import { IQbCustomer } from '../../../customers/interface/customer.interface';
+import { IQbItem } from '../../../items/interface/item.interface';
 import {
-  IQbCustomer,
   IQbInvoice,
   IQbInvoiceInput,
   IQbInvoiceLine,
   IQbInvoiceLineInput,
-  IQbItem,
   IQbTaxCode,
-} from '../../../interface/quickbooks.interface';
+} from '../../interface/invoice.interface';
 
 @Component({
   selector: 'app-edit-invoice',
@@ -40,7 +42,9 @@ export class EditInvoiceComponent implements OnInit {
     public bsModalRef: BsModalRef,
     public toast: ToastrService,
     private errorService: ErrorService,
-    private quickbooksService: QuickbooksService,
+    private invoicesService: InvoicesService,
+    private customersService: CustomersService,
+    private itemsService: ItemsService,
     private translate: TranslateService,
   ) {}
 
@@ -64,9 +68,9 @@ export class EditInvoiceComponent implements OnInit {
     this.loadingRefs = true;
     try {
       const [customersRes, itemsRes, taxRes] = await Promise.all([
-        firstValueFrom(this.quickbooksService.getCustomers(0, 1000)),
-        firstValueFrom(this.quickbooksService.getItems(0, 1000)),
-        firstValueFrom(this.quickbooksService.getTaxCodes()),
+        firstValueFrom(this.customersService.getCustomers(0, 1000)),
+        firstValueFrom(this.itemsService.getItems(0, 1000)),
+        firstValueFrom(this.invoicesService.getTaxCodes()),
       ]);
       this.customers = (customersRes.items || []).filter((c) => c.active === 1);
       this.items = (itemsRes.items || []).filter((i) => i.active === 1);
@@ -202,10 +206,10 @@ export class EditInvoiceComponent implements OnInit {
 
     try {
       if (this.isEdit) {
-        await firstValueFrom(this.quickbooksService.updateInvoice(this.invoice.qbId, dto));
+        await firstValueFrom(this.invoicesService.updateInvoice(this.invoice.qbId, dto));
         this.toast.success(this.translate.instant('QUICKBOOKS.TOAST_INVOICE_UPDATED'));
       } else {
-        await firstValueFrom(this.quickbooksService.createInvoice(dto));
+        await firstValueFrom(this.invoicesService.createInvoice(dto));
         this.toast.success(this.translate.instant('QUICKBOOKS.TOAST_INVOICE_CREATED'));
       }
       this.bsModalRef.hide();

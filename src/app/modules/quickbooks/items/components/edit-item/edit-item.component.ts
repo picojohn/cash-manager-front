@@ -5,13 +5,13 @@ import { TranslateService } from '@ngx-translate/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { ErrorService } from 'src/app/shared/services/error.service';
-import { QuickbooksService } from '../../../services/quickbooks.service';
+import { ItemsService } from '../../services/items.service';
 import {
   IQbAccount,
   IQbItem,
   IQbItemCreate,
   IQbItemUpdate,
-} from '../../../interface/quickbooks.interface';
+} from '../../interface/item.interface';
 
 @Component({
   selector: 'app-edit-item',
@@ -43,7 +43,7 @@ export class EditItemComponent implements OnInit {
     public bsModalRef: BsModalRef,
     public toast: ToastrService,
     private errorService: ErrorService,
-    private quickbooksService: QuickbooksService,
+    private itemsService: ItemsService,
     private translate: TranslateService,
   ) {}
 
@@ -104,9 +104,9 @@ export class EditItemComponent implements OnInit {
     this.loadingAccounts = true;
     try {
       const [income, asset, expense] = await Promise.all([
-        firstValueFrom(this.quickbooksService.getAccounts('Income')),
-        firstValueFrom(this.quickbooksService.getAccounts('Other Current Asset')),
-        firstValueFrom(this.quickbooksService.getAccounts('Cost of Goods Sold')),
+        firstValueFrom(this.itemsService.getAccounts('Income')),
+        firstValueFrom(this.itemsService.getAccounts('Other Current Asset')),
+        firstValueFrom(this.itemsService.getAccounts('Cost of Goods Sold')),
       ]);
       this.incomeAccounts = (income.accounts || []).filter((a) => a.Active !== false);
       // QB exige que la cuenta de inventario tenga AccountSubType='Inventory'.
@@ -154,7 +154,7 @@ export class EditItemComponent implements OnInit {
           incomeAccountRef: raw.incomeAccountRef,
           taxable: !!raw.taxable,
         };
-        await firstValueFrom(this.quickbooksService.updateItem(this.item.qbId, dto));
+        await firstValueFrom(this.itemsService.updateItem(this.item.qbId, dto));
         this.toast.success(this.translate.instant('QUICKBOOKS.TOAST_ITEM_UPDATED'));
       } else {
         const dto: IQbItemCreate = {
@@ -174,7 +174,7 @@ export class EditItemComponent implements OnInit {
           dto.qtyOnHand = Number(raw.qtyOnHand) || 0;
           dto.invStartDate = raw.invStartDate;
         }
-        await firstValueFrom(this.quickbooksService.createItem(dto));
+        await firstValueFrom(this.itemsService.createItem(dto));
         this.toast.success(this.translate.instant('QUICKBOOKS.TOAST_ITEM_CREATED'));
       }
       this.bsModalRef.hide();

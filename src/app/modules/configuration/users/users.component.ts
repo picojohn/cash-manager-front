@@ -7,6 +7,8 @@ import { PermissionService } from 'src/app/shared/services/permission.service';
 import { IPermisionValue } from 'src/app/shared/interface/permission.interface';
 import { firstValueFrom } from 'rxjs';
 import { PanelService } from '../panel/services/panel.service';
+import { UsersService } from './services/users.service';
+import { CompaniesService } from '../companies/services/companies.service';
 import { EditUserComponent } from './components/edit-user/edit-user.component';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -32,6 +34,8 @@ export class UsersComponent implements OnInit {
     public toast: ToastrService,
     private errorService: ErrorService,
     private panelService: PanelService,
+    private usersService: UsersService,
+    private companiesService: CompaniesService,
     private sweetAlertService: SweetAlertService,
     private permissionService: PermissionService,
     private translateService: TranslateService,
@@ -48,14 +52,14 @@ export class UsersComponent implements OnInit {
   }
 
   loadData() {
-    firstValueFrom(this.panelService.getAllUsers()).then(data => {
+    firstValueFrom(this.usersService.getAllUsers()).then(data => {
       this.users = data;
     }, err => {
       const errorObject = this.errorService.showNotification(err);
       this.toast[errorObject.typeToast](errorObject.message, errorObject.typeMessage, { timeOut: errorObject.timeOut });
     });
     firstValueFrom(this.panelService.roles()).then(data => { this.roles = data; });
-    firstValueFrom(this.panelService.getAllCompanies()).then(data => { this.companies = data; });
+    firstValueFrom(this.companiesService.getAllCompanies()).then(data => { this.companies = data; });
   }
 
   getRoleName(idRole) { return this.roles.find(r => r.id == idRole)?.name || ''; }
@@ -80,7 +84,7 @@ export class UsersComponent implements OnInit {
 
   async statesUser(id): Promise<void> {
     if (await this.sweetAlertService.alertStatesMessage()) {
-      await firstValueFrom(this.panelService.cambiarEstadosByidUser(id)).then(_ => {
+      await firstValueFrom(this.usersService.cambiarEstadosByidUser(id)).then(_ => {
         this.toast.success(this.translateService.instant('USERS.STATUS_CHANGED'));
         this.loadData();
       }, err => {

@@ -4,7 +4,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { ErrorService } from 'src/app/shared/services/error.service';
 import { UserStateService } from 'src/app/shared/services/user-state.service';
-import { PanelService } from 'src/app/modules/configuration/panel/services/panel.service';
+import { UsersService } from 'src/app/modules/configuration/users/services/users.service';
 import { firstValueFrom } from 'rxjs';
 
 @Component({
@@ -23,7 +23,7 @@ export class ProfileComponent implements OnInit {
     public bsModalRef: BsModalRef,
     public toast: ToastrService,
     private errorService: ErrorService,
-    private panelService: PanelService,
+    private usersService: UsersService,
     private userStateService: UserStateService,
   ) { }
 
@@ -71,7 +71,7 @@ export class ProfileComponent implements OnInit {
     }
     const data = this.formProfile.getRawValue();
     data.phone = data.phone ? String(data.phone) : '';
-    firstValueFrom(this.panelService.editUser(data)).then(_ => {
+    firstValueFrom(this.usersService.editUser(data)).then(_ => {
       this.userStateService.updateUsuario({
         name: data.name,
         phone: data.phone,

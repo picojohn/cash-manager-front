@@ -5,8 +5,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { ErrorService } from 'src/app/shared/services/error.service';
-import { QuickbooksService } from '../../../services/quickbooks.service';
-import { IQbAccount, IQbItem } from '../../../interface/quickbooks.interface';
+import { ItemsService } from '../../services/items.service';
+import { IQbAccount, IQbItem } from '../../interface/item.interface';
 
 @Component({
   selector: 'app-adjust-stock',
@@ -30,7 +30,7 @@ export class AdjustStockComponent implements OnInit {
     public bsModalRef: BsModalRef,
     public toast: ToastrService,
     private errorService: ErrorService,
-    private quickbooksService: QuickbooksService,
+    private itemsService: ItemsService,
     private translate: TranslateService,
   ) {}
 
@@ -55,8 +55,8 @@ export class AdjustStockComponent implements OnInit {
     try {
       // Cuentas validas para ajuste: Expense u Other Expense
       const [exp, otherExp] = await Promise.all([
-        firstValueFrom(this.quickbooksService.getAccounts('Expense')),
-        firstValueFrom(this.quickbooksService.getAccounts('Other Expense')),
+        firstValueFrom(this.itemsService.getAccounts('Expense')),
+        firstValueFrom(this.itemsService.getAccounts('Other Expense')),
       ]);
       this.adjustAccounts = [
         ...((exp.accounts || []) as Array<IQbAccount>),
@@ -99,7 +99,7 @@ export class AdjustStockComponent implements OnInit {
     this.saving = true;
     try {
       await firstValueFrom(
-        this.quickbooksService.adjustItemStock(this.item.qbId, {
+        this.itemsService.adjustItemStock(this.item.qbId, {
           qtyDiff,
           adjustAccountRef: raw.adjustAccountRef,
           memo: raw.memo || undefined,

@@ -1,0 +1,114 @@
+<div class="view-card">
+  <div class="view-header">
+    <h3 class="view-title">{{ 'QUICKBOOKS.TITLE_ACCOUNTS' | translate }}</h3>
+    <div class="view-search">
+      <input type="search" [(ngModel)]="buscador" class="form-control"
+        [placeholder]="'QUICKBOOKS.SEARCH_ACCOUNTS_PLACEHOLDER' | translate">
+    </div>
+    <button class="btn-create" (click)="syncNow()" [disabled]="syncing"
+      style="margin-left: 8px;" [title]="'QUICKBOOKS.SYNC_BUTTON_TITLE' | translate">
+      <i class="fa-solid fa-arrows-rotate" *ngIf="!syncing"></i>
+      <span class="spinner-border spinner-border-sm" *ngIf="syncing"></span>
+      {{ (syncing ? 'QUICKBOOKS.SYNCING' : 'QUICKBOOKS.SYNC_NOW') | translate }}
+    </button>
+  </div>
+
+  <!-- Resumen rapido -->
+  <div *ngIf="!loading && accounts.length > 0" class="px-3 pt-3">
+    <div class="alert alert-info py-2 mb-3 d-flex justify-content-between align-items-center">
+      <span>
+        <i class="fa-solid fa-sack-dollar me-2"></i>
+        <strong>{{ 'QUICKBOOKS.TOTAL_CASH' | translate }}:</strong>
+      </span>
+      <strong class="fs-5">${{ totalCash | number: '1.2-2' }}</strong>
+    </div>
+  </div>
+
+  <div class="px-3 pt-2 pb-2 d-flex gap-2" style="gap: 8px;">
+    <div style="min-width: 200px;">
+      <label class="form-label small text-muted mb-1">{{ 'GENERAL.STATUS' | translate }}</label>
+      <ng-select [items]="statusOptions" bindLabel="label" bindValue="value"
+        [(ngModel)]="filterStatus" [clearable]="false" (change)="onFilterChange()"
+        [placeholder]="'QUICKBOOKS.FILTER_BY_STATUS' | translate">
+      </ng-select>
+    </div>
+    <div style="min-width: 240px;">
+      <label class="form-label small text-muted mb-1">{{ 'QUICKBOOKS.TABLE_TYPE' | translate }}</label>
+      <ng-select [items]="typeOptions" bindLabel="label" bindValue="value"
+        [(ngModel)]="filterType" [clearable]="false" (change)="onFilterChange()"
+        [placeholder]="'QUICKBOOKS.FILTER_BY_TYPE' | translate">
+      </ng-select>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status"></div>
+    <p class="mt-2">{{ 'QUICKBOOKS.LOADING_ACCOUNTS' | translate }}</p>
+  </div>
+
+  <div *ngIf="!loading && accounts.length === 0" class="text-center py-5">
+    <i class="fa-solid fa-book fs-1 text-secondary mb-3"></i>
+    <p class="text-muted">
+      {{ 'QUICKBOOKS.EMPTY_ACCOUNTS_TITLE' | translate }}.
+      {{ 'QUICKBOOKS.EMPTY_ACCOUNTS_DESC' | translate }}
+    </p>
+  </div>
+
+  <div *ngIf="!loading && accounts.length > 0" style="overflow-x: auto;">
+    <table class="modern-table">
+      <thead>
+        <tr>
+          <th>{{ 'QUICKBOOKS.TABLE_QB_ID' | translate }}</th>
+          <th>{{ 'QUICKBOOKS.TABLE_ACCOUNT_NAME' | translate }}</th>
+          <th>{{ 'QUICKBOOKS.TABLE_TYPE' | translate }}</th>
+          <th>{{ 'QUICKBOOKS.TABLE_SUBTYPE' | translate }}</th>
+          <th>{{ 'QUICKBOOKS.TABLE_CLASSIFICATION' | translate }}</th>
+          <th class="text-end">{{ 'QUICKBOOKS.TABLE_CURRENT_BALANCE' | translate }}</th>
+          <th>{{ 'GENERAL.STATUS' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let a of filterData() | paginate: {itemsPerPage: totalPaginas, currentPage: page, id: 'itemAccounts'}"
+          [class.row-inactive]="a.active !== 1"
+          [class.table-row-cash]="isCashAccount(a)">
+          <td>{{ a.qbId }}</td>
+          <td class="td-name">
+            <i *ngIf="isCashAccount(a)" class="fa-solid fa-money-bill-wave text-success me-1"
+              [title]="'QUICKBOOKS.CASH_ACCOUNT' | translate"></i>
+            {{ (a.fullyQualifiedName || a.name).split(':').join(' : ') }}
+          </td>
+          <td>{{ a.accountType || '—' }}</td>
+          <td>{{ a.accountSubType || '—' }}</td>
+          <td>{{ a.classification || '—' }}</td>
+          <td class="text-end">${{ a.currentBalance | number: '1.2-2' }}</td>
+          <td>
+            <span class="status-badge"
+              [ngClass]="a.active === 1 ? 'status-active' : 'status-inactive'">
+              <i class="fa-solid" [ngClass]="a.active === 1 ? 'fa-circle-check' : 'fa-circle-xmark'"></i>
+              {{ (a.active === 1 ? 'GENERAL.ACTIVE' : 'GENERAL.INACTIVE') | translate }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="view-pagination" *ngIf="!loading && accounts.length > 0">
+    <select class="form-select" (change)="numeroPaginas($event)">
+      <option *ngFor="let option of nPaginas" [value]="option" [selected]="option === totalPaginas">
+        {{ option }}
+      </option>
+    </select>
+    <span *ngIf="filterData().length" class="pagination-info">
+      {{ 'GENERAL.SHOWING' | translate }}
+      <strong>{{ (page - 1) * totalPaginas + 1 }}</strong>
+      -
+      <strong>{{ (page * totalPaginas < filterData().length) ? (page * totalPaginas) : filterData().length }}</strong>
+      {{ 'GENERAL.OF' | translate }} <strong>{{ filterData().length }}</strong>
+    </span>
+    <pagination-controls id="itemAccounts" (pageChange)="page=$event"
+      [previousLabel]="'GENERAL.PREVIOUS' | translate" [nextLabel]="'GENERAL.NEXT' | translate"
+      style="font-size: 13px; color: var(--text-secondary);">
+    </pagination-controls>
+  </div>
+</div>

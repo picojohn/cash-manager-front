@@ -4,7 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { ErrorService } from 'src/app/shared/services/error.service';
-import { PanelService } from '../../../panel/services/panel.service';
+import { UsersService } from '../../services/users.service';
 import { UserStateService } from 'src/app/shared/services/user-state.service';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -25,7 +25,7 @@ export class EditUserComponent implements OnInit {
     public bsModalRef: BsModalRef,
     public toast: ToastrService,
     private errorService: ErrorService,
-    private panelService: PanelService,
+    private usersService: UsersService,
     private userStateService: UserStateService,
     private translateService: TranslateService,
   ) { }
@@ -57,8 +57,8 @@ export class EditUserComponent implements OnInit {
     }
     firstValueFrom(
       this.user
-        ? this.panelService.editUser(this.formUser.value)
-        : this.panelService.newUser(this.formUser.value)
+        ? this.usersService.editUser(this.formUser.value)
+        : this.usersService.newUser(this.formUser.value)
     ).then(_ => {
       // Si editó el usuario actual, actualizar el header
       const currentUser = this.userStateService.usuarioActual;

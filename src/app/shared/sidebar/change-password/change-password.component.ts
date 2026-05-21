@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { ErrorService } from 'src/app/shared/services/error.service';
-import { PanelService } from 'src/app/modules/configuration/panel/services/panel.service';
+import { UsersService } from 'src/app/modules/configuration/users/services/users.service';
 import { firstValueFrom } from 'rxjs';
 
 @Component({
@@ -24,7 +24,7 @@ export class ChangePasswordComponent implements OnInit {
     public bsModalRef: BsModalRef,
     public toast: ToastrService,
     private errorService: ErrorService,
-    private panelService: PanelService,
+    private usersService: UsersService,
   ) {
   }
 
@@ -49,7 +49,7 @@ export class ChangePasswordComponent implements OnInit {
     if (this.formPassword.value.newPassword !== this.formPassword.value.confirmPassword) {
       return this.toast.info('Las contraseñas no coinciden', 'Cambiar contraseña');
     }
-    firstValueFrom(this.panelService.changePassword({
+    firstValueFrom(this.usersService.changePassword({
       password: this.formPassword.value.password,
       newPassword: this.formPassword.value.newPassword,
     })).then(_ => {

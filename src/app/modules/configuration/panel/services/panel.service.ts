@@ -4,38 +4,43 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { IMenuPermissions, IModule, IRole, ISubModule } from '../interface/panel.interface';
 
+/**
+ * Servicio del submodulo Panel.
+ * Maneja Modules, SubModules, Roles y MenuPermissions.
+ * Companies vive en companies/services/companies.service.ts
+ * Users vive en users/services/users.service.ts
+ */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PanelService {
+  private url = environment.endpoint;
+  constructor(private http: HttpClient) {}
 
-  private url = environment.endpoint
-  constructor(private http: HttpClient) { }
-
-  // Módulos
+  // Modulos
   getAllModules(): Observable<Array<IModule>> {
-    return this.http.get<Array<IModule>>(`${this.url}/modules`)
+    return this.http.get<Array<IModule>>(`${this.url}/modules`);
   }
 
   newModule(module: IModule): Observable<IModule> {
-    return this.http.post<IModule>(`${this.url}/modules`, module)
+    return this.http.post<IModule>(`${this.url}/modules`, module);
   }
 
   editModule(module: IModule): Observable<IModule> {
-    return this.http.patch<IModule>(`${this.url}/modules`, module)
+    return this.http.patch<IModule>(`${this.url}/modules`, module);
   }
 
-  // SubMódulos
+  // SubModulos
   getAllSubModules(): Observable<Array<ISubModule>> {
-    return this.http.get<Array<ISubModule>>(`${this.url}/subModules`)
+    return this.http.get<Array<ISubModule>>(`${this.url}/subModules`);
   }
 
   newSubModule(subModule: ISubModule): Observable<ISubModule> {
-    return this.http.post<ISubModule>(`${this.url}/subModules`, subModule)
+    return this.http.post<ISubModule>(`${this.url}/subModules`, subModule);
   }
 
   editSubModule(subModule: ISubModule): Observable<ISubModule> {
-    return this.http.patch<ISubModule>(`${this.url}/subModules`, subModule)
+    return this.http.patch<ISubModule>(`${this.url}/subModules`, subModule);
   }
 
   public cambiarEstadosByidSubModule(id: number): Observable<Array<any>> {
@@ -44,7 +49,7 @@ export class PanelService {
 
   // Roles
   public roles(): Observable<Array<any>> {
-    return this.http.get<Array<any>>(`${this.url}/roles`)
+    return this.http.get<Array<any>>(`${this.url}/roles`);
   }
 
   newRol(rol: IRole): Observable<IRole> {
@@ -61,7 +66,7 @@ export class PanelService {
 
   // MenuPermissions
   public getAllMenuPermissions(): Observable<Array<any>> {
-    return this.http.get<Array<any>>(`${this.url}/menuPermissions`)
+    return this.http.get<Array<any>>(`${this.url}/menuPermissions`);
   }
 
   newMenuPermissions(data): Observable<any> {
@@ -70,44 +75,5 @@ export class PanelService {
 
   editMenuPermissions(data): Observable<any> {
     return this.http.patch<any>(`${this.url}/menuPermissions`, data);
-  }
-
-  // Companies
-  public getAllCompanies(): Observable<Array<any>> {
-    return this.http.get<Array<any>>(`${this.url}/companies`)
-  }
-
-  newCompany(company): Observable<any> {
-    return this.http.post<any>(`${this.url}/companies`, company);
-  }
-
-  editCompany(company): Observable<any> {
-    return this.http.patch<any>(`${this.url}/companies`, company);
-  }
-
-  public cambiarEstadosByidCompany(id: number): Observable<Array<any>> {
-    return this.http.get<Array<any>>(`${this.url}/companies/estados/${id}`);
-  }
-
-  // Change password
-  changePassword(data: { password: string, newPassword: string }): Observable<any> {
-    return this.http.patch<any>(`${this.url}/users/change-password`, data);
-  }
-
-  // Users
-  public getAllUsers(): Observable<Array<any>> {
-    return this.http.get<Array<any>>(`${this.url}/users`)
-  }
-
-  newUser(user): Observable<any> {
-    return this.http.post<any>(`${this.url}/users`, user);
-  }
-
-  editUser(user): Observable<any> {
-    return this.http.patch<any>(`${this.url}/users`, user);
-  }
-
-  public cambiarEstadosByidUser(id: number): Observable<Array<any>> {
-    return this.http.get<Array<any>>(`${this.url}/users/estados/${id}`);
   }
 }

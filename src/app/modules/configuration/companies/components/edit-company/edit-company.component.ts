@@ -4,7 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { ErrorService } from 'src/app/shared/services/error.service';
-import { PanelService } from '../../../panel/services/panel.service';
+import { CompaniesService } from '../../services/companies.service';
 import { UserStateService } from 'src/app/shared/services/user-state.service';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -23,7 +23,7 @@ export class EditCompanyComponent implements OnInit {
     public bsModalRef: BsModalRef,
     public toast: ToastrService,
     private errorService: ErrorService,
-    private panelService: PanelService,
+    private companiesService: CompaniesService,
     private userStateService: UserStateService,
     private translateService: TranslateService,
   ) { }
@@ -61,8 +61,8 @@ export class EditCompanyComponent implements OnInit {
     }
     firstValueFrom(
       this.company
-        ? this.panelService.editCompany(this.formCompany.value)
-        : this.panelService.newCompany(this.formCompany.value)
+        ? this.companiesService.editCompany(this.formCompany.value)
+        : this.companiesService.newCompany(this.formCompany.value)
     ).then(_ => {
       // Si editó la empresa del usuario actual, actualizar el header
       const currentUser = this.userStateService.usuarioActual;

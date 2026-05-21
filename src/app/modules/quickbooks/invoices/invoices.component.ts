@@ -4,8 +4,8 @@ import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
 import { firstValueFrom } from 'rxjs';
 import { ErrorService } from 'src/app/shared/services/error.service';
-import { QuickbooksService } from '../services/quickbooks.service';
-import { IQbInvoice } from '../interface/quickbooks.interface';
+import { InvoicesService } from './services/invoices.service';
+import { IQbInvoice } from './interface/invoice.interface';
 import { InvoiceDetailComponent } from './components/invoice-detail/invoice-detail.component';
 import { EditInvoiceComponent } from './components/edit-invoice/edit-invoice.component';
 
@@ -34,7 +34,7 @@ export class InvoicesComponent implements OnInit {
   constructor(
     public toast: ToastrService,
     private errorService: ErrorService,
-    private quickbooksService: QuickbooksService,
+    private invoicesService: InvoicesService,
     private modalService: BsModalService,
     private translate: TranslateService,
   ) {}
@@ -58,7 +58,7 @@ export class InvoicesComponent implements OnInit {
     const isInitialLoad = this.invoices.length === 0;
     if (isInitialLoad) this.loading = true;
     try {
-      const res = await firstValueFrom(this.quickbooksService.getInvoices(0, 1000));
+      const res = await firstValueFrom(this.invoicesService.getInvoices(0, 1000));
       this.invoices = (res.items || []).sort(
         (a, b) => Number(b.qbId || 0) - Number(a.qbId || 0),
       );
@@ -73,7 +73,7 @@ export class InvoicesComponent implements OnInit {
     if (this.syncing) return;
     this.syncing = true;
     try {
-      const result = await firstValueFrom(this.quickbooksService.syncInvoices());
+      const result = await firstValueFrom(this.invoicesService.syncInvoices());
       const msg = `${this.translate.instant('QUICKBOOKS.TOAST_SYNC_OK')}: ${result.recordsCreated} ${this.translate.instant('QUICKBOOKS.RESULT_NEW')}, ${result.recordsUpdated} ${this.translate.instant('QUICKBOOKS.RESULT_UPDATED')}`;
       this.toast.success(msg);
       await this.loadInvoices();
@@ -106,7 +106,7 @@ export class InvoicesComponent implements OnInit {
     try {
       // Cargamos las lineas existentes para precargar el form
       const existingLines = await firstValueFrom(
-        this.quickbooksService.getInvoiceLines(invoice.id),
+        this.invoicesService.getInvoiceLines(invoice.id),
       );
       this.bsModalRef = this.modalService.show(EditInvoiceComponent, {
         backdrop: 'static',
