@@ -14,6 +14,9 @@ import { CustomersService } from '../../customers/services/customers.service';
 import { ItemsService } from '../../items/services/items.service';
 import { InvoicesService } from '../../invoices/services/invoices.service';
 import { AccountsService } from '../../accounts/services/accounts.service';
+import { PaymentsService } from '../../payments/services/payments.service';
+import { VendorsService } from '../../vendors/services/vendors.service';
+import { BillsService } from '../../bills/services/bills.service';
 
 @Injectable({ providedIn: 'root' })
 export class QuickbooksService {
@@ -25,6 +28,9 @@ export class QuickbooksService {
     private itemsService: ItemsService,
     private invoicesService: InvoicesService,
     private accountsService: AccountsService,
+    private paymentsService: PaymentsService,
+    private vendorsService: VendorsService,
+    private billsService: BillsService,
   ) {}
 
   // === OAuth (auth/quickbooks/*) ===
@@ -74,6 +80,9 @@ export class QuickbooksService {
     customers: IQbSyncResult | { error: string };
     items: IQbSyncResult | { error: string };
     invoices: IQbSyncResult | { error: string };
+    payments: IQbSyncResult | { error: string };
+    vendors: IQbSyncResult | { error: string };
+    bills: IQbSyncResult | { error: string };
   }> {
     const run = async (call: Observable<IQbSyncResult>) => {
       try {
@@ -83,12 +92,15 @@ export class QuickbooksService {
         return { error: err?.error?.message || err?.message || String(err) };
       }
     };
-    const [accounts, customers, items, invoices] = await Promise.all([
+    const [accounts, customers, items, invoices, payments, vendors, bills] = await Promise.all([
       run(this.accountsService.syncAccounts()),
       run(this.customersService.syncCustomers()),
       run(this.itemsService.syncItems()),
       run(this.invoicesService.syncInvoices()),
+      run(this.paymentsService.syncPayments()),
+      run(this.vendorsService.syncVendors()),
+      run(this.billsService.syncBills()),
     ]);
-    return { accounts, customers, items, invoices };
+    return { accounts, customers, items, invoices, payments, vendors, bills };
   }
 }

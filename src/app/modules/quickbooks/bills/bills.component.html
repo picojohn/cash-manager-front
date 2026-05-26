@@ -1,0 +1,102 @@
+<div class="view-card">
+  <div class="view-header">
+    <h3 class="view-title">{{ 'QUICKBOOKS.TITLE_BILLS' | translate }}</h3>
+    <div class="view-search">
+      <input type="search" [(ngModel)]="buscador" class="form-control"
+        [placeholder]="'QUICKBOOKS.SEARCH_BILLS_PLACEHOLDER' | translate">
+    </div>
+    <button class="btn-create" (click)="syncNow()" [disabled]="syncing"
+      style="margin-left: 8px;" [title]="'QUICKBOOKS.SYNC_BUTTON_TITLE' | translate">
+      <i class="fa-solid fa-arrows-rotate" *ngIf="!syncing"></i>
+      <span class="spinner-border spinner-border-sm" *ngIf="syncing"></span>
+      {{ (syncing ? 'QUICKBOOKS.SYNCING' : 'QUICKBOOKS.SYNC_NOW') | translate }}
+    </button>
+  </div>
+
+  <div class="px-3 pt-3 pb-2" style="max-width: 280px;">
+    <label class="form-label small text-muted mb-1">{{ 'QUICKBOOKS.LABEL_PAYMENT_STATUS' | translate }}</label>
+    <ng-select [items]="paymentOptions" bindLabel="label" bindValue="value"
+      [(ngModel)]="filterPayment" [clearable]="false" (change)="onFilterChange()"
+      [placeholder]="'QUICKBOOKS.FILTER_BY_PAYMENT' | translate">
+    </ng-select>
+  </div>
+
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status"></div>
+    <p class="mt-2">{{ 'QUICKBOOKS.LOADING_BILLS' | translate }}</p>
+  </div>
+
+  <div *ngIf="!loading && bills.length === 0" class="text-center py-5">
+    <i class="fa-solid fa-receipt fs-1 text-secondary mb-3"></i>
+    <p class="text-muted">
+      {{ 'QUICKBOOKS.EMPTY_BILLS_TITLE' | translate }}.
+      {{ 'QUICKBOOKS.EMPTY_BILLS_DESC' | translate }}
+    </p>
+  </div>
+
+  <div *ngIf="!loading && bills.length > 0" style="overflow-x: auto;">
+    <table class="modern-table">
+      <thead>
+        <tr>
+          <th>{{ 'QUICKBOOKS.TABLE_DOC_NUMBER' | translate }}</th>
+          <th>{{ 'QUICKBOOKS.TABLE_TXN_DATE' | translate }}</th>
+          <th>{{ 'QUICKBOOKS.TABLE_DUE_DATE' | translate }}</th>
+          <th>{{ 'QUICKBOOKS.TABLE_VENDOR' | translate }}</th>
+          <th class="text-end">{{ 'QUICKBOOKS.TABLE_TOTAL' | translate }}</th>
+          <th class="text-end">{{ 'QUICKBOOKS.TABLE_BALANCE' | translate }}</th>
+          <th class="text-center">{{ 'QUICKBOOKS.TABLE_LINES' | translate }}</th>
+          <th>{{ 'GENERAL.STATUS' | translate }}</th>
+          <th>{{ 'GENERAL.ACTIONS' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let b of filterData() | paginate: {itemsPerPage: totalPaginas, currentPage: page, id: 'itemBills'}"
+          [class.row-paid]="b.balance <= 0">
+          <td><strong>{{ b.docNumber || b.qbId }}</strong></td>
+          <td>{{ b.txnDate | date: 'MMM d, y' }}</td>
+          <td>{{ b.dueDate ? (b.dueDate | date: 'MMM d, y') : '—' }}</td>
+          <td>{{ b.vendorName || '—' }}</td>
+          <td class="text-end amount-cell">${{ b.totalAmt | number: '1.2-2' }}</td>
+          <td class="text-end amount-cell">${{ b.balance | number: '1.2-2' }}</td>
+          <td class="text-center">{{ b.linesCount }}</td>
+          <td>
+            <span class="status-badge" [ngClass]="statusClass(b)">
+              <i class="fa-solid"
+                [ngClass]="{
+                  'fa-circle-check': b.balance <= 0,
+                  'fa-clock': b.balance > 0 && !isOverdue(b),
+                  'fa-triangle-exclamation': isOverdue(b)
+                }"></i>
+              {{ statusKey(b) | translate }}
+            </span>
+          </td>
+          <td>
+            <div class="td-actions">
+              <i (click)="viewDetail(b)" class="fa-solid fa-eye"
+                [title]="'QUICKBOOKS.VIEW_DETAIL' | translate"></i>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="view-pagination" *ngIf="!loading && bills.length > 0">
+    <select class="form-select" (change)="numeroPaginas($event)">
+      <option *ngFor="let option of nPaginas" [value]="option" [selected]="option === totalPaginas">
+        {{ option }}
+      </option>
+    </select>
+    <span *ngIf="filterData().length" class="pagination-info">
+      {{ 'GENERAL.SHOWING' | translate }}
+      <strong>{{ (page - 1) * totalPaginas + 1 }}</strong>
+      -
+      <strong>{{ (page * totalPaginas < filterData().length) ? (page * totalPaginas) : filterData().length }}</strong>
+      {{ 'GENERAL.OF' | translate }} <strong>{{ filterData().length }}</strong>
+    </span>
+    <pagination-controls id="itemBills" (pageChange)="page=$event"
+      [previousLabel]="'GENERAL.PREVIOUS' | translate" [nextLabel]="'GENERAL.NEXT' | translate"
+      style="font-size: 13px; color: var(--text-secondary);">
+    </pagination-controls>
+  </div>
+</div>

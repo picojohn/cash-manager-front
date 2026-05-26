@@ -1,0 +1,84 @@
+<div class="container mt-3 p-3" *ngIf="bill">
+  <div class="d-flex justify-content-between align-items-start mb-3">
+    <div>
+      <h3 class="mb-1">
+        <i class="fa-solid fa-receipt text-primary me-2"></i>
+        {{ 'QUICKBOOKS.MODAL_BILL_TITLE' | translate }} #{{ bill.docNumber || bill.qbId }}
+      </h3>
+      <small class="text-muted">QB ID: {{ bill.qbId }}</small>
+    </div>
+    <button (click)="bsModalRef.hide()" class="btn-close" aria-label="Close"></button>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <p class="mb-1"><strong>{{ 'QUICKBOOKS.TABLE_VENDOR' | translate }}:</strong> {{ bill.vendorName || '—' }}</p>
+      <p class="mb-1"><strong>{{ 'QUICKBOOKS.TABLE_TXN_DATE' | translate }}:</strong> {{ bill.txnDate | date: 'mediumDate' }}</p>
+      <p class="mb-1"><strong>{{ 'QUICKBOOKS.TABLE_DUE_DATE' | translate }}:</strong> {{ bill.dueDate ? (bill.dueDate | date: 'mediumDate') : '—' }}</p>
+    </div>
+    <div class="col-md-6 text-md-end">
+      <p class="mb-1"><strong>{{ 'QUICKBOOKS.TABLE_TOTAL' | translate }}:</strong> <span class="fs-5">${{ bill.totalAmt | number: '1.2-2' }}</span></p>
+      <p class="mb-1"><strong>{{ 'QUICKBOOKS.TABLE_BALANCE' | translate }}:</strong>
+        <span [class.text-success]="bill.balance <= 0"
+              [class.text-danger]="bill.balance > 0">
+          ${{ bill.balance | number: '1.2-2' }}
+        </span>
+      </p>
+    </div>
+  </div>
+
+  <h5 class="mt-4 mb-2">{{ 'QUICKBOOKS.BILL_LINES_TITLE' | translate }}</h5>
+
+  <div *ngIf="loading" class="text-center py-4">
+    <div class="spinner-border text-primary" role="status"></div>
+  </div>
+
+  <div *ngIf="!loading && expenseLines.length === 0" class="text-center py-3 text-muted">
+    {{ 'QUICKBOOKS.NO_BILL_LINES' | translate }}
+  </div>
+
+  <div *ngIf="!loading && expenseLines.length > 0" style="overflow-x: auto;">
+    <table class="modern-table">
+      <thead>
+        <tr>
+          <th style="width: 40px;">#</th>
+          <th>{{ 'QUICKBOOKS.BILL_LINE_CATEGORY' | translate }}</th>
+          <th>{{ 'QUICKBOOKS.LINE_DESCRIPTION' | translate }}</th>
+          <th>{{ 'QUICKBOOKS.BILL_LINE_BILLABLE_TO' | translate }}</th>
+          <th class="text-end">{{ 'QUICKBOOKS.LINE_AMOUNT' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let line of expenseLines; let i = index">
+          <td>{{ line.lineNum || (i + 1) }}</td>
+          <td>
+            <span *ngIf="line.accountName">{{ line.accountName }}</span>
+            <span *ngIf="line.itemName" class="text-info">
+              <i class="fa-solid fa-box me-1"></i>{{ line.itemName }}
+              <span *ngIf="line.qty > 0"> (× {{ line.qty }})</span>
+            </span>
+            <span *ngIf="!line.accountName && !line.itemName">—</span>
+          </td>
+          <td>{{ line.description || '—' }}</td>
+          <td>
+            <span *ngIf="line.customerName">{{ line.customerName }}</span>
+            <span *ngIf="!line.customerName" class="text-muted">—</span>
+          </td>
+          <td class="text-end"><strong>${{ line.amount | number: '1.2-2' }}</strong></td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="4" class="text-end"><strong>{{ 'QUICKBOOKS.TABLE_TOTAL' | translate }}:</strong></td>
+          <td class="text-end"><strong>${{ bill.totalAmt | number: '1.2-2' }}</strong></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <div class="row justify-content-center p-3 mt-3">
+    <button (click)="bsModalRef.hide()" class="btn btn-outline-secondary col-md-4">
+      <i class="fa-solid fa-xmark"></i> {{ 'GENERAL.CLOSE' | translate }}
+    </button>
+  </div>
+</div>

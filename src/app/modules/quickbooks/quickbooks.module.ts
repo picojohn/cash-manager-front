@@ -17,6 +17,10 @@ import { InvoicesComponent } from './invoices/invoices.component';
 import { InvoiceDetailComponent } from './invoices/components/invoice-detail/invoice-detail.component';
 import { EditInvoiceComponent } from './invoices/components/edit-invoice/edit-invoice.component';
 import { AccountsComponent } from './accounts/accounts.component';
+import { PaymentsComponent } from './payments/payments.component';
+import { VendorsComponent } from './vendors/vendors.component';
+import { BillsComponent } from './bills/bills.component';
+import { BillDetailComponent } from './bills/components/bill-detail/bill-detail.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +35,10 @@ import { AccountsComponent } from './accounts/accounts.component';
     InvoiceDetailComponent,
     EditInvoiceComponent,
     AccountsComponent,
+    PaymentsComponent,
+    VendorsComponent,
+    BillsComponent,
+    BillDetailComponent,
   ],
   imports: [
     CommonModule,

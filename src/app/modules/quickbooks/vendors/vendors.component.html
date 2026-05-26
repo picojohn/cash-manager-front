@@ -1,0 +1,93 @@
+<div class="view-card">
+  <div class="view-header">
+    <h3 class="view-title">{{ 'QUICKBOOKS.TITLE_VENDORS' | translate }}</h3>
+    <div class="view-search">
+      <input type="search" [(ngModel)]="buscador" class="form-control"
+        [placeholder]="'QUICKBOOKS.SEARCH_VENDORS_PLACEHOLDER' | translate">
+    </div>
+    <button class="btn-create" (click)="syncNow()" [disabled]="syncing"
+      style="margin-left: 8px;" [title]="'QUICKBOOKS.SYNC_BUTTON_TITLE' | translate">
+      <i class="fa-solid fa-arrows-rotate" *ngIf="!syncing"></i>
+      <span class="spinner-border spinner-border-sm" *ngIf="syncing"></span>
+      {{ (syncing ? 'QUICKBOOKS.SYNCING' : 'QUICKBOOKS.SYNC_NOW') | translate }}
+    </button>
+  </div>
+
+  <div class="px-3 pt-3 pb-2" style="max-width: 280px;">
+    <label class="form-label small text-muted mb-1">{{ 'GENERAL.STATUS' | translate }}</label>
+    <ng-select [items]="statusOptions" bindLabel="label" bindValue="value"
+      [(ngModel)]="filterStatus" [clearable]="false" (change)="onFilterChange()"
+      [placeholder]="'QUICKBOOKS.FILTER_BY_STATUS' | translate">
+    </ng-select>
+  </div>
+
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status"></div>
+    <p class="mt-2">{{ 'QUICKBOOKS.LOADING_VENDORS' | translate }}</p>
+  </div>
+
+  <div *ngIf="!loading && vendors.length === 0" class="text-center py-5">
+    <i class="fa-solid fa-truck-field fs-1 text-secondary mb-3"></i>
+    <p class="text-muted">
+      {{ 'QUICKBOOKS.EMPTY_VENDORS_TITLE' | translate }}.
+      {{ 'QUICKBOOKS.EMPTY_VENDORS_DESC' | translate }}
+    </p>
+  </div>
+
+  <div *ngIf="!loading && vendors.length > 0" style="overflow-x: auto;">
+    <table class="modern-table">
+      <thead>
+        <tr>
+          <th>{{ 'QUICKBOOKS.TABLE_QB_ID' | translate }}</th>
+          <th>{{ 'QUICKBOOKS.TABLE_DISPLAY_NAME' | translate }}</th>
+          <th>{{ 'QUICKBOOKS.TABLE_COMPANY' | translate }}</th>
+          <th>{{ 'QUICKBOOKS.TABLE_EMAIL' | translate }}</th>
+          <th>{{ 'QUICKBOOKS.TABLE_PHONE' | translate }}</th>
+          <th>{{ 'QUICKBOOKS.TABLE_TAX_ID' | translate }}</th>
+          <th class="text-end">{{ 'QUICKBOOKS.TABLE_OWED' | translate }}</th>
+          <th>{{ 'GENERAL.STATUS' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let v of filterData() | paginate: {itemsPerPage: totalPaginas, currentPage: page, id: 'itemVendors'}"
+          [class.row-inactive]="v.active !== 1">
+          <td>{{ v.qbId }}</td>
+          <td class="td-name">{{ v.displayName }}</td>
+          <td>{{ v.companyName || '—' }}</td>
+          <td>{{ v.primaryEmail || '—' }}</td>
+          <td>{{ v.primaryPhone || '—' }}</td>
+          <td>{{ v.taxIdentifier || '—' }}</td>
+          <td class="text-end">
+            <span [class.text-warning]="v.balance > 0">${{ v.balance | number: '1.2-2' }}</span>
+          </td>
+          <td>
+            <span class="status-badge"
+              [ngClass]="v.active === 1 ? 'status-active' : 'status-inactive'">
+              <i class="fa-solid" [ngClass]="v.active === 1 ? 'fa-circle-check' : 'fa-circle-xmark'"></i>
+              {{ (v.active === 1 ? 'GENERAL.ACTIVE' : 'GENERAL.INACTIVE') | translate }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="view-pagination" *ngIf="!loading && vendors.length > 0">
+    <select class="form-select" (change)="numeroPaginas($event)">
+      <option *ngFor="let option of nPaginas" [value]="option" [selected]="option === totalPaginas">
+        {{ option }}
+      </option>
+    </select>
+    <span *ngIf="filterData().length" class="pagination-info">
+      {{ 'GENERAL.SHOWING' | translate }}
+      <strong>{{ (page - 1) * totalPaginas + 1 }}</strong>
+      -
+      <strong>{{ (page * totalPaginas < filterData().length) ? (page * totalPaginas) : filterData().length }}</strong>
+      {{ 'GENERAL.OF' | translate }} <strong>{{ filterData().length }}</strong>
+    </span>
+    <pagination-controls id="itemVendors" (pageChange)="page=$event"
+      [previousLabel]="'GENERAL.PREVIOUS' | translate" [nextLabel]="'GENERAL.NEXT' | translate"
+      style="font-size: 13px; color: var(--text-secondary);">
+    </pagination-controls>
+  </div>
+</div>

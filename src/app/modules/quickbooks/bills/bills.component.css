@@ -1,0 +1,22 @@
+.row-paid {
+  opacity: 0.65;
+}
+
+.status-paid {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status-overdue {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.amount-cell {
+  font-variant-numeric: tabular-nums;
+}
