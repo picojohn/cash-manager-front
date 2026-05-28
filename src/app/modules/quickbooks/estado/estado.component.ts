@@ -12,6 +12,8 @@ import { AccountsService } from '../accounts/services/accounts.service';
 import { PaymentsService } from '../payments/services/payments.service';
 import { VendorsService } from '../vendors/services/vendors.service';
 import { BillsService } from '../bills/services/bills.service';
+import { BillPaymentsService } from '../bill-payments/services/bill-payments.service';
+import { TransfersService } from '../transfers/services/transfers.service';
 import {
   IQbSyncLog,
   IQbWebhookLog,
@@ -19,7 +21,16 @@ import {
   IQuickbooksStatus,
 } from './interface/quickbooks.interface';
 
-type EntityKey = 'Customer' | 'Item' | 'Invoice' | 'Account' | 'Payment' | 'Vendor' | 'Bill';
+type EntityKey =
+  | 'Customer'
+  | 'Item'
+  | 'Invoice'
+  | 'Account'
+  | 'Payment'
+  | 'Vendor'
+  | 'Bill'
+  | 'BillPayment'
+  | 'Transfer';
 
 interface EntityState {
   key: EntityKey;
@@ -50,6 +61,8 @@ export class EstadoComponent implements OnInit {
     { key: 'Payment', titleI18n: 'QUICKBOOKS.LOCAL_PAYMENTS', iconClass: 'fa-solid fa-hand-holding-dollar', count: 0, lastSync: null, syncing: false },
     { key: 'Vendor', titleI18n: 'QUICKBOOKS.LOCAL_VENDORS', iconClass: 'fa-solid fa-truck-field', count: 0, lastSync: null, syncing: false },
     { key: 'Bill', titleI18n: 'QUICKBOOKS.LOCAL_BILLS', iconClass: 'fa-solid fa-receipt', count: 0, lastSync: null, syncing: false },
+    { key: 'BillPayment', titleI18n: 'QUICKBOOKS.LOCAL_BILL_PAYMENTS', iconClass: 'fa-solid fa-money-bill-transfer', count: 0, lastSync: null, syncing: false },
+    { key: 'Transfer', titleI18n: 'QUICKBOOKS.LOCAL_TRANSFERS', iconClass: 'fa-solid fa-right-left', count: 0, lastSync: null, syncing: false },
   ];
 
   /** Sync automatico */
@@ -69,6 +82,8 @@ export class EstadoComponent implements OnInit {
     private paymentsService: PaymentsService,
     private vendorsService: VendorsService,
     private billsService: BillsService,
+    private billPaymentsService: BillPaymentsService,
+    private transfersService: TransfersService,
     private translate: TranslateService,
   ) {}
 
@@ -101,6 +116,8 @@ export class EstadoComponent implements OnInit {
         paymentsCount,
         vendorsCount,
         billsCount,
+        billPaymentsCount,
+        transfersCount,
         accountLog,
         customerLog,
         itemLog,
@@ -108,6 +125,8 @@ export class EstadoComponent implements OnInit {
         paymentLog,
         vendorLog,
         billLog,
+        billPaymentLog,
+        transferLog,
         cdcLog,
         webhookLogs,
       ] = await Promise.all([
@@ -119,6 +138,8 @@ export class EstadoComponent implements OnInit {
         firstValueFrom(this.paymentsService.getPaymentsCount()),
         firstValueFrom(this.vendorsService.getVendorsCount()),
         firstValueFrom(this.billsService.getBillsCount()),
+        firstValueFrom(this.billPaymentsService.getBillPaymentsCount()),
+        firstValueFrom(this.transfersService.getTransfersCount()),
         firstValueFrom(this.quickbooksService.getSyncStatus('Account')),
         firstValueFrom(this.quickbooksService.getSyncStatus('Customer')),
         firstValueFrom(this.quickbooksService.getSyncStatus('Item')),
@@ -126,6 +147,8 @@ export class EstadoComponent implements OnInit {
         firstValueFrom(this.quickbooksService.getSyncStatus('Payment')),
         firstValueFrom(this.quickbooksService.getSyncStatus('Vendor')),
         firstValueFrom(this.quickbooksService.getSyncStatus('Bill')),
+        firstValueFrom(this.quickbooksService.getSyncStatus('BillPayment')),
+        firstValueFrom(this.quickbooksService.getSyncStatus('Transfer')),
         firstValueFrom(this.quickbooksService.getSyncStatus('CDC')),
         firstValueFrom(this.quickbooksService.getWebhookLogs(20)),
       ]);
@@ -137,6 +160,8 @@ export class EstadoComponent implements OnInit {
       this.entities[4].count = paymentsCount.count;
       this.entities[5].count = vendorsCount.count;
       this.entities[6].count = billsCount.count;
+      this.entities[7].count = billPaymentsCount.count;
+      this.entities[8].count = transfersCount.count;
       this.entities[0].lastSync = accountLog;
       this.entities[1].lastSync = customerLog;
       this.entities[2].lastSync = itemLog;
@@ -144,6 +169,8 @@ export class EstadoComponent implements OnInit {
       this.entities[4].lastSync = paymentLog;
       this.entities[5].lastSync = vendorLog;
       this.entities[6].lastSync = billLog;
+      this.entities[7].lastSync = billPaymentLog;
+      this.entities[8].lastSync = transferLog;
       this.lastCdc = cdcLog;
       this.webhookLogs = webhookLogs || [];
     } catch (err) {
@@ -187,8 +214,12 @@ export class EstadoComponent implements OnInit {
         result = await firstValueFrom(this.paymentsService.syncPayments());
       } else if (entity.key === 'Vendor') {
         result = await firstValueFrom(this.vendorsService.syncVendors());
-      } else {
+      } else if (entity.key === 'Bill') {
         result = await firstValueFrom(this.billsService.syncBills());
+      } else if (entity.key === 'BillPayment') {
+        result = await firstValueFrom(this.billPaymentsService.syncBillPayments());
+      } else {
+        result = await firstValueFrom(this.transfersService.syncTransfers());
       }
       this.toast.success(this.buildSyncToast(entity.key, result));
       await this.loadConnectedData();
@@ -214,6 +245,8 @@ export class EstadoComponent implements OnInit {
         ['Payment', 'payments'],
         ['Vendor', 'vendors'],
         ['Bill', 'bills'],
+        ['BillPayment', 'billPayments'],
+        ['Transfer', 'transfers'],
       ];
       for (const [k, prop] of order) {
         const r = all[prop];

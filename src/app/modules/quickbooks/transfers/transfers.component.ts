@@ -3,24 +3,19 @@ import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
 import { firstValueFrom } from 'rxjs';
 import { ErrorService } from 'src/app/shared/services/error.service';
-import { VendorsService } from './services/vendors.service';
-import { IQbVendor } from './interface/vendor.interface';
-
-type FilterStatus = 'all' | 'active' | 'inactive';
+import { TransfersService } from './services/transfers.service';
+import { IQbTransfer } from './interface/transfer.interface';
 
 @Component({
-  selector: 'app-qb-vendors',
-  templateUrl: './vendors.component.html',
-  styleUrls: ['./vendors.component.css'],
+  selector: 'app-qb-transfers',
+  templateUrl: './transfers.component.html',
+  styleUrls: ['./transfers.component.css'],
 })
-export class VendorsComponent implements OnInit {
-  public vendors: Array<IQbVendor> = [];
+export class TransfersComponent implements OnInit {
+  public transfers: Array<IQbTransfer> = [];
   public loading: boolean = false;
   public loadError: string | null = null;
   public syncing: boolean = false;
-
-  public filterStatus: FilterStatus = 'all';
-  public statusOptions: Array<{ value: FilterStatus; label: string }> = [];
 
   public nPaginas = [10, 25, 50, 100];
   public totalPaginas = 25;
@@ -30,31 +25,21 @@ export class VendorsComponent implements OnInit {
   constructor(
     public toast: ToastrService,
     private errorService: ErrorService,
-    private vendorsService: VendorsService,
+    private transfersService: TransfersService,
     private translate: TranslateService,
   ) {}
 
   ngOnInit(): void {
-    this.buildOptions();
-    this.translate.onLangChange.subscribe(() => this.buildOptions());
-    this.loadVendors();
+    this.loadTransfers();
   }
 
-  private buildOptions(): void {
-    this.statusOptions = [
-      { value: 'all', label: this.translate.instant('QUICKBOOKS.FILTER_ALL') },
-      { value: 'active', label: this.translate.instant('QUICKBOOKS.FILTER_ACTIVE') },
-      { value: 'inactive', label: this.translate.instant('QUICKBOOKS.FILTER_INACTIVE') },
-    ];
-  }
-
-  async loadVendors(): Promise<void> {
-    const isInitialLoad = this.vendors.length === 0;
+  async loadTransfers(): Promise<void> {
+    const isInitialLoad = this.transfers.length === 0;
     if (isInitialLoad) this.loading = true;
     this.loadError = null;
     try {
-      const res = await firstValueFrom(this.vendorsService.getVendors(0, 1000));
-      this.vendors = (res.items || []).sort(
+      const res = await firstValueFrom(this.transfersService.getTransfers(0, 1000));
+      this.transfers = (res.items || []).sort(
         (a, b) => Number(b.qbId || 0) - Number(a.qbId || 0),
       );
     } catch (err) {
@@ -68,10 +53,10 @@ export class VendorsComponent implements OnInit {
     if (this.syncing) return;
     this.syncing = true;
     try {
-      const result = await firstValueFrom(this.vendorsService.syncVendors());
+      const result = await firstValueFrom(this.transfersService.syncTransfers());
       const msg = `${this.translate.instant('QUICKBOOKS.TOAST_SYNC_OK')}: ${result.recordsCreated} ${this.translate.instant('QUICKBOOKS.RESULT_NEW')}, ${result.recordsUpdated} ${this.translate.instant('QUICKBOOKS.RESULT_UPDATED')}`;
       this.toast.success(msg);
-      await this.loadVendors();
+      await this.loadTransfers();
     } catch (err) {
       this.handleError(err);
     } finally {
@@ -79,29 +64,19 @@ export class VendorsComponent implements OnInit {
     }
   }
 
-  filterData(): Array<IQbVendor> {
-    let list = this.vendors;
-    if (this.filterStatus === 'active') {
-      list = list.filter((v) => v.active === 1);
-    } else if (this.filterStatus === 'inactive') {
-      list = list.filter((v) => v.active !== 1);
-    }
+  filterData(): Array<IQbTransfer> {
+    let list = this.transfers;
     if (this._buscador) {
       const q = this._buscador.toLowerCase();
       list = list.filter(
-        (v) =>
-          v.displayName?.toLowerCase().includes(q) ||
-          v.companyName?.toLowerCase().includes(q) ||
-          v.primaryEmail?.toLowerCase().includes(q) ||
-          v.taxIdentifier?.toLowerCase().includes(q) ||
-          v.qbId?.toLowerCase().includes(q),
+        (x) =>
+          x.fromAccountName?.toLowerCase().includes(q) ||
+          x.toAccountName?.toLowerCase().includes(q) ||
+          x.privateNote?.toLowerCase().includes(q) ||
+          x.qbId?.toLowerCase().includes(q),
       );
     }
     return list;
-  }
-
-  onFilterChange(): void {
-    this.page = 1;
   }
 
   numeroPaginas($event: any) {

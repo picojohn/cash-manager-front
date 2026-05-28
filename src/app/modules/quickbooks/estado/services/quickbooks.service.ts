@@ -17,6 +17,8 @@ import { AccountsService } from '../../accounts/services/accounts.service';
 import { PaymentsService } from '../../payments/services/payments.service';
 import { VendorsService } from '../../vendors/services/vendors.service';
 import { BillsService } from '../../bills/services/bills.service';
+import { BillPaymentsService } from '../../bill-payments/services/bill-payments.service';
+import { TransfersService } from '../../transfers/services/transfers.service';
 
 @Injectable({ providedIn: 'root' })
 export class QuickbooksService {
@@ -31,6 +33,8 @@ export class QuickbooksService {
     private paymentsService: PaymentsService,
     private vendorsService: VendorsService,
     private billsService: BillsService,
+    private billPaymentsService: BillPaymentsService,
+    private transfersService: TransfersService,
   ) {}
 
   // === OAuth (auth/quickbooks/*) ===
@@ -83,6 +87,8 @@ export class QuickbooksService {
     payments: IQbSyncResult | { error: string };
     vendors: IQbSyncResult | { error: string };
     bills: IQbSyncResult | { error: string };
+    billPayments: IQbSyncResult | { error: string };
+    transfers: IQbSyncResult | { error: string };
   }> {
     const run = async (call: Observable<IQbSyncResult>) => {
       try {
@@ -92,7 +98,17 @@ export class QuickbooksService {
         return { error: err?.error?.message || err?.message || String(err) };
       }
     };
-    const [accounts, customers, items, invoices, payments, vendors, bills] = await Promise.all([
+    const [
+      accounts,
+      customers,
+      items,
+      invoices,
+      payments,
+      vendors,
+      bills,
+      billPayments,
+      transfers,
+    ] = await Promise.all([
       run(this.accountsService.syncAccounts()),
       run(this.customersService.syncCustomers()),
       run(this.itemsService.syncItems()),
@@ -100,7 +116,19 @@ export class QuickbooksService {
       run(this.paymentsService.syncPayments()),
       run(this.vendorsService.syncVendors()),
       run(this.billsService.syncBills()),
+      run(this.billPaymentsService.syncBillPayments()),
+      run(this.transfersService.syncTransfers()),
     ]);
-    return { accounts, customers, items, invoices, payments, vendors, bills };
+    return {
+      accounts,
+      customers,
+      items,
+      invoices,
+      payments,
+      vendors,
+      bills,
+      billPayments,
+      transfers,
+    };
   }
 }

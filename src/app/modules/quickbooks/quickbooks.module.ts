@@ -21,6 +21,8 @@ import { PaymentsComponent } from './payments/payments.component';
 import { VendorsComponent } from './vendors/vendors.component';
 import { BillsComponent } from './bills/bills.component';
 import { BillDetailComponent } from './bills/components/bill-detail/bill-detail.component';
+import { BillPaymentsComponent } from './bill-payments/bill-payments.component';
+import { TransfersComponent } from './transfers/transfers.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +41,8 @@ import { BillDetailComponent } from './bills/components/bill-detail/bill-detail.
     VendorsComponent,
     BillsComponent,
     BillDetailComponent,
+    BillPaymentsComponent,
+    TransfersComponent,
   ],
   imports: [
     CommonModule,

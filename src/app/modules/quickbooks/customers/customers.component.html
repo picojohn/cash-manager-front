@@ -30,7 +30,16 @@
     <p class="mt-2">{{ 'QUICKBOOKS.LOADING_CUSTOMERS' | translate }}</p>
   </div>
 
-  <div *ngIf="!loading && customers.length === 0" class="text-center py-5">
+  <div *ngIf="!loading && loadError" class="text-center py-5">
+    <i class="fa-solid fa-triangle-exclamation fs-1 text-danger mb-3"></i>
+    <h5 class="text-danger">{{ 'QUICKBOOKS.LOAD_ERROR_TITLE' | translate }}</h5>
+    <p class="text-muted">{{ 'QUICKBOOKS.LOAD_ERROR_DESC' | translate }}</p>
+    <button class="btn btn-outline-primary mt-2" (click)="loadCustomers()">
+      <i class="fa-solid fa-rotate-right"></i> {{ 'QUICKBOOKS.RETRY' | translate }}
+    </button>
+  </div>
+
+  <div *ngIf="!loading && !loadError && customers.length === 0" class="text-center py-5">
     <i class="fa-solid fa-users-slash fs-1 text-secondary mb-3"></i>
     <p class="text-muted">
       {{ 'QUICKBOOKS.EMPTY_STATE_TITLE' | translate }}.
@@ -38,7 +47,7 @@
     </p>
   </div>
 
-  <div *ngIf="!loading && customers.length > 0" style="overflow-x: auto;">
+  <div *ngIf="!loading && !loadError && customers.length > 0" style="overflow-x: auto;">
     <table class="modern-table">
       <thead>
         <tr>
@@ -79,7 +88,7 @@
     </table>
   </div>
 
-  <div class="view-pagination" *ngIf="!loading && customers.length > 0">
+  <div class="view-pagination" *ngIf="!loading && !loadError && customers.length > 0">
     <select class="form-select" (change)="numeroPaginas($event)">
       <option *ngFor="let option of nPaginas" [value]="option" [selected]="option === totalPaginas">
         {{ option }}

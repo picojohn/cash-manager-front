@@ -9,6 +9,8 @@ import { AccountsComponent } from './accounts/accounts.component';
 import { PaymentsComponent } from './payments/payments.component';
 import { VendorsComponent } from './vendors/vendors.component';
 import { BillsComponent } from './bills/bills.component';
+import { BillPaymentsComponent } from './bill-payments/bill-payments.component';
+import { TransfersComponent } from './transfers/transfers.component';
 
 const routes: Routes = [
   {
@@ -24,6 +26,8 @@ const routes: Routes = [
       { path: 'payments', component: PaymentsComponent },
       { path: 'vendors', component: VendorsComponent },
       { path: 'bills', component: BillsComponent },
+      { path: 'bill-payments', component: BillPaymentsComponent },
+      { path: 'transfers', component: TransfersComponent },
     ],
   },
 ];

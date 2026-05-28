@@ -3,24 +3,19 @@ import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
 import { firstValueFrom } from 'rxjs';
 import { ErrorService } from 'src/app/shared/services/error.service';
-import { VendorsService } from './services/vendors.service';
-import { IQbVendor } from './interface/vendor.interface';
-
-type FilterStatus = 'all' | 'active' | 'inactive';
+import { BillPaymentsService } from './services/bill-payments.service';
+import { IQbBillPayment } from './interface/bill-payment.interface';
 
 @Component({
-  selector: 'app-qb-vendors',
-  templateUrl: './vendors.component.html',
-  styleUrls: ['./vendors.component.css'],
+  selector: 'app-qb-bill-payments',
+  templateUrl: './bill-payments.component.html',
+  styleUrls: ['./bill-payments.component.css'],
 })
-export class VendorsComponent implements OnInit {
-  public vendors: Array<IQbVendor> = [];
+export class BillPaymentsComponent implements OnInit {
+  public billPayments: Array<IQbBillPayment> = [];
   public loading: boolean = false;
   public loadError: string | null = null;
   public syncing: boolean = false;
-
-  public filterStatus: FilterStatus = 'all';
-  public statusOptions: Array<{ value: FilterStatus; label: string }> = [];
 
   public nPaginas = [10, 25, 50, 100];
   public totalPaginas = 25;
@@ -30,31 +25,21 @@ export class VendorsComponent implements OnInit {
   constructor(
     public toast: ToastrService,
     private errorService: ErrorService,
-    private vendorsService: VendorsService,
+    private billPaymentsService: BillPaymentsService,
     private translate: TranslateService,
   ) {}
 
   ngOnInit(): void {
-    this.buildOptions();
-    this.translate.onLangChange.subscribe(() => this.buildOptions());
-    this.loadVendors();
+    this.loadBillPayments();
   }
 
-  private buildOptions(): void {
-    this.statusOptions = [
-      { value: 'all', label: this.translate.instant('QUICKBOOKS.FILTER_ALL') },
-      { value: 'active', label: this.translate.instant('QUICKBOOKS.FILTER_ACTIVE') },
-      { value: 'inactive', label: this.translate.instant('QUICKBOOKS.FILTER_INACTIVE') },
-    ];
-  }
-
-  async loadVendors(): Promise<void> {
-    const isInitialLoad = this.vendors.length === 0;
+  async loadBillPayments(): Promise<void> {
+    const isInitialLoad = this.billPayments.length === 0;
     if (isInitialLoad) this.loading = true;
     this.loadError = null;
     try {
-      const res = await firstValueFrom(this.vendorsService.getVendors(0, 1000));
-      this.vendors = (res.items || []).sort(
+      const res = await firstValueFrom(this.billPaymentsService.getBillPayments(0, 1000));
+      this.billPayments = (res.items || []).sort(
         (a, b) => Number(b.qbId || 0) - Number(a.qbId || 0),
       );
     } catch (err) {
@@ -68,10 +53,10 @@ export class VendorsComponent implements OnInit {
     if (this.syncing) return;
     this.syncing = true;
     try {
-      const result = await firstValueFrom(this.vendorsService.syncVendors());
+      const result = await firstValueFrom(this.billPaymentsService.syncBillPayments());
       const msg = `${this.translate.instant('QUICKBOOKS.TOAST_SYNC_OK')}: ${result.recordsCreated} ${this.translate.instant('QUICKBOOKS.RESULT_NEW')}, ${result.recordsUpdated} ${this.translate.instant('QUICKBOOKS.RESULT_UPDATED')}`;
       this.toast.success(msg);
-      await this.loadVendors();
+      await this.loadBillPayments();
     } catch (err) {
       this.handleError(err);
     } finally {
@@ -79,29 +64,20 @@ export class VendorsComponent implements OnInit {
     }
   }
 
-  filterData(): Array<IQbVendor> {
-    let list = this.vendors;
-    if (this.filterStatus === 'active') {
-      list = list.filter((v) => v.active === 1);
-    } else if (this.filterStatus === 'inactive') {
-      list = list.filter((v) => v.active !== 1);
-    }
+  filterData(): Array<IQbBillPayment> {
+    let list = this.billPayments;
     if (this._buscador) {
       const q = this._buscador.toLowerCase();
       list = list.filter(
-        (v) =>
-          v.displayName?.toLowerCase().includes(q) ||
-          v.companyName?.toLowerCase().includes(q) ||
-          v.primaryEmail?.toLowerCase().includes(q) ||
-          v.taxIdentifier?.toLowerCase().includes(q) ||
-          v.qbId?.toLowerCase().includes(q),
+        (x) =>
+          x.vendorName?.toLowerCase().includes(q) ||
+          x.checkNum?.toLowerCase().includes(q) ||
+          x.payAccountName?.toLowerCase().includes(q) ||
+          x.docNumber?.toLowerCase().includes(q) ||
+          x.qbId?.toLowerCase().includes(q),
       );
     }
     return list;
-  }
-
-  onFilterChange(): void {
-    this.page = 1;
   }
 
   numeroPaginas($event: any) {

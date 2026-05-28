@@ -14,6 +14,7 @@ import { IQbPayment } from './interface/payment.interface';
 export class PaymentsComponent implements OnInit {
   public payments: Array<IQbPayment> = [];
   public loading: boolean = false;
+  public loadError: string | null = null;
   public syncing: boolean = false;
 
   public nPaginas = [10, 25, 50, 100];
@@ -35,13 +36,14 @@ export class PaymentsComponent implements OnInit {
   async loadPayments(): Promise<void> {
     const isInitialLoad = this.payments.length === 0;
     if (isInitialLoad) this.loading = true;
+    this.loadError = null;
     try {
       const res = await firstValueFrom(this.paymentsService.getPayments(0, 1000));
       this.payments = (res.items || []).sort(
         (a, b) => Number(b.qbId || 0) - Number(a.qbId || 0),
       );
     } catch (err) {
-      this.handleError(err);
+      this.loadError = this.handleError(err);
     } finally {
       if (isInitialLoad) this.loading = false;
     }
@@ -90,8 +92,9 @@ export class PaymentsComponent implements OnInit {
     return this._buscador;
   }
 
-  private handleError(err: any): void {
+  private handleError(err: any): string {
     const e = this.errorService.showNotification(err);
     this.toast[e.typeToast](e.message, e.typeMessage, { timeOut: e.timeOut });
+    return e.message || 'Error';
   }
 }

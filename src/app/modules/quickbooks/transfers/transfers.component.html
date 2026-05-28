@@ -1,9 +1,9 @@
 <div class="view-card">
   <div class="view-header">
-    <h3 class="view-title">{{ 'QUICKBOOKS.TITLE_PAYMENTS' | translate }}</h3>
+    <h3 class="view-title">{{ 'QUICKBOOKS.TITLE_TRANSFERS' | translate }}</h3>
     <div class="view-search">
       <input type="search" [(ngModel)]="buscador" class="form-control"
-        [placeholder]="'QUICKBOOKS.SEARCH_PAYMENTS_PLACEHOLDER' | translate">
+        [placeholder]="'QUICKBOOKS.SEARCH_TRANSFERS_PLACEHOLDER' | translate">
     </div>
     <button class="btn-create" (click)="syncNow()" [disabled]="syncing"
       style="margin-left: 8px;" [title]="'QUICKBOOKS.SYNC_BUTTON_TITLE' | translate">
@@ -15,60 +15,54 @@
 
   <div *ngIf="loading" class="text-center py-5">
     <div class="spinner-border text-primary" role="status"></div>
-    <p class="mt-2">{{ 'QUICKBOOKS.LOADING_PAYMENTS' | translate }}</p>
+    <p class="mt-2">{{ 'QUICKBOOKS.LOADING_TRANSFERS' | translate }}</p>
   </div>
 
   <div *ngIf="!loading && loadError" class="text-center py-5">
     <i class="fa-solid fa-triangle-exclamation fs-1 text-danger mb-3"></i>
     <h5 class="text-danger">{{ 'QUICKBOOKS.LOAD_ERROR_TITLE' | translate }}</h5>
     <p class="text-muted">{{ 'QUICKBOOKS.LOAD_ERROR_DESC' | translate }}</p>
-    <button class="btn btn-outline-primary mt-2" (click)="loadPayments()">
+    <button class="btn btn-outline-primary mt-2" (click)="loadTransfers()">
       <i class="fa-solid fa-rotate-right"></i> {{ 'QUICKBOOKS.RETRY' | translate }}
     </button>
   </div>
 
-  <div *ngIf="!loading && !loadError && payments.length === 0" class="text-center py-5">
-    <i class="fa-solid fa-hand-holding-dollar fs-1 text-secondary mb-3"></i>
+  <div *ngIf="!loading && !loadError && transfers.length === 0" class="text-center py-5">
+    <i class="fa-solid fa-right-left fs-1 text-secondary mb-3"></i>
     <p class="text-muted">
-      {{ 'QUICKBOOKS.EMPTY_PAYMENTS_TITLE' | translate }}.
-      {{ 'QUICKBOOKS.EMPTY_PAYMENTS_DESC' | translate }}
+      {{ 'QUICKBOOKS.EMPTY_TRANSFERS_TITLE' | translate }}.
+      {{ 'QUICKBOOKS.EMPTY_TRANSFERS_DESC' | translate }}
     </p>
   </div>
 
-  <div *ngIf="!loading && !loadError && payments.length > 0" style="overflow-x: auto;">
+  <div *ngIf="!loading && !loadError && transfers.length > 0" style="overflow-x: auto;">
     <table class="modern-table">
       <thead>
         <tr>
           <th>{{ 'QUICKBOOKS.TABLE_QB_ID' | translate }}</th>
           <th>{{ 'QUICKBOOKS.TABLE_TXN_DATE' | translate }}</th>
-          <th>{{ 'QUICKBOOKS.TABLE_CUSTOMER' | translate }}</th>
-          <th>{{ 'QUICKBOOKS.TABLE_PAYMENT_METHOD' | translate }}</th>
-          <th>{{ 'QUICKBOOKS.TABLE_DEPOSIT_ACCOUNT' | translate }}</th>
-          <th>{{ 'QUICKBOOKS.TABLE_REF_NUM' | translate }}</th>
-          <th class="text-end">{{ 'QUICKBOOKS.TABLE_TOTAL' | translate }}</th>
-          <th class="text-end">{{ 'QUICKBOOKS.TABLE_UNAPPLIED' | translate }}</th>
+          <th>{{ 'QUICKBOOKS.TABLE_FROM_ACCOUNT' | translate }}</th>
+          <th class="text-center" style="width: 50px;"></th>
+          <th>{{ 'QUICKBOOKS.TABLE_TO_ACCOUNT' | translate }}</th>
+          <th class="text-end">{{ 'QUICKBOOKS.TABLE_AMOUNT' | translate }}</th>
+          <th>{{ 'QUICKBOOKS.TABLE_NOTE' | translate }}</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let p of filterData() | paginate: {itemsPerPage: totalPaginas, currentPage: page, id: 'itemPayments'}">
-          <td>{{ p.qbId }}</td>
-          <td>{{ p.txnDate | date: 'MMM d, y' }}</td>
-          <td class="td-name">{{ p.customerName || '—' }}</td>
-          <td>{{ p.paymentMethodName || '—' }}</td>
-          <td>{{ p.depositToAccountName || '—' }}</td>
-          <td>{{ p.paymentRefNum || '—' }}</td>
-          <td class="text-end"><strong>${{ p.totalAmt | number: '1.2-2' }}</strong></td>
-          <td class="text-end">
-            <span [class.text-warning]="p.unappliedAmt > 0">
-              ${{ p.unappliedAmt | number: '1.2-2' }}
-            </span>
-          </td>
+        <tr *ngFor="let t of filterData() | paginate: {itemsPerPage: totalPaginas, currentPage: page, id: 'itemTransfers'}">
+          <td>{{ t.qbId }}</td>
+          <td>{{ t.txnDate | date: 'MMM d, y' }}</td>
+          <td class="td-name">{{ t.fromAccountName || '—' }}</td>
+          <td class="text-center"><i class="fa-solid fa-arrow-right text-primary"></i></td>
+          <td class="td-name">{{ t.toAccountName || '—' }}</td>
+          <td class="text-end"><strong>${{ t.amount | number: '1.2-2' }}</strong></td>
+          <td class="small text-muted">{{ t.privateNote || '—' }}</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <div class="view-pagination" *ngIf="!loading && !loadError && payments.length > 0">
+  <div class="view-pagination" *ngIf="!loading && !loadError && transfers.length > 0">
     <select class="form-select" (change)="numeroPaginas($event)">
       <option *ngFor="let option of nPaginas" [value]="option" [selected]="option === totalPaginas">
         {{ option }}
@@ -81,7 +75,7 @@
       <strong>{{ (page * totalPaginas < filterData().length) ? (page * totalPaginas) : filterData().length }}</strong>
       {{ 'GENERAL.OF' | translate }} <strong>{{ filterData().length }}</strong>
     </span>
-    <pagination-controls id="itemPayments" (pageChange)="page=$event"
+    <pagination-controls id="itemTransfers" (pageChange)="page=$event"
       [previousLabel]="'GENERAL.PREVIOUS' | translate" [nextLabel]="'GENERAL.NEXT' | translate"
       style="font-size: 13px; color: var(--text-secondary);">
     </pagination-controls>

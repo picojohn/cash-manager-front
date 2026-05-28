@@ -19,6 +19,7 @@ type FilterStatus = 'all' | 'active' | 'inactive';
 export class CustomersComponent implements OnInit {
   public customers: Array<IQbCustomer> = [];
   public loading: boolean = false;
+  public loadError: string | null = null;
   public syncing: boolean = false;
 
   public filterStatus: FilterStatus = 'all';
@@ -59,13 +60,14 @@ export class CustomersComponent implements OnInit {
     // visible y reemplazamos los datos al final para evitar parpadeo.
     const isInitialLoad = this.customers.length === 0;
     if (isInitialLoad) this.loading = true;
+    this.loadError = null;
     try {
       const res = await firstValueFrom(this.customersService.getCustomers(0, 1000));
       this.customers = (res.items || []).sort(
         (a, b) => Number(b.qbId || 0) - Number(a.qbId || 0),
       );
     } catch (err) {
-      this.handleError(err);
+      this.loadError = this.handleError(err);
     } finally {
       if (isInitialLoad) this.loading = false;
     }
@@ -191,8 +193,9 @@ export class CustomersComponent implements OnInit {
     return this._buscador;
   }
 
-  private handleError(err: any): void {
+  private handleError(err: any): string {
     const e = this.errorService.showNotification(err);
     this.toast[e.typeToast](e.message, e.typeMessage, { timeOut: e.timeOut });
+    return e.message || 'Error';
   }
 }

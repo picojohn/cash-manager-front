@@ -18,6 +18,7 @@ type PaymentFilter = 'all' | 'paid' | 'pending' | 'overdue';
 export class BillsComponent implements OnInit {
   public bills: Array<IQbBill> = [];
   public loading: boolean = false;
+  public loadError: string | null = null;
   public syncing: boolean = false;
 
   public filterPayment: PaymentFilter = 'all';
@@ -56,13 +57,14 @@ export class BillsComponent implements OnInit {
   async loadBills(): Promise<void> {
     const isInitialLoad = this.bills.length === 0;
     if (isInitialLoad) this.loading = true;
+    this.loadError = null;
     try {
       const res = await firstValueFrom(this.billsService.getBills(0, 1000));
       this.bills = (res.items || []).sort(
         (a, b) => Number(b.qbId || 0) - Number(a.qbId || 0),
       );
     } catch (err) {
-      this.handleError(err);
+      this.loadError = this.handleError(err);
     } finally {
       if (isInitialLoad) this.loading = false;
     }
@@ -154,8 +156,9 @@ export class BillsComponent implements OnInit {
     return this._buscador;
   }
 
-  private handleError(err: any): void {
+  private handleError(err: any): string {
     const e = this.errorService.showNotification(err);
     this.toast[e.typeToast](e.message, e.typeMessage, { timeOut: e.timeOut });
+    return e.message || 'Error';
   }
 }
