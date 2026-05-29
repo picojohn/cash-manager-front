@@ -519,5 +519,23 @@
     "EVENT_TIME": "When",
     "EVENT_ENTITY": "Entity",
     "EVENT_OPERATION": "Operation"
+  },
+  "CASH_FLOW": {
+    "TITLE_FORECAST": "Cash Flow Forecast",
+    "PERIOD": "Period:",
+    "WEEKS": "weeks",
+    "REFRESH": "Refresh",
+    "LOADING": "Calculating...",
+    "ACCOUNT": "Account",
+    "DESCRIPTION": "Description",
+    "OPENING_BALANCE": "Opening Balance",
+    "CLOSING_BALANCE": "Closing Balance",
+    "INCOME": "Income",
+    "EXPENSE": "Expense",
+    "TOTAL": "Total",
+    "TOTAL_INCOME": "Total Income",
+    "TOTAL_EXPENSE": "Total Expense",
+    "CONSOLIDATED": "Consolidated",
+    "NOTE_PHASE_21": "MVP view (Phase 2.1): only QuickBooks paid movements. Hardcoded categories; custom ones, editable planned and real opening balance will come in next phases."
   }
 }

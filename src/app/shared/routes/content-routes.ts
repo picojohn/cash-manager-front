@@ -16,6 +16,10 @@ export const content: Routes = [
     loadChildren: () => import('../../modules/quickbooks/quickbooks.module').then(m => m.QuickbooksModule),
   },
   {
+    path: 'cash-flow',
+    loadChildren: () => import('../../modules/cash-flow/cash-flow.module').then(m => m.CashFlowModule),
+  },
+  {
     path: '',
     redirectTo: '/gestiones/home',
     pathMatch: 'full'

@@ -1,0 +1,212 @@
+<div class="view-card">
+  <div class="view-header">
+    <h3 class="view-title">{{ 'CASH_FLOW.TITLE_FORECAST' | translate }}</h3>
+    <div class="view-search"></div>
+    <button class="btn-create" (click)="loadForecast()" [disabled]="loading"
+      [title]="'CASH_FLOW.REFRESH' | translate">
+      <i class="fa-solid fa-arrows-rotate" *ngIf="!loading"></i>
+      <span class="spinner-border spinner-border-sm" *ngIf="loading"></span>
+      {{ (loading ? 'CASH_FLOW.LOADING' : 'CASH_FLOW.REFRESH') | translate }}
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status"></div>
+    <p class="mt-2">{{ 'CASH_FLOW.LOADING' | translate }}</p>
+  </div>
+
+  <div *ngIf="!loading && loadError" class="text-center py-5">
+    <i class="fa-solid fa-triangle-exclamation fs-1 text-danger mb-3"></i>
+    <h5 class="text-danger">{{ 'QUICKBOOKS.LOAD_ERROR_TITLE' | translate }}</h5>
+    <p class="text-muted">{{ 'QUICKBOOKS.LOAD_ERROR_DESC' | translate }}</p>
+    <button class="btn btn-outline-primary mt-2" (click)="loadForecast()">
+      <i class="fa-solid fa-rotate-right"></i> {{ 'QUICKBOOKS.RETRY' | translate }}
+    </button>
+  </div>
+
+  <div *ngIf="!loading && !loadError && forecast" class="cash-flow-grid-wrapper">
+
+    <!-- Resumen rapido del consolidado -->
+    <div class="cf-summary px-3 pt-3">
+      <div class="cf-summary-card">
+        <div class="cf-summary-label">{{ 'CASH_FLOW.OPENING_BALANCE' | translate }}</div>
+        <div class="cf-summary-value">${{ forecast.consolidated.openingBalance | number: '1.2-2' }}</div>
+      </div>
+      <div class="cf-summary-card">
+        <div class="cf-summary-label">{{ 'CASH_FLOW.TOTAL_INCOME' | translate }}</div>
+        <div class="cf-summary-value text-success">+${{ forecast.consolidated.totals.income | number: '1.2-2' }}</div>
+      </div>
+      <div class="cf-summary-card">
+        <div class="cf-summary-label">{{ 'CASH_FLOW.TOTAL_EXPENSE' | translate }}</div>
+        <div class="cf-summary-value text-danger">-${{ forecast.consolidated.totals.expense | number: '1.2-2' }}</div>
+      </div>
+      <div class="cf-summary-card">
+        <div class="cf-summary-label">{{ 'CASH_FLOW.CLOSING_BALANCE' | translate }}</div>
+        <div class="cf-summary-value" [ngClass]="amountClass(forecast.consolidated.closingBalance)">
+          ${{ forecast.consolidated.closingBalance | number: '1.2-2' }}
+        </div>
+      </div>
+    </div>
+
+    <div class="table-scroll">
+      <table class="cash-flow-table">
+        <thead>
+          <tr>
+            <th class="col-account">{{ 'CASH_FLOW.ACCOUNT' | translate }}</th>
+            <th class="col-balance text-end">{{ 'CASH_FLOW.OPENING_BALANCE' | translate }}</th>
+            <th class="col-desc">{{ 'CASH_FLOW.DESCRIPTION' | translate }}</th>
+            <th *ngFor="let w of forecast.weeks; trackBy: trackByWeekIndex" class="col-week text-end">
+              {{ w.label }}
+              <div class="th-sub">{{ w.startDate | date: 'MMM d' }} - {{ w.endDate | date: 'MMM d' }}</div>
+            </th>
+            <th class="col-total text-end">{{ 'CASH_FLOW.TOTAL' | translate }}</th>
+            <th class="col-closing text-end">{{ 'CASH_FLOW.CLOSING_BALANCE' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <!-- Bloques por cuenta -->
+          <ng-container *ngFor="let acc of forecast.accounts; trackBy: trackByAccountQbId">
+
+            <!-- Fila de cuenta (toggle) -->
+            <tr class="row-account" (click)="toggleAccount(acc.qbId)">
+              <td class="col-account">
+                <i class="fa-solid"
+                  [ngClass]="isAccountExpanded(acc.qbId) ? 'fa-chevron-down' : 'fa-chevron-right'"></i>
+                <strong>{{ acc.name }}</strong>
+                <span class="badge-account-type">{{ acc.accountType }}</span>
+              </td>
+              <td class="col-balance text-end">${{ acc.openingBalance | number: '1.2-2' }}</td>
+              <td class="col-desc"></td>
+              <td *ngFor="let wt of acc.weeklyTotals; trackBy: trackByWeekIndex" class="col-week text-end">
+                <span [ngClass]="amountClass(wt.net)">${{ wt.net | number: '1.2-2' }}</span>
+              </td>
+              <td class="col-total text-end">
+                <span [ngClass]="amountClass(acc.totals.net)">${{ acc.totals.net | number: '1.2-2' }}</span>
+              </td>
+              <td class="col-closing text-end">
+                <strong [ngClass]="amountClass(acc.closingBalance)">${{ acc.closingBalance | number: '1.2-2' }}</strong>
+              </td>
+            </tr>
+
+            <!-- Desglose Ingresos -->
+            <ng-container *ngIf="isAccountExpanded(acc.qbId)">
+              <tr class="row-section row-section-income">
+                <td colspan="3" class="td-section">{{ 'CASH_FLOW.INCOME' | translate }}</td>
+                <td *ngFor="let wt of acc.weeklyTotals; trackBy: trackByWeekIndex" class="text-end">
+                  <span class="text-success">${{ wt.totalIncome | number: '1.2-2' }}</span>
+                </td>
+                <td class="text-end"><span class="text-success">${{ acc.totals.income | number: '1.2-2' }}</span></td>
+                <td></td>
+              </tr>
+              <tr *ngFor="let cat of acc.incomeCategories; trackBy: trackByCategoryKey" class="row-category">
+                <td colspan="3" class="td-category">{{ cat.categoryLabel }}</td>
+                <td *ngFor="let v of cat.weeks; let i = index" class="text-end">
+                  <span [ngClass]="v > 0.001 ? 'text-success' : 'text-muted'">
+                    ${{ v | number: '1.2-2' }}
+                  </span>
+                </td>
+                <td class="text-end">
+                  <span [ngClass]="cat.total > 0.001 ? 'text-success' : 'text-muted'">
+                    ${{ cat.total | number: '1.2-2' }}
+                  </span>
+                </td>
+                <td></td>
+              </tr>
+
+              <!-- Desglose Egresos -->
+              <tr class="row-section row-section-expense">
+                <td colspan="3" class="td-section">{{ 'CASH_FLOW.EXPENSE' | translate }}</td>
+                <td *ngFor="let wt of acc.weeklyTotals; trackBy: trackByWeekIndex" class="text-end">
+                  <span class="text-danger">${{ wt.totalExpense | number: '1.2-2' }}</span>
+                </td>
+                <td class="text-end"><span class="text-danger">${{ acc.totals.expense | number: '1.2-2' }}</span></td>
+                <td></td>
+              </tr>
+              <tr *ngFor="let cat of acc.expenseCategories; trackBy: trackByCategoryKey" class="row-category">
+                <td colspan="3" class="td-category">{{ cat.categoryLabel }}</td>
+                <td *ngFor="let v of cat.weeks; let i = index" class="text-end">
+                  <span [ngClass]="v > 0.001 ? 'text-danger' : 'text-muted'">
+                    ${{ v | number: '1.2-2' }}
+                  </span>
+                </td>
+                <td class="text-end">
+                  <span [ngClass]="cat.total > 0.001 ? 'text-danger' : 'text-muted'">
+                    ${{ cat.total | number: '1.2-2' }}
+                  </span>
+                </td>
+                <td></td>
+              </tr>
+            </ng-container>
+
+          </ng-container>
+
+          <!-- Consolidado al final -->
+          <tr class="row-consolidated-header">
+            <td colspan="100" class="td-consolidated-header">{{ 'CASH_FLOW.CONSOLIDATED' | translate }}</td>
+          </tr>
+          <tr class="row-account row-consolidated">
+            <td class="col-account"><strong>{{ forecast.consolidated.name }}</strong></td>
+            <td class="col-balance text-end"><strong>${{ forecast.consolidated.openingBalance | number: '1.2-2' }}</strong></td>
+            <td></td>
+            <td *ngFor="let wt of forecast.consolidated.weeklyTotals; trackBy: trackByWeekIndex" class="text-end">
+              <strong [ngClass]="amountClass(wt.net)">${{ wt.net | number: '1.2-2' }}</strong>
+            </td>
+            <td class="text-end">
+              <strong [ngClass]="amountClass(forecast.consolidated.totals.net)">
+                ${{ forecast.consolidated.totals.net | number: '1.2-2' }}
+              </strong>
+            </td>
+            <td class="text-end">
+              <strong [ngClass]="amountClass(forecast.consolidated.closingBalance)">
+                ${{ forecast.consolidated.closingBalance | number: '1.2-2' }}
+              </strong>
+            </td>
+          </tr>
+          <tr class="row-section">
+            <td colspan="3" class="td-section">{{ 'CASH_FLOW.INCOME' | translate }}</td>
+            <td *ngFor="let wt of forecast.consolidated.weeklyTotals; trackBy: trackByWeekIndex" class="text-end">
+              <span class="text-success">${{ wt.totalIncome | number: '1.2-2' }}</span>
+            </td>
+            <td class="text-end"><span class="text-success">${{ forecast.consolidated.totals.income | number: '1.2-2' }}</span></td>
+            <td></td>
+          </tr>
+          <tr *ngFor="let cat of forecast.consolidated.incomeCategories; trackBy: trackByCategoryKey" class="row-category">
+            <td colspan="3" class="td-category">{{ cat.categoryLabel }}</td>
+            <td *ngFor="let v of cat.weeks; let i = index" class="text-end">
+              <span [ngClass]="v > 0.001 ? 'text-success' : 'text-muted'">${{ v | number: '1.2-2' }}</span>
+            </td>
+            <td class="text-end">
+              <span [ngClass]="cat.total > 0.001 ? 'text-success' : 'text-muted'">${{ cat.total | number: '1.2-2' }}</span>
+            </td>
+            <td></td>
+          </tr>
+          <tr class="row-section">
+            <td colspan="3" class="td-section">{{ 'CASH_FLOW.EXPENSE' | translate }}</td>
+            <td *ngFor="let wt of forecast.consolidated.weeklyTotals; trackBy: trackByWeekIndex" class="text-end">
+              <span class="text-danger">${{ wt.totalExpense | number: '1.2-2' }}</span>
+            </td>
+            <td class="text-end"><span class="text-danger">${{ forecast.consolidated.totals.expense | number: '1.2-2' }}</span></td>
+            <td></td>
+          </tr>
+          <tr *ngFor="let cat of forecast.consolidated.expenseCategories; trackBy: trackByCategoryKey" class="row-category">
+            <td colspan="3" class="td-category">{{ cat.categoryLabel }}</td>
+            <td *ngFor="let v of cat.weeks; let i = index" class="text-end">
+              <span [ngClass]="v > 0.001 ? 'text-danger' : 'text-muted'">${{ v | number: '1.2-2' }}</span>
+            </td>
+            <td class="text-end">
+              <span [ngClass]="cat.total > 0.001 ? 'text-danger' : 'text-muted'">${{ cat.total | number: '1.2-2' }}</span>
+            </td>
+            <td></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+    <p class="cf-note small text-muted px-3 pb-3 mt-2">
+      <i class="fa-solid fa-info-circle"></i>
+      {{ 'CASH_FLOW.NOTE_PHASE_21' | translate }}
+    </p>
+  </div>
+</div>

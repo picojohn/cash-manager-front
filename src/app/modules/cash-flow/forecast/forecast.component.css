@@ -1,0 +1,203 @@
+.cash-flow-grid-wrapper {
+  padding: 0;
+}
+
+/* Resumen rapido */
+.cf-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.cf-summary-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+.cf-summary-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+.cf-summary-value {
+  font-size: 20px;
+  font-weight: 700;
+  margin-top: 4px;
+  color: var(--text-primary);
+}
+
+/* Tabla */
+.table-scroll {
+  overflow-x: auto;
+  padding: 0 12px;
+}
+.cash-flow-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 13px;
+  min-width: 900px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--bg-surface);
+}
+.cash-flow-table thead th {
+  background: var(--table-header-bg);
+  color: #fff;
+  padding: 10px 8px;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+.cash-flow-table thead .th-sub {
+  font-size: 10px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.75);
+  text-transform: none;
+  letter-spacing: 0;
+  margin-top: 2px;
+}
+.cash-flow-table tbody td {
+  padding: 8px;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: middle;
+  color: var(--text-primary);
+}
+.cash-flow-table .col-account {
+  min-width: 240px;
+}
+.cash-flow-table .col-balance,
+.cash-flow-table .col-closing {
+  min-width: 110px;
+  font-weight: 600;
+}
+.cash-flow-table .col-week {
+  min-width: 90px;
+}
+.cash-flow-table .col-total {
+  min-width: 100px;
+  background: var(--primary-light);
+  font-weight: 600;
+}
+.cash-flow-table .col-desc {
+  min-width: 140px;
+}
+
+/* Fila de cuenta (header) */
+.row-account {
+  background: var(--bg-surface);
+  cursor: pointer;
+  user-select: none;
+}
+.row-account:hover {
+  background: var(--primary-light);
+}
+.row-account .col-account i {
+  margin-right: 6px;
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+.badge-account-type {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 8px;
+  background: var(--primary-light);
+  color: var(--primary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+/* Filas de seccion (ingresos / egresos) */
+.row-section {
+  background: var(--primary-light);
+}
+.td-section {
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  padding-left: 28px !important;
+  color: var(--text-primary);
+}
+.row-section-income .td-section {
+  color: #15803d;
+}
+.row-section-expense .td-section {
+  color: #b91c1c;
+}
+
+/* Filas de categoria */
+.row-category {
+  background: var(--bg-surface);
+}
+.td-category {
+  padding-left: 48px !important;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+/* Consolidado */
+.row-consolidated-header {
+  background: var(--primary);
+}
+.td-consolidated-header {
+  color: #fff;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 12px;
+  padding: 10px 8px !important;
+}
+.row-consolidated {
+  background: var(--primary-light);
+  font-weight: 700;
+}
+.row-consolidated:hover {
+  background: var(--primary-light);
+  filter: brightness(0.97);
+}
+
+/* Colores de monto */
+.amount-positive {
+  color: #15803d;
+  font-weight: 600;
+}
+.amount-negative {
+  color: #b91c1c;
+  font-weight: 600;
+}
+.amount-zero {
+  color: var(--text-muted);
+}
+
+.cf-note {
+  padding-top: 8px;
+  color: var(--text-secondary);
+}
+
+/* Dark mode: las variables CSS ya hacen la mayor parte. */
+:host-context(.dark-mode) .amount-positive {
+  color: #4ade80;
+}
+:host-context(.dark-mode) .amount-negative {
+  color: #f87171;
+}
+:host-context(.dark-mode) .row-section-income .td-section {
+  color: #4ade80;
+}
+:host-context(.dark-mode) .row-section-expense .td-section {
+  color: #f87171;
+}

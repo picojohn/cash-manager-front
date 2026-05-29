@@ -519,5 +519,23 @@
     "EVENT_TIME": "Cuándo",
     "EVENT_ENTITY": "Entidad",
     "EVENT_OPERATION": "Operación"
+  },
+  "CASH_FLOW": {
+    "TITLE_FORECAST": "Pronóstico de Flujo de Caja",
+    "PERIOD": "Periodo:",
+    "WEEKS": "semanas",
+    "REFRESH": "Actualizar",
+    "LOADING": "Calculando...",
+    "ACCOUNT": "Cuenta",
+    "DESCRIPTION": "Descripción",
+    "OPENING_BALANCE": "Saldo Inicial",
+    "CLOSING_BALANCE": "Saldo Final",
+    "INCOME": "Ingresos",
+    "EXPENSE": "Egresos",
+    "TOTAL": "Total",
+    "TOTAL_INCOME": "Total Ingresos",
+    "TOTAL_EXPENSE": "Total Egresos",
+    "CONSOLIDATED": "Consolidado",
+    "NOTE_PHASE_21": "Vista MVP (Fase 2.1): solo movimientos ya pagados de QuickBooks. Categorías hardcoded; las personalizables, planeado modificable y saldo inicial real vendrán en próximas fases."
   }
 }
