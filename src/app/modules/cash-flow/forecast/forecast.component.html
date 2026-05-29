@@ -26,24 +26,33 @@
 
   <div *ngIf="!loading && !loadError && forecast" class="cash-flow-grid-wrapper">
 
-    <!-- Resumen rapido del consolidado -->
+    <!-- Resumen rapido -->
     <div class="cf-summary px-3 pt-3">
       <div class="cf-summary-card">
         <div class="cf-summary-label">{{ 'CASH_FLOW.OPENING_BALANCE' | translate }}</div>
         <div class="cf-summary-value">${{ forecast.consolidated.openingBalance | number: '1.2-2' }}</div>
       </div>
       <div class="cf-summary-card">
-        <div class="cf-summary-label">{{ 'CASH_FLOW.TOTAL_INCOME' | translate }}</div>
-        <div class="cf-summary-value text-success">+${{ forecast.consolidated.totals.income | number: '1.2-2' }}</div>
+        <div class="cf-summary-label">{{ 'CASH_FLOW.PLANNED_INCOME' | translate }}</div>
+        <div class="cf-summary-value text-success">+${{ forecast.consolidated.totals.plannedIncome | number: '1.2-2' }}</div>
+        <div class="cf-summary-sub">
+          {{ 'CASH_FLOW.ACTUAL' | translate }}: ${{ forecast.consolidated.totals.actualIncome | number: '1.2-2' }}
+        </div>
       </div>
       <div class="cf-summary-card">
-        <div class="cf-summary-label">{{ 'CASH_FLOW.TOTAL_EXPENSE' | translate }}</div>
-        <div class="cf-summary-value text-danger">-${{ forecast.consolidated.totals.expense | number: '1.2-2' }}</div>
+        <div class="cf-summary-label">{{ 'CASH_FLOW.PLANNED_EXPENSE' | translate }}</div>
+        <div class="cf-summary-value text-danger">-${{ forecast.consolidated.totals.plannedExpense | number: '1.2-2' }}</div>
+        <div class="cf-summary-sub">
+          {{ 'CASH_FLOW.ACTUAL' | translate }}: ${{ forecast.consolidated.totals.actualExpense | number: '1.2-2' }}
+        </div>
       </div>
       <div class="cf-summary-card">
-        <div class="cf-summary-label">{{ 'CASH_FLOW.CLOSING_BALANCE' | translate }}</div>
-        <div class="cf-summary-value" [ngClass]="amountClass(forecast.consolidated.closingBalance)">
-          ${{ forecast.consolidated.closingBalance | number: '1.2-2' }}
+        <div class="cf-summary-label">{{ 'CASH_FLOW.CLOSING_BALANCE_PLANNED' | translate }}</div>
+        <div class="cf-summary-value" [ngClass]="amountClass(forecast.consolidated.closingBalancePlanned)">
+          ${{ forecast.consolidated.closingBalancePlanned | number: '1.2-2' }}
+        </div>
+        <div class="cf-summary-sub">
+          {{ 'CASH_FLOW.ACTUAL' | translate }}: ${{ forecast.consolidated.closingBalanceActual | number: '1.2-2' }}
         </div>
       </div>
     </div>
@@ -51,16 +60,25 @@
     <div class="table-scroll">
       <table class="cash-flow-table">
         <thead>
-          <tr>
-            <th class="col-account">{{ 'CASH_FLOW.ACCOUNT' | translate }}</th>
-            <th class="col-balance text-end">{{ 'CASH_FLOW.OPENING_BALANCE' | translate }}</th>
-            <th class="col-desc">{{ 'CASH_FLOW.DESCRIPTION' | translate }}</th>
-            <th *ngFor="let w of forecast.weeks; trackBy: trackByWeekIndex" class="col-week text-end">
+          <tr class="th-row-1">
+            <th class="col-account" rowspan="2">{{ 'CASH_FLOW.ACCOUNT' | translate }}</th>
+            <th class="col-balance text-end" rowspan="2">{{ 'CASH_FLOW.OPENING_BALANCE' | translate }}</th>
+            <th *ngFor="let w of forecast.weeks; trackBy: trackByWeekIndex" class="col-week-group" colspan="2">
               {{ w.label }}
               <div class="th-sub">{{ w.startDate | date: 'MMM d' }} - {{ w.endDate | date: 'MMM d' }}</div>
             </th>
-            <th class="col-total text-end">{{ 'CASH_FLOW.TOTAL' | translate }}</th>
-            <th class="col-closing text-end">{{ 'CASH_FLOW.CLOSING_BALANCE' | translate }}</th>
+            <th class="col-total text-end" colspan="2">{{ 'CASH_FLOW.TOTAL' | translate }}</th>
+            <th class="col-closing text-end" colspan="2">{{ 'CASH_FLOW.CLOSING_BALANCE' | translate }}</th>
+          </tr>
+          <tr class="th-row-2">
+            <ng-container *ngFor="let w of forecast.weeks; trackBy: trackByWeekIndex">
+              <th class="col-week-sub text-end">P</th>
+              <th class="col-week-sub text-end">E</th>
+            </ng-container>
+            <th class="col-total text-end">P</th>
+            <th class="col-total text-end">E</th>
+            <th class="col-closing text-end">P</th>
+            <th class="col-closing text-end">E</th>
           </tr>
         </thead>
         <tbody>
@@ -77,127 +95,216 @@
                 <span class="badge-account-type">{{ acc.accountType }}</span>
               </td>
               <td class="col-balance text-end">${{ acc.openingBalance | number: '1.2-2' }}</td>
-              <td class="col-desc"></td>
-              <td *ngFor="let wt of acc.weeklyTotals; trackBy: trackByWeekIndex" class="col-week text-end">
-                <span [ngClass]="amountClass(wt.net)">${{ wt.net | number: '1.2-2' }}</span>
+              <ng-container *ngFor="let wt of acc.weeklyTotals; trackBy: trackByWeekIndex">
+                <td class="col-week-sub text-end">
+                  <span [ngClass]="amountClass(wt.plannedNet)">${{ wt.plannedNet | number: '1.2-2' }}</span>
+                </td>
+                <td class="col-week-sub text-end">
+                  <span [ngClass]="amountClass(wt.actualNet)">${{ wt.actualNet | number: '1.2-2' }}</span>
+                </td>
+              </ng-container>
+              <td class="col-total text-end">
+                <span [ngClass]="amountClass(acc.totals.plannedNet)">${{ acc.totals.plannedNet | number: '1.2-2' }}</span>
               </td>
               <td class="col-total text-end">
-                <span [ngClass]="amountClass(acc.totals.net)">${{ acc.totals.net | number: '1.2-2' }}</span>
+                <span [ngClass]="amountClass(acc.totals.actualNet)">${{ acc.totals.actualNet | number: '1.2-2' }}</span>
               </td>
               <td class="col-closing text-end">
-                <strong [ngClass]="amountClass(acc.closingBalance)">${{ acc.closingBalance | number: '1.2-2' }}</strong>
+                <strong [ngClass]="amountClass(acc.closingBalancePlanned)">${{ acc.closingBalancePlanned | number: '1.2-2' }}</strong>
+              </td>
+              <td class="col-closing text-end">
+                <strong [ngClass]="amountClass(acc.closingBalanceActual)">${{ acc.closingBalanceActual | number: '1.2-2' }}</strong>
               </td>
             </tr>
 
-            <!-- Desglose Ingresos -->
             <ng-container *ngIf="isAccountExpanded(acc.qbId)">
+
+              <!-- INGRESOS (subtotal) -->
               <tr class="row-section row-section-income">
-                <td colspan="3" class="td-section">{{ 'CASH_FLOW.INCOME' | translate }}</td>
-                <td *ngFor="let wt of acc.weeklyTotals; trackBy: trackByWeekIndex" class="text-end">
-                  <span class="text-success">${{ wt.totalIncome | number: '1.2-2' }}</span>
-                </td>
-                <td class="text-end"><span class="text-success">${{ acc.totals.income | number: '1.2-2' }}</span></td>
-                <td></td>
-              </tr>
-              <tr *ngFor="let cat of acc.incomeCategories; trackBy: trackByCategoryKey" class="row-category">
-                <td colspan="3" class="td-category">{{ cat.categoryLabel }}</td>
-                <td *ngFor="let v of cat.weeks; let i = index" class="text-end">
-                  <span [ngClass]="v > 0.001 ? 'text-success' : 'text-muted'">
-                    ${{ v | number: '1.2-2' }}
-                  </span>
-                </td>
-                <td class="text-end">
-                  <span [ngClass]="cat.total > 0.001 ? 'text-success' : 'text-muted'">
-                    ${{ cat.total | number: '1.2-2' }}
-                  </span>
-                </td>
-                <td></td>
+                <td colspan="2" class="td-section">{{ 'CASH_FLOW.INCOME' | translate }}</td>
+                <ng-container *ngFor="let wt of acc.weeklyTotals; trackBy: trackByWeekIndex">
+                  <td class="text-end"><span class="text-success">${{ wt.plannedIncome | number: '1.2-2' }}</span></td>
+                  <td class="text-end"><span class="text-success">${{ wt.actualIncome | number: '1.2-2' }}</span></td>
+                </ng-container>
+                <td class="text-end"><span class="text-success">${{ acc.totals.plannedIncome | number: '1.2-2' }}</span></td>
+                <td class="text-end"><span class="text-success">${{ acc.totals.actualIncome | number: '1.2-2' }}</span></td>
+                <td colspan="2"></td>
               </tr>
 
-              <!-- Desglose Egresos -->
+              <!-- Categorias de ingreso -->
+              <ng-container *ngFor="let cat of acc.incomeCategories; trackBy: trackByCategoryKey">
+                <tr class="row-category"
+                  [class.row-category-clickable]="cat.subgroups && cat.subgroups.length > 0"
+                  (click)="cat.subgroups && cat.subgroups.length > 0 && toggleCategory(acc.qbId || 'consolidated', cat.categoryKey)">
+                  <td colspan="2" class="td-category">
+                    <i *ngIf="cat.subgroups && cat.subgroups.length > 0" class="fa-solid me-1"
+                      [ngClass]="isCategoryExpanded(acc.qbId || 'consolidated', cat.categoryKey) ? 'fa-chevron-down' : 'fa-chevron-right'"></i>
+                    {{ cat.categoryLabel }}
+                  </td>
+                  <ng-container *ngFor="let v of cat.weeks; trackBy: trackByIndex">
+                    <td class="text-end">
+                      <span [ngClass]="v.planned > 0.001 ? 'text-success' : 'text-muted'">${{ v.planned | number: '1.2-2' }}</span>
+                    </td>
+                    <td class="text-end">
+                      <span [ngClass]="v.actual > 0.001 ? 'text-success' : 'text-muted'">${{ v.actual | number: '1.2-2' }}</span>
+                    </td>
+                  </ng-container>
+                  <td class="text-end"><span [ngClass]="cat.totals.planned > 0.001 ? 'text-success' : 'text-muted'">${{ cat.totals.planned | number: '1.2-2' }}</span></td>
+                  <td class="text-end"><span [ngClass]="cat.totals.actual > 0.001 ? 'text-success' : 'text-muted'">${{ cat.totals.actual | number: '1.2-2' }}</span></td>
+                  <td colspan="2"></td>
+                </tr>
+
+                <!-- Subgrupos (clientes) -->
+                <ng-container *ngIf="cat.subgroups && isCategoryExpanded(acc.qbId || 'consolidated', cat.categoryKey)">
+                  <tr *ngFor="let sub of cat.subgroups; trackBy: trackBySubgroupKey" class="row-subgroup">
+                    <td colspan="2" class="td-subgroup">
+                      <span class="subgroup-label">{{ sub.subgroupLabel }}</span>
+                      <button *ngIf="sub.plannedInvoices && sub.plannedInvoices.length > 0"
+                        class="btn-link-invoices"
+                        (click)="openInvoicesModal(sub); $event.stopPropagation()"
+                        [title]="'CASH_FLOW.VIEW_INVOICES' | translate">
+                        <i class="fa-solid fa-file-invoice-dollar"></i>
+                        {{ sub.plannedInvoices.length }}
+                      </button>
+                    </td>
+                    <ng-container *ngFor="let v of sub.weeks; trackBy: trackByIndex">
+                      <td class="text-end">
+                        <span [ngClass]="v.planned > 0.001 ? 'text-success' : 'text-muted'">${{ v.planned | number: '1.2-2' }}</span>
+                      </td>
+                      <td class="text-end">
+                        <span [ngClass]="v.actual > 0.001 ? 'text-success' : 'text-muted'">${{ v.actual | number: '1.2-2' }}</span>
+                      </td>
+                    </ng-container>
+                    <td class="text-end"><span [ngClass]="sub.totals.planned > 0.001 ? 'text-success' : 'text-muted'">${{ sub.totals.planned | number: '1.2-2' }}</span></td>
+                    <td class="text-end"><span [ngClass]="sub.totals.actual > 0.001 ? 'text-success' : 'text-muted'">${{ sub.totals.actual | number: '1.2-2' }}</span></td>
+                    <td colspan="2"></td>
+                  </tr>
+                </ng-container>
+              </ng-container>
+
+              <!-- EGRESOS (subtotal) -->
               <tr class="row-section row-section-expense">
-                <td colspan="3" class="td-section">{{ 'CASH_FLOW.EXPENSE' | translate }}</td>
-                <td *ngFor="let wt of acc.weeklyTotals; trackBy: trackByWeekIndex" class="text-end">
-                  <span class="text-danger">${{ wt.totalExpense | number: '1.2-2' }}</span>
-                </td>
-                <td class="text-end"><span class="text-danger">${{ acc.totals.expense | number: '1.2-2' }}</span></td>
-                <td></td>
+                <td colspan="2" class="td-section">{{ 'CASH_FLOW.EXPENSE' | translate }}</td>
+                <ng-container *ngFor="let wt of acc.weeklyTotals; trackBy: trackByWeekIndex">
+                  <td class="text-end"><span class="text-danger">${{ wt.plannedExpense | number: '1.2-2' }}</span></td>
+                  <td class="text-end"><span class="text-danger">${{ wt.actualExpense | number: '1.2-2' }}</span></td>
+                </ng-container>
+                <td class="text-end"><span class="text-danger">${{ acc.totals.plannedExpense | number: '1.2-2' }}</span></td>
+                <td class="text-end"><span class="text-danger">${{ acc.totals.actualExpense | number: '1.2-2' }}</span></td>
+                <td colspan="2"></td>
               </tr>
-              <tr *ngFor="let cat of acc.expenseCategories; trackBy: trackByCategoryKey" class="row-category">
-                <td colspan="3" class="td-category">{{ cat.categoryLabel }}</td>
-                <td *ngFor="let v of cat.weeks; let i = index" class="text-end">
-                  <span [ngClass]="v > 0.001 ? 'text-danger' : 'text-muted'">
-                    ${{ v | number: '1.2-2' }}
-                  </span>
-                </td>
-                <td class="text-end">
-                  <span [ngClass]="cat.total > 0.001 ? 'text-danger' : 'text-muted'">
-                    ${{ cat.total | number: '1.2-2' }}
-                  </span>
-                </td>
-                <td></td>
-              </tr>
+
+              <!-- Categorias de egreso -->
+              <ng-container *ngFor="let cat of acc.expenseCategories; trackBy: trackByCategoryKey">
+                <tr class="row-category">
+                  <td colspan="2" class="td-category">{{ cat.categoryLabel }}</td>
+                  <ng-container *ngFor="let v of cat.weeks; trackBy: trackByIndex">
+                    <td class="text-end">
+                      <span [ngClass]="v.planned > 0.001 ? 'text-danger' : 'text-muted'">${{ v.planned | number: '1.2-2' }}</span>
+                    </td>
+                    <td class="text-end">
+                      <span [ngClass]="v.actual > 0.001 ? 'text-danger' : 'text-muted'">${{ v.actual | number: '1.2-2' }}</span>
+                    </td>
+                  </ng-container>
+                  <td class="text-end"><span [ngClass]="cat.totals.planned > 0.001 ? 'text-danger' : 'text-muted'">${{ cat.totals.planned | number: '1.2-2' }}</span></td>
+                  <td class="text-end"><span [ngClass]="cat.totals.actual > 0.001 ? 'text-danger' : 'text-muted'">${{ cat.totals.actual | number: '1.2-2' }}</span></td>
+                  <td colspan="2"></td>
+                </tr>
+              </ng-container>
+
             </ng-container>
 
           </ng-container>
 
-          <!-- Consolidado al final -->
+          <!-- Consolidado -->
           <tr class="row-consolidated-header">
-            <td colspan="100" class="td-consolidated-header">{{ 'CASH_FLOW.CONSOLIDATED' | translate }}</td>
+            <td [attr.colspan]="totalColsCount" class="td-consolidated-header">{{ 'CASH_FLOW.CONSOLIDATED' | translate }}</td>
           </tr>
           <tr class="row-account row-consolidated">
             <td class="col-account"><strong>{{ forecast.consolidated.name }}</strong></td>
             <td class="col-balance text-end"><strong>${{ forecast.consolidated.openingBalance | number: '1.2-2' }}</strong></td>
-            <td></td>
-            <td *ngFor="let wt of forecast.consolidated.weeklyTotals; trackBy: trackByWeekIndex" class="text-end">
-              <strong [ngClass]="amountClass(wt.net)">${{ wt.net | number: '1.2-2' }}</strong>
-            </td>
-            <td class="text-end">
-              <strong [ngClass]="amountClass(forecast.consolidated.totals.net)">
-                ${{ forecast.consolidated.totals.net | number: '1.2-2' }}
-              </strong>
-            </td>
-            <td class="text-end">
-              <strong [ngClass]="amountClass(forecast.consolidated.closingBalance)">
-                ${{ forecast.consolidated.closingBalance | number: '1.2-2' }}
-              </strong>
-            </td>
+            <ng-container *ngFor="let wt of forecast.consolidated.weeklyTotals; trackBy: trackByWeekIndex">
+              <td class="text-end"><strong [ngClass]="amountClass(wt.plannedNet)">${{ wt.plannedNet | number: '1.2-2' }}</strong></td>
+              <td class="text-end"><strong [ngClass]="amountClass(wt.actualNet)">${{ wt.actualNet | number: '1.2-2' }}</strong></td>
+            </ng-container>
+            <td class="text-end"><strong [ngClass]="amountClass(forecast.consolidated.totals.plannedNet)">${{ forecast.consolidated.totals.plannedNet | number: '1.2-2' }}</strong></td>
+            <td class="text-end"><strong [ngClass]="amountClass(forecast.consolidated.totals.actualNet)">${{ forecast.consolidated.totals.actualNet | number: '1.2-2' }}</strong></td>
+            <td class="text-end"><strong [ngClass]="amountClass(forecast.consolidated.closingBalancePlanned)">${{ forecast.consolidated.closingBalancePlanned | number: '1.2-2' }}</strong></td>
+            <td class="text-end"><strong [ngClass]="amountClass(forecast.consolidated.closingBalanceActual)">${{ forecast.consolidated.closingBalanceActual | number: '1.2-2' }}</strong></td>
           </tr>
-          <tr class="row-section">
-            <td colspan="3" class="td-section">{{ 'CASH_FLOW.INCOME' | translate }}</td>
-            <td *ngFor="let wt of forecast.consolidated.weeklyTotals; trackBy: trackByWeekIndex" class="text-end">
-              <span class="text-success">${{ wt.totalIncome | number: '1.2-2' }}</span>
-            </td>
-            <td class="text-end"><span class="text-success">${{ forecast.consolidated.totals.income | number: '1.2-2' }}</span></td>
-            <td></td>
+
+          <tr class="row-section row-section-income">
+            <td colspan="2" class="td-section">{{ 'CASH_FLOW.INCOME' | translate }}</td>
+            <ng-container *ngFor="let wt of forecast.consolidated.weeklyTotals; trackBy: trackByWeekIndex">
+              <td class="text-end"><span class="text-success">${{ wt.plannedIncome | number: '1.2-2' }}</span></td>
+              <td class="text-end"><span class="text-success">${{ wt.actualIncome | number: '1.2-2' }}</span></td>
+            </ng-container>
+            <td class="text-end"><span class="text-success">${{ forecast.consolidated.totals.plannedIncome | number: '1.2-2' }}</span></td>
+            <td class="text-end"><span class="text-success">${{ forecast.consolidated.totals.actualIncome | number: '1.2-2' }}</span></td>
+            <td colspan="2"></td>
           </tr>
-          <tr *ngFor="let cat of forecast.consolidated.incomeCategories; trackBy: trackByCategoryKey" class="row-category">
-            <td colspan="3" class="td-category">{{ cat.categoryLabel }}</td>
-            <td *ngFor="let v of cat.weeks; let i = index" class="text-end">
-              <span [ngClass]="v > 0.001 ? 'text-success' : 'text-muted'">${{ v | number: '1.2-2' }}</span>
-            </td>
-            <td class="text-end">
-              <span [ngClass]="cat.total > 0.001 ? 'text-success' : 'text-muted'">${{ cat.total | number: '1.2-2' }}</span>
-            </td>
-            <td></td>
+
+          <ng-container *ngFor="let cat of forecast.consolidated.incomeCategories; trackBy: trackByCategoryKey">
+            <tr class="row-category"
+              [class.row-category-clickable]="cat.subgroups && cat.subgroups.length > 0"
+              (click)="cat.subgroups && cat.subgroups.length > 0 && toggleCategory('consolidated', cat.categoryKey)">
+              <td colspan="2" class="td-category">
+                <i *ngIf="cat.subgroups && cat.subgroups.length > 0" class="fa-solid me-1"
+                  [ngClass]="isCategoryExpanded('consolidated', cat.categoryKey) ? 'fa-chevron-down' : 'fa-chevron-right'"></i>
+                {{ cat.categoryLabel }}
+              </td>
+              <ng-container *ngFor="let v of cat.weeks; trackBy: trackByIndex">
+                <td class="text-end"><span [ngClass]="v.planned > 0.001 ? 'text-success' : 'text-muted'">${{ v.planned | number: '1.2-2' }}</span></td>
+                <td class="text-end"><span [ngClass]="v.actual > 0.001 ? 'text-success' : 'text-muted'">${{ v.actual | number: '1.2-2' }}</span></td>
+              </ng-container>
+              <td class="text-end"><span [ngClass]="cat.totals.planned > 0.001 ? 'text-success' : 'text-muted'">${{ cat.totals.planned | number: '1.2-2' }}</span></td>
+              <td class="text-end"><span [ngClass]="cat.totals.actual > 0.001 ? 'text-success' : 'text-muted'">${{ cat.totals.actual | number: '1.2-2' }}</span></td>
+              <td colspan="2"></td>
+            </tr>
+
+            <ng-container *ngIf="cat.subgroups && isCategoryExpanded('consolidated', cat.categoryKey)">
+              <tr *ngFor="let sub of cat.subgroups; trackBy: trackBySubgroupKey" class="row-subgroup">
+                <td colspan="2" class="td-subgroup">
+                  <span class="subgroup-label">{{ sub.subgroupLabel }}</span>
+                  <button *ngIf="sub.plannedInvoices && sub.plannedInvoices.length > 0"
+                    class="btn-link-invoices"
+                    (click)="openInvoicesModal(sub); $event.stopPropagation()"
+                    [title]="'CASH_FLOW.VIEW_INVOICES' | translate">
+                    <i class="fa-solid fa-file-invoice-dollar"></i>
+                    {{ sub.plannedInvoices.length }}
+                  </button>
+                </td>
+                <ng-container *ngFor="let v of sub.weeks; trackBy: trackByIndex">
+                  <td class="text-end"><span [ngClass]="v.planned > 0.001 ? 'text-success' : 'text-muted'">${{ v.planned | number: '1.2-2' }}</span></td>
+                  <td class="text-end"><span [ngClass]="v.actual > 0.001 ? 'text-success' : 'text-muted'">${{ v.actual | number: '1.2-2' }}</span></td>
+                </ng-container>
+                <td class="text-end"><span [ngClass]="sub.totals.planned > 0.001 ? 'text-success' : 'text-muted'">${{ sub.totals.planned | number: '1.2-2' }}</span></td>
+                <td class="text-end"><span [ngClass]="sub.totals.actual > 0.001 ? 'text-success' : 'text-muted'">${{ sub.totals.actual | number: '1.2-2' }}</span></td>
+                <td colspan="2"></td>
+              </tr>
+            </ng-container>
+          </ng-container>
+
+          <tr class="row-section row-section-expense">
+            <td colspan="2" class="td-section">{{ 'CASH_FLOW.EXPENSE' | translate }}</td>
+            <ng-container *ngFor="let wt of forecast.consolidated.weeklyTotals; trackBy: trackByWeekIndex">
+              <td class="text-end"><span class="text-danger">${{ wt.plannedExpense | number: '1.2-2' }}</span></td>
+              <td class="text-end"><span class="text-danger">${{ wt.actualExpense | number: '1.2-2' }}</span></td>
+            </ng-container>
+            <td class="text-end"><span class="text-danger">${{ forecast.consolidated.totals.plannedExpense | number: '1.2-2' }}</span></td>
+            <td class="text-end"><span class="text-danger">${{ forecast.consolidated.totals.actualExpense | number: '1.2-2' }}</span></td>
+            <td colspan="2"></td>
           </tr>
-          <tr class="row-section">
-            <td colspan="3" class="td-section">{{ 'CASH_FLOW.EXPENSE' | translate }}</td>
-            <td *ngFor="let wt of forecast.consolidated.weeklyTotals; trackBy: trackByWeekIndex" class="text-end">
-              <span class="text-danger">${{ wt.totalExpense | number: '1.2-2' }}</span>
-            </td>
-            <td class="text-end"><span class="text-danger">${{ forecast.consolidated.totals.expense | number: '1.2-2' }}</span></td>
-            <td></td>
-          </tr>
+
           <tr *ngFor="let cat of forecast.consolidated.expenseCategories; trackBy: trackByCategoryKey" class="row-category">
-            <td colspan="3" class="td-category">{{ cat.categoryLabel }}</td>
-            <td *ngFor="let v of cat.weeks; let i = index" class="text-end">
-              <span [ngClass]="v > 0.001 ? 'text-danger' : 'text-muted'">${{ v | number: '1.2-2' }}</span>
-            </td>
-            <td class="text-end">
-              <span [ngClass]="cat.total > 0.001 ? 'text-danger' : 'text-muted'">${{ cat.total | number: '1.2-2' }}</span>
-            </td>
-            <td></td>
+            <td colspan="2" class="td-category">{{ cat.categoryLabel }}</td>
+            <ng-container *ngFor="let v of cat.weeks; trackBy: trackByIndex">
+              <td class="text-end"><span [ngClass]="v.planned > 0.001 ? 'text-danger' : 'text-muted'">${{ v.planned | number: '1.2-2' }}</span></td>
+              <td class="text-end"><span [ngClass]="v.actual > 0.001 ? 'text-danger' : 'text-muted'">${{ v.actual | number: '1.2-2' }}</span></td>
+            </ng-container>
+            <td class="text-end"><span [ngClass]="cat.totals.planned > 0.001 ? 'text-danger' : 'text-muted'">${{ cat.totals.planned | number: '1.2-2' }}</span></td>
+            <td class="text-end"><span [ngClass]="cat.totals.actual > 0.001 ? 'text-danger' : 'text-muted'">${{ cat.totals.actual | number: '1.2-2' }}</span></td>
+            <td colspan="2"></td>
           </tr>
 
         </tbody>
@@ -206,7 +313,7 @@
 
     <p class="cf-note small text-muted px-3 pb-3 mt-2">
       <i class="fa-solid fa-info-circle"></i>
-      {{ 'CASH_FLOW.NOTE_PHASE_21' | translate }}
+      {{ 'CASH_FLOW.NOTE_PHASE_22' | translate }}
     </p>
   </div>
 </div>

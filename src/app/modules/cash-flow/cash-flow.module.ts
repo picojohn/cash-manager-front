@@ -7,9 +7,10 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { CashFlowRoutingModule } from './cash-flow.routing.module';
 import { CashFlowComponent } from './cash-flow.component';
 import { ForecastComponent } from './forecast/forecast.component';
+import { InvoiceDetailsModalComponent } from './forecast/components/invoice-details-modal/invoice-details-modal.component';
 
 @NgModule({
-  declarations: [CashFlowComponent, ForecastComponent],
+  declarations: [CashFlowComponent, ForecastComponent, InvoiceDetailsModalComponent],
   imports: [
     CommonModule,
     CashFlowRoutingModule,

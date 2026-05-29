@@ -1,0 +1,61 @@
+<div class="modal-header">
+  <h5 class="modal-title">
+    <i class="fa-solid fa-file-invoice-dollar me-2"></i>
+    {{ 'CASH_FLOW.MODAL_INVOICES_TITLE' | translate }}: <strong>{{ customerName }}</strong>
+  </h5>
+  <button type="button" class="btn-close" (click)="bsModalRef.hide()"></button>
+</div>
+
+<div class="modal-body">
+  <div *ngIf="invoices.length === 0" class="text-center py-4 text-muted">
+    {{ 'CASH_FLOW.MODAL_NO_INVOICES' | translate }}
+  </div>
+
+  <div *ngIf="invoices.length > 0" style="overflow-x: auto;">
+    <table class="modern-table">
+      <thead>
+        <tr>
+          <th>{{ 'CASH_FLOW.MODAL_WEEK' | translate }}</th>
+          <th>{{ 'CASH_FLOW.MODAL_DOC_NUMBER' | translate }}</th>
+          <th>{{ 'CASH_FLOW.MODAL_DUE_DATE' | translate }}</th>
+          <th>{{ 'CASH_FLOW.MODAL_TERMS' | translate }}</th>
+          <th class="text-end">{{ 'CASH_FLOW.MODAL_SUBTOTAL' | translate }}</th>
+          <th class="text-end">{{ 'CASH_FLOW.MODAL_TAX' | translate }}</th>
+          <th class="text-end">{{ 'CASH_FLOW.MODAL_TOTAL_WITH_TAX' | translate }}</th>
+          <th class="text-end">{{ 'CASH_FLOW.MODAL_BALANCE' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let inv of invoices">
+          <td><span class="badge bg-secondary">{{ weekLabel(inv.weekIndex) }}</span></td>
+          <td><strong>{{ inv.docNumber || inv.qbId }}</strong></td>
+          <td>{{ inv.dueDate | date: 'MMM d, y' }}</td>
+          <td>{{ inv.termsName || '—' }}</td>
+          <td class="text-end">${{ inv.subtotal | number: '1.2-2' }}</td>
+          <td class="text-end">${{ inv.totalTax | number: '1.2-2' }}</td>
+          <td class="text-end"><strong>${{ inv.totalAmt | number: '1.2-2' }}</strong></td>
+          <td class="text-end">
+            <span [ngClass]="inv.balance > 0.001 ? 'text-warning' : 'text-success'">
+              ${{ inv.balance | number: '1.2-2' }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="4" class="text-end"><strong>{{ 'GENERAL.TOTAL' | translate }}</strong></td>
+          <td class="text-end"><strong>${{ totalSubtotal | number: '1.2-2' }}</strong></td>
+          <td class="text-end"><strong>${{ totalTax | number: '1.2-2' }}</strong></td>
+          <td class="text-end"><strong>${{ totalAmt | number: '1.2-2' }}</strong></td>
+          <td class="text-end"><strong>${{ totalBalance | number: '1.2-2' }}</strong></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="bsModalRef.hide()">
+    {{ 'GENERAL.CLOSE' | translate }}
+  </button>
+</div>

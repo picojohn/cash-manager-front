@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
 import { firstValueFrom } from 'rxjs';
@@ -6,9 +7,13 @@ import { ErrorService } from 'src/app/shared/services/error.service';
 import { CashFlowService } from './services/cash-flow.service';
 import {
   ICashFlowAccountBlock,
+  ICashFlowCategoryRow,
   ICashFlowForecastResponse,
+  ICashFlowSubgroupRow,
+  ICashFlowWeekValue,
   ICashFlowWeeklyTotal,
 } from './interface/cash-flow.interface';
+import { InvoiceDetailsModalComponent } from './components/invoice-details-modal/invoice-details-modal.component';
 
 @Component({
   selector: 'app-cash-flow-forecast',
@@ -20,16 +25,22 @@ export class ForecastComponent implements OnInit {
   public loading: boolean = false;
   public loadError: string | null = null;
 
-  // Fijo en 5 semanas para el MVP. El selector de granularidad
-  // (diario/semanal/mensual/anual) viene en una fase posterior.
-  private readonly WEEKS_TO_SHOW = 5;
+  // Fijo en 4 semanas mientras tenemos toda la grilla en una pantalla. El
+  // selector de granularidad (diario/semanal/mensual/anual) viene en una
+  // fase posterior.
+  private readonly WEEKS_TO_SHOW = 4;
 
   public expandedAccounts: { [qbId: string]: boolean } = {};
+  // Expansion de categoria por bloque: clave `${blockKey}__${categoryKey}`
+  public expandedCategories: { [k: string]: boolean } = {};
+
+  private bsModalRef: BsModalRef;
 
   constructor(
     public toast: ToastrService,
     private errorService: ErrorService,
     private cashFlowService: CashFlowService,
+    private modalService: BsModalService,
     private translate: TranslateService,
   ) {}
 
@@ -48,6 +59,7 @@ export class ForecastComponent implements OnInit {
       for (const a of normalized.accounts) {
         if (a.qbId) this.expandedAccounts[a.qbId] = false;
       }
+      this.expandedCategories = {};
       this.forecast = normalized;
     } catch (err) {
       this.loadError = this.handleError(err);
@@ -56,11 +68,71 @@ export class ForecastComponent implements OnInit {
     }
   }
 
-  /**
-   * Normaliza el response para que TODOS los bloques (cuentas y consolidado)
-   * tengan la misma forma esperada por el template. Sin esto, si el backend
-   * llegara a omitir algun campo (totals, weeklyTotals, etc) el *ngFor explota.
-   */
+  // ============== Toggles de expansion ==============
+
+  toggleAccount(qbId: string | null): void {
+    if (!qbId) return;
+    this.expandedAccounts[qbId] = !this.expandedAccounts[qbId];
+  }
+
+  isAccountExpanded(qbId: string | null): boolean {
+    if (!qbId) return true;
+    return !!this.expandedAccounts[qbId];
+  }
+
+  toggleCategory(blockKey: string, categoryKey: string): void {
+    const k = `${blockKey}__${categoryKey}`;
+    this.expandedCategories[k] = !this.expandedCategories[k];
+  }
+
+  isCategoryExpanded(blockKey: string, categoryKey: string): boolean {
+    return !!this.expandedCategories[`${blockKey}__${categoryKey}`];
+  }
+
+  openInvoicesModal(subgroup: ICashFlowSubgroupRow): void {
+    if (!subgroup.plannedInvoices || subgroup.plannedInvoices.length === 0) return;
+    this.bsModalRef = this.modalService.show(InvoiceDetailsModalComponent, {
+      backdrop: 'static',
+      class: 'modal-xl p-5',
+    });
+    this.bsModalRef.content.customerName = subgroup.subgroupLabel;
+    this.bsModalRef.content.invoices = subgroup.plannedInvoices;
+    this.bsModalRef.content.weeks = this.forecast?.weeks || [];
+  }
+
+  // ============== Helpers de presentacion ==============
+
+  amountClass(n: number): string {
+    if (n > 0.001) return 'amount-positive';
+    if (n < -0.001) return 'amount-negative';
+    return 'amount-zero';
+  }
+
+  /** Devuelve cantidad de columnas para colspans dinamicos. */
+  get totalColsCount(): number {
+    if (!this.forecast) return 0;
+    const weeksCols = this.forecast.weeks.length * 2; // P + E por semana
+    return 2 + weeksCols + 2 + 2; // header(account+balance) + weeks*2 + total(2) + closing(2)
+  }
+
+  trackByWeekIndex(_: number, w: { weekIndex: number }): number {
+    return w.weekIndex;
+  }
+  trackByIndex(i: number): number {
+    return i;
+  }
+  trackByCategoryKey(_: number, c: { categoryKey: string }): string {
+    return c.categoryKey;
+  }
+  trackBySubgroupKey(_: number, s: { subgroupKey: string }): string {
+    return s.subgroupKey;
+  }
+  trackByAccountQbId(_: number, a: ICashFlowAccountBlock): string {
+    return a.qbId || 'consolidated';
+  }
+
+  // ============== Normalize del response ==============
+
   private normalize(res: ICashFlowForecastResponse): ICashFlowForecastResponse {
     const weeksCount = (res.weeks || []).length;
     const accounts = (res.accounts || []).map((b) => this.normalizeBlock(b, weeksCount));
@@ -79,63 +151,68 @@ export class ForecastComponent implements OnInit {
       const w = b?.weeklyTotals?.[i];
       safeWeekly.push({
         weekIndex: i,
-        totalIncome: w?.totalIncome ?? 0,
-        totalExpense: w?.totalExpense ?? 0,
-        net: w?.net ?? 0,
+        plannedIncome: w?.plannedIncome ?? 0,
+        actualIncome: w?.actualIncome ?? 0,
+        plannedExpense: w?.plannedExpense ?? 0,
+        actualExpense: w?.actualExpense ?? 0,
+        plannedNet: w?.plannedNet ?? 0,
+        actualNet: w?.actualNet ?? 0,
       });
     }
-    const padCategoryWeeks = (cat: any) => ({
-      categoryKey: cat?.categoryKey ?? '',
-      categoryLabel: cat?.categoryLabel ?? '',
-      weeks: Array.from({ length: weeksCount }, (_, i) => cat?.weeks?.[i] ?? 0),
-      total: cat?.total ?? 0,
-    });
     return {
       qbId: b?.qbId ?? null,
       name: b?.name ?? '',
       accountType: b?.accountType ?? null,
       accountSubType: b?.accountSubType ?? null,
       openingBalance: b?.openingBalance ?? 0,
-      incomeCategories: (b?.incomeCategories || []).map(padCategoryWeeks),
-      expenseCategories: (b?.expenseCategories || []).map(padCategoryWeeks),
+      incomeCategories: (b?.incomeCategories || []).map((c) => this.normalizeCategory(c, weeksCount)),
+      expenseCategories: (b?.expenseCategories || []).map((c) => this.normalizeCategory(c, weeksCount)),
       weeklyTotals: safeWeekly,
       totals: {
-        income: b?.totals?.income ?? 0,
-        expense: b?.totals?.expense ?? 0,
-        net: b?.totals?.net ?? 0,
+        plannedIncome: b?.totals?.plannedIncome ?? 0,
+        actualIncome: b?.totals?.actualIncome ?? 0,
+        plannedExpense: b?.totals?.plannedExpense ?? 0,
+        actualExpense: b?.totals?.actualExpense ?? 0,
+        plannedNet: b?.totals?.plannedNet ?? 0,
+        actualNet: b?.totals?.actualNet ?? 0,
       },
-      closingBalance: b?.closingBalance ?? 0,
+      closingBalancePlanned: b?.closingBalancePlanned ?? 0,
+      closingBalanceActual: b?.closingBalanceActual ?? 0,
     };
   }
 
-  toggleAccount(qbId: string | null): void {
-    if (!qbId) return;
-    this.expandedAccounts[qbId] = !this.expandedAccounts[qbId];
+  private normalizeCategory(c: ICashFlowCategoryRow, weeksCount: number): ICashFlowCategoryRow {
+    return {
+      categoryKey: c?.categoryKey ?? '',
+      categoryLabel: c?.categoryLabel ?? '',
+      weeks: this.padWeekValues(c?.weeks, weeksCount),
+      totals: {
+        planned: c?.totals?.planned ?? 0,
+        actual: c?.totals?.actual ?? 0,
+      },
+      subgroups: (c?.subgroups || []).map((s) => ({
+        subgroupKey: s?.subgroupKey ?? '',
+        subgroupLabel: s?.subgroupLabel ?? '',
+        weeks: this.padWeekValues(s?.weeks, weeksCount),
+        totals: {
+          planned: s?.totals?.planned ?? 0,
+          actual: s?.totals?.actual ?? 0,
+        },
+        plannedInvoices: s?.plannedInvoices || [],
+      })),
+    };
   }
 
-  isAccountExpanded(qbId: string | null): boolean {
-    if (!qbId) return true;
-    return !!this.expandedAccounts[qbId];
-  }
-
-  /** Clase CSS para resaltar negativos en rojo. */
-  amountClass(n: number): string {
-    if (n > 0.001) return 'amount-positive';
-    if (n < -0.001) return 'amount-negative';
-    return 'amount-zero';
-  }
-
-  /** Suma por columna a lo largo de las semanas del bloque (helper para template). */
-  trackByWeekIndex(i: number, w: { weekIndex: number }): number {
-    return w.weekIndex;
-  }
-
-  trackByCategoryKey(i: number, c: { categoryKey: string }): string {
-    return c.categoryKey;
-  }
-
-  trackByAccountQbId(i: number, a: ICashFlowAccountBlock): string {
-    return a.qbId || 'consolidated';
+  private padWeekValues(
+    arr: Array<ICashFlowWeekValue> | undefined,
+    weeksCount: number,
+  ): Array<ICashFlowWeekValue> {
+    const out: Array<ICashFlowWeekValue> = [];
+    for (let i = 0; i < weeksCount; i++) {
+      const v = arr?.[i];
+      out.push({ planned: v?.planned ?? 0, actual: v?.actual ?? 0 });
+    }
+    return out;
   }
 
   private handleError(err: any): string {
