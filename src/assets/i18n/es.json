@@ -516,6 +516,10 @@
     "RECORDS": "registros",
     "SHOW_EVENTS": "Ver eventos",
     "HIDE_EVENTS": "Ocultar eventos",
+    "SHOW_WEBHOOKS": "Ver webhooks",
+    "HIDE_WEBHOOKS": "Ocultar webhooks",
+    "SHOW_CDC": "Ver CDC",
+    "HIDE_CDC": "Ocultar CDC",
     "EVENT_TIME": "Cuándo",
     "EVENT_ENTITY": "Entidad",
     "EVENT_OPERATION": "Operación"

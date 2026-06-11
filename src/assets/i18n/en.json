@@ -516,6 +516,10 @@
     "RECORDS": "records",
     "SHOW_EVENTS": "Show events",
     "HIDE_EVENTS": "Hide events",
+    "SHOW_WEBHOOKS": "Show webhooks",
+    "HIDE_WEBHOOKS": "Hide webhooks",
+    "SHOW_CDC": "Show CDC",
+    "HIDE_CDC": "Hide CDC",
     "EVENT_TIME": "When",
     "EVENT_ENTITY": "Entity",
     "EVENT_OPERATION": "Operation"

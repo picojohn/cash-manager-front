@@ -67,8 +67,10 @@ export class EstadoComponent implements OnInit {
 
   /** Sync automatico */
   public webhookLogs: Array<IQbWebhookLog> = [];
+  public cdcLogs: Array<IQbSyncLog> = [];
   public lastCdc: IQbSyncLog | null = null;
   public showAllWebhooks: boolean = false;
+  public showAllCdc: boolean = false;
 
   constructor(
     public toast: ToastrService,
@@ -129,6 +131,7 @@ export class EstadoComponent implements OnInit {
         transferLog,
         cdcLog,
         webhookLogs,
+        cdcLogs,
       ] = await Promise.all([
         firstValueFrom(this.quickbooksService.getCompanyInfo()),
         firstValueFrom(this.accountsService.getLocalAccountsCount()),
@@ -151,6 +154,7 @@ export class EstadoComponent implements OnInit {
         firstValueFrom(this.quickbooksService.getSyncStatus('Transfer')),
         firstValueFrom(this.quickbooksService.getSyncStatus('CDC')),
         firstValueFrom(this.quickbooksService.getWebhookLogs(20)),
+        firstValueFrom(this.quickbooksService.getCdcLogs(20)),
       ]);
       this.companyInfo = info.CompanyInfo;
       this.entities[0].count = accountsCount.count;
@@ -173,6 +177,7 @@ export class EstadoComponent implements OnInit {
       this.entities[8].lastSync = transferLog;
       this.lastCdc = cdcLog;
       this.webhookLogs = webhookLogs || [];
+      this.cdcLogs = cdcLogs || [];
     } catch (err) {
       this.handleError(err);
     }
@@ -184,6 +189,10 @@ export class EstadoComponent implements OnInit {
 
   toggleWebhookList(): void {
     this.showAllWebhooks = !this.showAllWebhooks;
+  }
+
+  toggleCdcList(): void {
+    this.showAllCdc = !this.showAllCdc;
   }
 
   async connect(): Promise<void> {

@@ -110,10 +110,18 @@
             <i class="fa-solid fa-bolt me-2 text-warning"></i>
             {{ 'QUICKBOOKS.AUTO_SYNC_TITLE' | translate }}
           </h5>
-          <button class="btn btn-sm btn-link" (click)="toggleWebhookList()" *ngIf="webhookLogs.length > 0">
-            {{ (showAllWebhooks ? 'QUICKBOOKS.HIDE_EVENTS' : 'QUICKBOOKS.SHOW_EVENTS') | translate }}
-            ({{ webhookLogs.length }})
-          </button>
+          <div class="d-flex gap-2">
+            <button class="btn btn-sm btn-link" (click)="toggleWebhookList()" *ngIf="webhookLogs.length > 0">
+              <i class="fa-solid fa-tower-broadcast me-1"></i>
+              {{ (showAllWebhooks ? 'QUICKBOOKS.HIDE_WEBHOOKS' : 'QUICKBOOKS.SHOW_WEBHOOKS') | translate }}
+              ({{ webhookLogs.length }})
+            </button>
+            <button class="btn btn-sm btn-link" (click)="toggleCdcList()" *ngIf="cdcLogs.length > 0">
+              <i class="fa-solid fa-clock-rotate-left me-1"></i>
+              {{ (showAllCdc ? 'QUICKBOOKS.HIDE_CDC' : 'QUICKBOOKS.SHOW_CDC') | translate }}
+              ({{ cdcLogs.length }})
+            </button>
+          </div>
         </div>
 
         <div class="row">
@@ -156,8 +164,11 @@
           </div>
         </div>
 
-        <!-- Lista de eventos expandible -->
+        <!-- Lista de eventos webhook -->
         <div *ngIf="showAllWebhooks && webhookLogs.length > 0" class="mt-3">
+          <h6 class="small text-muted text-uppercase mb-2">
+            <i class="fa-solid fa-tower-broadcast me-1"></i> {{ 'QUICKBOOKS.WEBHOOKS' | translate }}
+          </h6>
           <table class="table table-sm">
             <thead>
               <tr>
@@ -177,6 +188,41 @@
                     [class.bg-success]="log.status === 'processed'"
                     [class.bg-danger]="log.status === 'failed'"
                     [class.bg-secondary]="log.status === 'received'">
+                    {{ log.status }}
+                  </span>
+                  <small class="text-danger ms-1" *ngIf="log.errorMessage" [title]="log.errorMessage">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                  </small>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Lista de runs del CDC -->
+        <div *ngIf="showAllCdc && cdcLogs.length > 0" class="mt-3">
+          <h6 class="small text-muted text-uppercase mb-2">
+            <i class="fa-solid fa-clock-rotate-left me-1"></i> {{ 'QUICKBOOKS.CDC_POLL' | translate }}
+          </h6>
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th>{{ 'QUICKBOOKS.EVENT_TIME' | translate }}</th>
+                <th class="text-end">{{ 'QUICKBOOKS.RECORDS' | translate }}</th>
+                <th class="text-end">{{ 'QUICKBOOKS.RESULT_NEW' | translate }} / {{ 'QUICKBOOKS.RESULT_UPDATED' | translate }}</th>
+                <th>{{ 'GENERAL.STATUS' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let log of cdcLogs">
+                <td class="small">{{ formatRelative(log.startedAt) }}</td>
+                <td class="text-end">{{ log.recordsFetched || 0 }}</td>
+                <td class="text-end">{{ log.recordsCreated || 0 }} / {{ log.recordsUpdated || 0 }}</td>
+                <td>
+                  <span class="badge"
+                    [class.bg-success]="log.status === 'completed'"
+                    [class.bg-danger]="log.status === 'failed'"
+                    [class.bg-secondary]="log.status === 'started'">
                     {{ log.status }}
                   </span>
                   <small class="text-danger ms-1" *ngIf="log.errorMessage" [title]="log.errorMessage">

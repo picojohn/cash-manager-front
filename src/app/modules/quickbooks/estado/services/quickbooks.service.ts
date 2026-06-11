@@ -57,8 +57,14 @@ export class QuickbooksService {
     return this.http.get<IQuickbooksCompanyInfo>(`${this.url}/quickbooks/company-info`);
   }
 
-  getSyncLogs(limit = 20): Observable<Array<IQbSyncLog>> {
-    return this.http.get<Array<IQbSyncLog>>(`${this.url}/quickbooks/sync/logs?limit=${limit}`);
+  getSyncLogs(limit = 20, entity?: string): Observable<Array<IQbSyncLog>> {
+    const params = entity ? `?limit=${limit}&entity=${entity}` : `?limit=${limit}`;
+    return this.http.get<Array<IQbSyncLog>>(`${this.url}/quickbooks/sync/logs${params}`);
+  }
+
+  /** Lista los ultimos N runs del CDC scheduler. */
+  getCdcLogs(limit = 20): Observable<Array<IQbSyncLog>> {
+    return this.getSyncLogs(limit, 'CDC');
   }
 
   /** Ultimo sync para una entidad: Customer / Item / Invoice / Account / CDC */
