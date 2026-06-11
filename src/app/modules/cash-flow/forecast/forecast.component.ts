@@ -25,10 +25,9 @@ export class ForecastComponent implements OnInit {
   public loading: boolean = false;
   public loadError: string | null = null;
 
-  // Fijo en 4 semanas mientras tenemos toda la grilla en una pantalla. El
-  // selector de granularidad (diario/semanal/mensual/anual) viene en una
-  // fase posterior.
-  private readonly WEEKS_TO_SHOW = 4;
+  // Mes seleccionado para la vista. Default: mes actual.
+  public selectedYear: number;
+  public selectedMonth: number; // 1-12
 
   public expandedAccounts: { [qbId: string]: boolean } = {};
   // Expansion de categoria por bloque: clave `${blockKey}__${categoryKey}`
@@ -45,6 +44,9 @@ export class ForecastComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    const today = new Date();
+    this.selectedYear = today.getFullYear();
+    this.selectedMonth = today.getMonth() + 1;
     this.loadForecast();
   }
 
@@ -53,7 +55,9 @@ export class ForecastComponent implements OnInit {
     this.loadError = null;
     this.forecast = null;
     try {
-      const res = await firstValueFrom(this.cashFlowService.getForecast(this.WEEKS_TO_SHOW));
+      const res = await firstValueFrom(
+        this.cashFlowService.getForecast(this.selectedYear, this.selectedMonth),
+      );
       const normalized = this.normalize(res);
       this.expandedAccounts = {};
       for (const a of normalized.accounts) {
@@ -66,6 +70,48 @@ export class ForecastComponent implements OnInit {
     } finally {
       this.loading = false;
     }
+  }
+
+  /** Avanza/retrocede un mes y recarga. */
+  changeMonth(delta: number): void {
+    let y = this.selectedYear;
+    let m = this.selectedMonth + delta;
+    if (m < 1) {
+      m = 12;
+      y -= 1;
+    } else if (m > 12) {
+      m = 1;
+      y += 1;
+    }
+    this.selectedYear = y;
+    this.selectedMonth = m;
+    this.loadForecast();
+  }
+
+  goToCurrentMonth(): void {
+    const today = new Date();
+    this.selectedYear = today.getFullYear();
+    this.selectedMonth = today.getMonth() + 1;
+    this.loadForecast();
+  }
+
+  /** Texto "Mayo 2026" o similar segun idioma. */
+  get selectedMonthLabel(): string {
+    if (!this.selectedYear || !this.selectedMonth) return '';
+    const date = new Date(this.selectedYear, this.selectedMonth - 1, 1);
+    const lang = this.translate.currentLang || 'es';
+    return date.toLocaleDateString(lang === 'es' ? 'es-PA' : 'en-US', {
+      month: 'long',
+      year: 'numeric',
+    });
+  }
+
+  get isCurrentMonth(): boolean {
+    const today = new Date();
+    return (
+      this.selectedYear === today.getFullYear() &&
+      this.selectedMonth === today.getMonth() + 1
+    );
   }
 
   // ============== Toggles de expansion ==============

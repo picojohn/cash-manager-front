@@ -2,6 +2,66 @@
   padding: 0;
 }
 
+/* Selector de mes en el header */
+.cf-month-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cf-month-arrow {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-primary);
+  transition: background 0.15s, border-color 0.15s;
+  font-size: 22px;
+  line-height: 1;
+  font-weight: 600;
+  padding: 0;
+}
+.cf-month-arrow:hover:not(:disabled) {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+.cf-month-arrow:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.cf-month-label {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text-primary);
+  min-width: 140px;
+  text-align: center;
+  text-transform: capitalize;
+}
+.cf-today-btn {
+  background: var(--primary-light);
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 4px;
+}
+.cf-today-btn:hover:not(:disabled) {
+  background: var(--primary);
+  color: #fff;
+}
+.cf-today-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* Resumen rapido */
 .cf-summary {
   display: grid;

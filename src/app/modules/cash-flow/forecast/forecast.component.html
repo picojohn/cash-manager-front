@@ -1,7 +1,21 @@
 <div class="view-card">
   <div class="view-header">
     <h3 class="view-title">{{ 'CASH_FLOW.TITLE_FORECAST' | translate }}</h3>
-    <div class="view-search"></div>
+    <div class="view-search cf-month-selector">
+      <button class="cf-month-arrow" (click)="changeMonth(-1)" [disabled]="loading"
+        [title]="'CASH_FLOW.PREV_MONTH' | translate">
+        &#x2039;
+      </button>
+      <span class="cf-month-label">{{ selectedMonthLabel }}</span>
+      <button class="cf-month-arrow" (click)="changeMonth(1)" [disabled]="loading"
+        [title]="'CASH_FLOW.NEXT_MONTH' | translate">
+        &#x203A;
+      </button>
+      <button *ngIf="!isCurrentMonth" class="cf-today-btn" (click)="goToCurrentMonth()"
+        [disabled]="loading" [title]="'CASH_FLOW.GO_TO_CURRENT' | translate">
+        {{ 'CASH_FLOW.TODAY' | translate }}
+      </button>
+    </div>
     <button class="btn-create" (click)="loadForecast()" [disabled]="loading"
       [title]="'CASH_FLOW.REFRESH' | translate">
       <i class="fa-solid fa-arrows-rotate" *ngIf="!loading"></i>

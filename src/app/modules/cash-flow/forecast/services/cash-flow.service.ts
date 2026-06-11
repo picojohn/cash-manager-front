@@ -10,9 +10,9 @@ export class CashFlowService {
 
   constructor(private http: HttpClient) {}
 
-  getForecast(weeks = 5): Observable<ICashFlowForecastResponse> {
+  getForecast(year: number, month: number): Observable<ICashFlowForecastResponse> {
     return this.http.get<ICashFlowForecastResponse>(
-      `${this.url}/cash-flow/forecast?weeks=${weeks}`,
+      `${this.url}/cash-flow/forecast?year=${year}&month=${month}`,
     );
   }
 }

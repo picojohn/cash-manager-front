@@ -182,13 +182,20 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 24px;
+  padding: 0 300px 0 100px;
   height: 64px;
   background: var(--bg-surface, #fff);
   border-bottom: 1px solid var(--border-color, #e8ecf1);
   position: sticky;
   top: 0;
   z-index: 100;
+}
+
+/* Cuando el sidebar esta abierto, el boton sandwich va pegado a la izquierda
+   (el sidebar ya ocupa la columna izquierda, no necesita padding extra). */
+.main-content.expanded .topbar,
+.main-content.compact-expanded .topbar {
+  padding-left: 24px;
 }
 
 .topbar-left {
@@ -230,8 +237,13 @@
   font-size: 18px;
   color: #64748b;
   cursor: pointer;
-  padding: 8px;
+  border: 1px solid #e2e8f0;
   border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   transition: all 0.2s;
 }
 
@@ -249,8 +261,13 @@
   font-size: 18px;
   color: #64748b;
   cursor: pointer;
-  padding: 8px;
+  border: 1px solid #e2e8f0;
   border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   transition: all 0.2s;
 }
 
@@ -471,7 +488,7 @@
   align-items: center;
   background: var(--bg-surface, #fff);
   border-bottom: 1px solid var(--border-color, #e8ecf1);
-  padding: 0 20px;
+  padding: 0 300px 0 100px;
   height: 64px;
   position: sticky;
   top: 0;
@@ -670,6 +687,30 @@
 :host-context([dir="rtl"]) .main-content.expanded {
   margin-left: 0;
   margin-right: 260px;
+}
+
+:host-context([dir="rtl"]) .compact-expanded {
+  margin-left: 0 !important;
+  margin-right: 70px !important;
+}
+
+/* En RTL los iconos quedan a la izquierda (flex se invierte). Sobrescribo
+   la regla LTR que pone padding-left: 24px en expanded/compact, para que
+   los iconos tengan un espacio comodo del borde izquierdo y el sandwich
+   (a la derecha en RTL) quede pegado al sidebar visible. */
+:host-context([dir="rtl"]) .main-content.expanded .topbar,
+:host-context([dir="rtl"]) .main-content.compact-expanded .topbar {
+  padding-left: 100px;
+  padding-right: 24px;
+}
+
+/* En RTL, el padding del topbar y horizontal-nav debe invertirse para que
+   los menus (que ahora estan a la izquierda) no queden pegados al borde. */
+:host-context([dir="rtl"]) .topbar {
+  padding: 0 100px 0 300px;
+}
+:host-context([dir="rtl"]) .horizontal-nav {
+  padding: 0 100px 0 300px;
 }
 
 /* ===== MOBILE ===== */

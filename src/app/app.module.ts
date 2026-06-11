@@ -31,7 +31,7 @@ import { QuickbooksCallbackComponent } from './authentication/components/quickbo
     ModalModule.forRoot(),
     ReactiveFormsModule,
     TranslateModule.forRoot({
-      defaultLanguage: 'es',
+      fallbackLang: 'es',
       loader: {
         provide: TranslateLoader,
         useClass: TranslateHttpLoader,
