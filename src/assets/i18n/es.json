@@ -550,6 +550,7 @@
     "TOTAL_EXPENSE": "Total Egresos",
     "CONSOLIDATED": "Consolidado",
     "VIEW_INVOICES": "Ver facturas planeadas",
+    "DBLCLICK_TO_VIEW": "Doble click para ver facturas",
     "MODAL_INVOICES_TITLE": "Facturas planeadas",
     "MODAL_NO_INVOICES": "No hay facturas planeadas para este cliente en el rango.",
     "MODAL_WEEK": "Semana",

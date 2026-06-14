@@ -173,23 +173,27 @@
                   <tr *ngFor="let sub of cat.subgroups; trackBy: trackBySubgroupKey" class="row-subgroup">
                     <td colspan="2" class="td-subgroup">
                       <span class="subgroup-label">{{ sub.subgroupLabel }}</span>
-                      <button *ngIf="sub.plannedInvoices && sub.plannedInvoices.length > 0"
-                        class="btn-link-invoices"
-                        (click)="openInvoicesModal(sub); $event.stopPropagation()"
-                        [title]="'CASH_FLOW.VIEW_INVOICES' | translate">
-                        <i class="fa-solid fa-file-invoice-dollar"></i>
-                        {{ sub.plannedInvoices.length }}
-                      </button>
+                      <i *ngIf="sub.plannedInvoices && sub.plannedInvoices.length > 0"
+                        class="fa-solid fa-file-invoice-dollar subgroup-invoices-hint"
+                        [title]="('CASH_FLOW.DBLCLICK_TO_VIEW' | translate) + ' (' + sub.plannedInvoices.length + ')'"></i>
                     </td>
                     <ng-container *ngFor="let v of sub.weeks; trackBy: trackByIndex">
-                      <td class="text-end">
+                      <td class="text-end"
+                        [class.cell-clickable]="v.planned > 0.001 && sub.plannedInvoices && sub.plannedInvoices.length > 0"
+                        (dblclick)="v.planned > 0.001 && openInvoicesModal(sub)"
+                        [title]="v.planned > 0.001 && sub.plannedInvoices?.length ? ('CASH_FLOW.DBLCLICK_TO_VIEW' | translate) : null">
                         <span [ngClass]="v.planned > 0.001 ? 'text-success' : 'text-muted'">${{ v.planned | number: '1.2-2' }}</span>
                       </td>
                       <td class="text-end">
                         <span [ngClass]="v.actual > 0.001 ? 'text-success' : 'text-muted'">${{ v.actual | number: '1.2-2' }}</span>
                       </td>
                     </ng-container>
-                    <td class="text-end"><span [ngClass]="sub.totals.planned > 0.001 ? 'text-success' : 'text-muted'">${{ sub.totals.planned | number: '1.2-2' }}</span></td>
+                    <td class="text-end"
+                      [class.cell-clickable]="sub.totals.planned > 0.001 && sub.plannedInvoices && sub.plannedInvoices.length > 0"
+                      (dblclick)="sub.totals.planned > 0.001 && openInvoicesModal(sub)"
+                      [title]="sub.totals.planned > 0.001 && sub.plannedInvoices?.length ? ('CASH_FLOW.DBLCLICK_TO_VIEW' | translate) : null">
+                      <span [ngClass]="sub.totals.planned > 0.001 ? 'text-success' : 'text-muted'">${{ sub.totals.planned | number: '1.2-2' }}</span>
+                    </td>
                     <td class="text-end"><span [ngClass]="sub.totals.actual > 0.001 ? 'text-success' : 'text-muted'">${{ sub.totals.actual | number: '1.2-2' }}</span></td>
                     <td colspan="2"></td>
                   </tr>
@@ -280,19 +284,25 @@
               <tr *ngFor="let sub of cat.subgroups; trackBy: trackBySubgroupKey" class="row-subgroup">
                 <td colspan="2" class="td-subgroup">
                   <span class="subgroup-label">{{ sub.subgroupLabel }}</span>
-                  <button *ngIf="sub.plannedInvoices && sub.plannedInvoices.length > 0"
-                    class="btn-link-invoices"
-                    (click)="openInvoicesModal(sub); $event.stopPropagation()"
-                    [title]="'CASH_FLOW.VIEW_INVOICES' | translate">
-                    <i class="fa-solid fa-file-invoice-dollar"></i>
-                    {{ sub.plannedInvoices.length }}
-                  </button>
+                  <i *ngIf="sub.plannedInvoices && sub.plannedInvoices.length > 0"
+                    class="fa-solid fa-file-invoice-dollar subgroup-invoices-hint"
+                    [title]="('CASH_FLOW.DBLCLICK_TO_VIEW' | translate) + ' (' + sub.plannedInvoices.length + ')'"></i>
                 </td>
                 <ng-container *ngFor="let v of sub.weeks; trackBy: trackByIndex">
-                  <td class="text-end"><span [ngClass]="v.planned > 0.001 ? 'text-success' : 'text-muted'">${{ v.planned | number: '1.2-2' }}</span></td>
+                  <td class="text-end"
+                    [class.cell-clickable]="v.planned > 0.001 && sub.plannedInvoices && sub.plannedInvoices.length > 0"
+                    (dblclick)="v.planned > 0.001 && openInvoicesModal(sub)"
+                    [title]="v.planned > 0.001 && sub.plannedInvoices?.length ? ('CASH_FLOW.DBLCLICK_TO_VIEW' | translate) : null">
+                    <span [ngClass]="v.planned > 0.001 ? 'text-success' : 'text-muted'">${{ v.planned | number: '1.2-2' }}</span>
+                  </td>
                   <td class="text-end"><span [ngClass]="v.actual > 0.001 ? 'text-success' : 'text-muted'">${{ v.actual | number: '1.2-2' }}</span></td>
                 </ng-container>
-                <td class="text-end"><span [ngClass]="sub.totals.planned > 0.001 ? 'text-success' : 'text-muted'">${{ sub.totals.planned | number: '1.2-2' }}</span></td>
+                <td class="text-end"
+                  [class.cell-clickable]="sub.totals.planned > 0.001 && sub.plannedInvoices && sub.plannedInvoices.length > 0"
+                  (dblclick)="sub.totals.planned > 0.001 && openInvoicesModal(sub)"
+                  [title]="sub.totals.planned > 0.001 && sub.plannedInvoices?.length ? ('CASH_FLOW.DBLCLICK_TO_VIEW' | translate) : null">
+                  <span [ngClass]="sub.totals.planned > 0.001 ? 'text-success' : 'text-muted'">${{ sub.totals.planned | number: '1.2-2' }}</span>
+                </td>
                 <td class="text-end"><span [ngClass]="sub.totals.actual > 0.001 ? 'text-success' : 'text-muted'">${{ sub.totals.actual | number: '1.2-2' }}</span></td>
                 <td colspan="2"></td>
               </tr>

@@ -550,6 +550,7 @@
     "TOTAL_EXPENSE": "Total Expense",
     "CONSOLIDATED": "Consolidated",
     "VIEW_INVOICES": "View planned invoices",
+    "DBLCLICK_TO_VIEW": "Double click to view invoices",
     "MODAL_INVOICES_TITLE": "Planned invoices",
     "MODAL_NO_INVOICES": "No planned invoices for this customer in the range.",
     "MODAL_WEEK": "Week",
